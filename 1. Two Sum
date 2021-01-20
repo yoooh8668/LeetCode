@@ -23,6 +23,8 @@ int* twoSum(int* nums, int numsSize, int target, int* returnSize){
             break;
     }
     return returnMallocData;
+    
+    //free the data in pointer
     free(*returnMallocData);
 }
 
@@ -48,6 +50,8 @@ int* twoSum(int* nums, int numsSize, int target, int* returnSize){
     }
     //Not the same as type1...
     return returnMallocData;
+    
+    //free the pointer which malloced.
     free (returnMallocData);
 }
 */
