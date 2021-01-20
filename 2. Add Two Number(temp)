@@ -1,0 +1,151 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     struct ListNode *next;
+ * };
+ */
+int lengthOfLink(struct ListNode * A){
+    int sizeOfNode=0;
+    for (int i=0 ; i<100; i++)
+    {
+        if (A->next != NULL)
+        {
+            sizeOfNode ++;
+            A = A->next;
+        }
+        else
+        {
+            break;
+        }
+    }
+    return sizeOfNode;
+}
+
+struct ListNode * addNewNode(struct ListNode * front ,int value) { 
+    struct ListNode * newListNode; 
+
+    newListNode = (struct ListNode*) malloc(sizeof(struct ListNode)); 
+
+    if(newListNode == NULL) { 
+        printf("Create Node FAILD!!");  
+    } 
+
+    newListNode->val = value; 
+    newListNode->next = NULL;
+    if (front != NULL)        
+        front->next = newListNode;
+
+    return newListNode; 
+} 
+
+struct ListNode* addTwoNumbers(struct ListNode* l1, struct ListNode* l2){
+    struct ListNode * temp1 = l1;
+    struct ListNode * temp2 = l2;
+    struct ListNode * temp = addNewNode(NULL,0);
+    int sizeOfL1 = 0;
+    int sizeOfL2 = 0;
+    int carry = 0;
+    
+    //check the length of l1
+    sizeOfL1 = lengthOfLink(l1);
+    printf("sizeOfL1 = %d\n",(sizeOfL1+1));
+    
+    //check the length of l2
+    sizeOfL2 = lengthOfLink(l2);
+    printf("sizeOfL2 = %d\n",(sizeOfL2+1));
+    
+    struct ListNode * resultNode = addNewNode(NULL,0);
+    struct ListNode * resultNodeTemp = addNewNode(NULL,0);
+    int resultTemp[100]={0};
+    int nullOfL1=0;
+    int nullOfL2=0;
+    int nullCarry=0;
+    int val1=0;
+    int val2=0;
+
+    for (int i=0 ; i<100 ; i++)
+    {
+        printf("i=%d\n",i);
+        printf("nullOfL1 =%d ,nullOfL2 =%d ,nullCarry=%d\n",nullOfL1 ,nullOfL2 ,nullCarry);
+        if (nullOfL1 && nullOfL2 && nullCarry)//if two List and carry are all null
+        {
+            printf("Add Function END!!\n");
+            break;
+        }
+        else//add function
+        {
+            printf("Add Function Start!!\n");
+            //select the l1 value for add
+            if (nullOfL1 == 1)//L1 is empty
+                val1 = 0;
+            else
+                val1 = temp1->val;
+            
+            //select the l2 value for add
+            if (nullOfL2 == 1)//L2 is empty
+                val2 = 0;
+            else
+                val2 = temp2->val;
+            
+            //add two number for add function
+            resultTemp[i] = val1 + val2 + carry;
+            if (resultTemp[i] >=10  )
+            {
+                resultTemp[i] -= 10;
+                nullCarry = 0;
+                carry = 1;   
+            }
+            else
+            {
+                nullCarry = 1;
+                carry = 0;
+            }
+
+            //Check if L1/L2 reach its max node?
+            //if not switch to next node
+            if ((temp1->next) == NULL)
+            {
+                nullOfL1=1;
+            }
+            else
+            {
+                temp = temp1->next;
+                temp->val = temp1->next->val;
+                
+                temp1 = temp;
+                temp1->val = temp->val;
+            }
+            if ((temp2->next) == NULL)
+            {
+                nullOfL2=1;
+                printf("nullOfL2 = %d\n",nullOfL2);
+            }
+            else
+            {
+                temp = temp2->next;
+                temp->val = temp2->next->val;
+                
+                temp2 = temp;
+                temp2->val = temp->val;
+            }
+            
+            //creat a new node for resultNode
+            if (i == 0) //result
+            {
+                resultNode->val = resultTemp[i];
+            }
+            else if (i==1)
+            {
+                resultNodeTemp = addNewNode(resultNode,resultTemp[i]);
+            }
+            else
+            {
+                resultNodeTemp = addNewNode(resultNodeTemp,resultTemp[i]);
+            }
+        }   
+        
+    }
+    return resultNode;
+    
+}
