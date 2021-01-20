@@ -1,0 +1,53 @@
+
+
+/**
+ * Note: The returned array must be malloced, assume caller calls free().
+ */
+//type1
+int* twoSum(int* nums, int numsSize, int target, int* returnSize){
+    *returnSize = 2;
+    int* returnMallocData = (int*) malloc (2 * sizeof(int));
+    int flag=0; //flag for finding complete
+    for(int i=0 ; i<numsSize ; i++)
+    {
+        for(int j=i+1 ; j<numsSize ; j++)
+        {
+            if((target - nums[i]) == nums[j])
+            {
+                returnMallocData[0]=i;
+                returnMallocData[1]=j;
+                flag =1;
+            }
+        }
+        if (flag == 1)
+            break;
+    }
+    return returnMallocData;
+    free(*returnMallocData);
+}
+
+/*
+//type2
+int* twoSum(int* nums, int numsSize, int target, int* returnSize){
+    *returnSize = 2;
+    int* returnMallocData = malloc (2 * sizeof(int));
+    int flag=0; //flag for finding complete
+    for(int i=0 ; i<numsSize ; i++)
+    {
+        for(int j=i+1 ; j<numsSize ; j++)
+        {
+            if((target - nums[i]) == nums[j])
+            {
+                *returnMallocData=i;
+                *(returnMallocData+1)=j;
+                flag =1;
+            }
+        }
+        if (flag == 1)
+            break;
+    }
+    //Not the same as type1...
+    return returnMallocData;
+    free (returnMallocData);
+}
+*/
