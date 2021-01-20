@@ -8,18 +8,11 @@
 
 struct ListNode * addNewNode(struct ListNode * front ,int value) { 
     struct ListNode * newListNode; 
-
     newListNode = (struct ListNode*) malloc(sizeof(struct ListNode)); 
-
-    if(newListNode == NULL) { 
-        printf("Create Node FAILD!!");  
-    } 
-
     newListNode->val = value; 
     newListNode->next = NULL;
     if (front != NULL)        
         front->next = newListNode;
-
     return newListNode; 
 } 
 
@@ -31,37 +24,31 @@ struct ListNode* addTwoNumbers(struct ListNode* l1, struct ListNode* l2){
 
     for (int i=0 ; i<100 ; i++)
     {
-        printf("i=%d\n",i);
-        if ((l1==NULL) && (l2==NULL) && (sum == 0))//if two List and carry are all null
+        //if two List and sum are all null ===> break
+        if ((l1==NULL) && (l2==NULL) && (sum == 0))
         {
-            printf("Add Function END!!\n");
             break;
         }
         else//add function
         {
-            printf("Add Function Start!!\n");
             if(l1!=NULL)
             {
                 sum += l1->val;
-                printf("sum = %d\n",sum);
                 l1 = l1->next;
             }
             if(l2!=NULL)
             {
                 sum += l2->val;
-                printf("sum = %d\n",sum);
                 l2 = l2->next;
             }
             if (i != 0)
             {
-                resultNode = addNewNode(resultNode,0);
-                resultNode->val = sum%10;
-                printf("NEW NODE ADDED for i = %d\n",i);
+                resultNode = addNewNode(resultNode,sum%10);
             }
-
         }  
         sum/=10;
     }
-    return resultNodeSave;
-    
+    return resultNodeSave; 
+    free(resultNode);
+    free(resultNodeSave);
 }
