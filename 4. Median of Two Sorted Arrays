@@ -1,0 +1,61 @@
+double findMedianSortedArrays(int* nums1, int nums1Size, int* nums2, int nums2Size){
+    int sizeOfAll = nums1Size + nums2Size;
+    int s[sizeOfAll];
+    int result = 0;
+    int one_Start =0;
+    int two_Start =0;
+    printf("sizeOfAll = %d\n",sizeOfAll);
+    
+    //sort two nums start
+    
+    //nums2 insert into nums1
+    int count = 0;
+    //for nums2
+    while(count != (sizeOfAll +1 )){
+    
+    for (int i=two_Start ; i<nums2Size ; i++)
+    {
+        //for nums1
+        for (int j=one_Start ; j<nums1Size ; j++)
+        {
+            if(nums1[one_Start] > nums2[two_Start])//put nums2 min
+            {
+                s[count] = nums2[two_Start];
+                printf("insert nums2[%d]\n",two_Start);
+                printf("count = %d, s[sount] = %d\n",count,s[count]);
+                two_Start ++;
+                break;
+            }
+            else//put nums1 min
+            {
+                s[count] = nums1[one_Start];
+                printf("insert nums1[%d]\n",one_Start);
+                printf("count = %d, s[sount] = %d\n",count,s[count]);
+                one_Start ++;
+                break;
+            }
+        }
+    }
+        count++;
+    }//while
+    printf("WHILE END!!!\n");
+    //sort two nums end
+    
+    if (sizeOfAll == 0)
+        return 0.0;
+    else if(sizeOfAll == 1)
+    {
+        result = s[1]/1;
+        return result;
+    }
+    else if (sizeOfAll%2 == 1)//odd
+    {
+        result = s[((sizeOfAll +1 )/2)];
+        return result;
+    }
+    else //even
+    {
+        result = (s[(sizeOfAll/2)]+s[((sizeOfAll/2) + 1)])/2;
+        return result;
+    }
+}
