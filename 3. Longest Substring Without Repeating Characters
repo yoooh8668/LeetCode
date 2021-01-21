@@ -1,0 +1,54 @@
+
+//check if char repeat in recent length
+bool ifRepeat (char *s ,int startNumber,int targetNumber)
+{
+    //printf("Repeat of %d and %d\n",startNumber,targetNumber);
+    bool repeat = false;
+    for (int i=startNumber ; i<=(targetNumber-1) ; i++)
+    {
+        if (s[i]==s[targetNumber])
+        {
+            repeat = true;
+            //printf("REPEAT!!\n");
+            break;
+        }
+    }
+    return repeat;
+}
+
+
+int lengthOfLongestSubstring(char * s){
+    int sLen =0 ;
+    sLen = strlen( s );
+    //printf("sLen = %d\n",sLen);
+    
+    int maxLen = 0;
+    int currentLen =0;
+    bool repeatFlag = false;
+    //at least oneLength
+    if (sLen>0)
+        maxLen = 1;
+    //startNumber
+    for (int i=0 ; i<sLen ; i++)
+    {
+        //printf("***i = %d\n",i);
+        //targetNumber
+        for (int j=(i+1) ; j<sLen ; j++)
+        {
+            repeatFlag = ifRepeat(s,i,j);
+            if (!repeatFlag)//Non repeat
+            {
+                currentLen = (j - i+1);
+            }
+            else
+            {
+                break;
+            }
+        }
+        if (maxLen < currentLen)
+            maxLen = currentLen;
+        //printf("maxLen = %d\n\n",maxLen);
+    }
+
+    return maxLen;
+}
