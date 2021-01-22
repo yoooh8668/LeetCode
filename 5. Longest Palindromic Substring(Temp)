@@ -1,27 +1,12 @@
+//check if palindromic for string s[i] to s[j]
 bool palindromic (char * s,int i, int j)
 {
-    if (((j-i+1)%2)==0) //even
+    for(int k=j; k>(j-k+i) ; k--)
     {
-        //printf("EVEN case\n");
-        for(int k=j; k>(j-k+i) ; k--)
+        if (s[(j-k+i)] != s[k])
         {
-            if (s[(j-k+i)] != s[k])
-            {
-                //printf("NOT MATCH!!\n\n");
-                return false;   
-            }
-        }
-    }
-    else                //odd
-    {
-        //printf("ODD case\n");
-        for(int k=j; k>(j-k+i) ; k--)
-        {
-            if (s[(j-k+i)] != s[k])
-            {
-                //printf("NOT MATCH!!\n\n");
-                return false;   
-            }
+            //printf("NOT MATCH!!\n\n");
+            return false;   
         }
     }
     return true;
@@ -30,21 +15,8 @@ bool palindromic (char * s,int i, int j)
 
 char * longestPalindrome(char * s){
     int sLen = strlen(s);
-    printf("sLen = %d\n",sLen);
     char maxStr[(sLen+1)];
     char *result = &maxStr;
-    
-    if (sLen == 0)
-    {
-        maxStr[0] = '\0';
-        return result;   
-    }
-    else if (sLen == 1)
-    {
-        maxStr[0] = s[0];
-        maxStr[1] = '\0';
-        return result;
-    }
     
     //+++finding palindromic here
     int currentLen = 1;
@@ -68,8 +40,12 @@ char * longestPalindrome(char * s){
         }
     }
     //---finding palindromic here
-    
-    if (currentLen == 1)
+    if (sLen == 0)
+    {
+        maxStr[0] = '\0';
+        return result;   
+    }
+    else if (currentLen == 1)
     {
         maxStr[0] = s[0];
         maxStr[1] = '\0';
