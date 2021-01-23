@@ -1,0 +1,92 @@
+
+
+char * convert(char * s, int numRows){
+    int sLen = strlen(s);
+    printf("sLen = %d\n",sLen);
+    char result[(sLen+1)];
+    char *buf = &result;
+    
+    if (sLen == 0)
+    {
+        result[0] = '\0';
+        return buf;   
+    }
+    else if (numRows == 1)
+    {
+        for (int i =0 ; s[i] ; i++)
+            result[i] = s[i];
+        result[sLen] = '\0';
+        return buf;
+    }
+    
+    int target = 0;
+    int bundle = (sLen -1) / (numRows -1) ;//number of set in (numRows-1)
+    printf("bundle = %d\n",bundle);
+    int remainder = sLen % (numRows -1) ;//if has remainder ?
+    printf("remainder = %d\n",remainder);
+    bool remainderDir;
+    int count = 0;
+    if (bundle % 2 == 0)
+        remainderDir = true ;
+    else 
+        remainderDir  = false ;
+    
+    for (int row =0 ; row<numRows ; row++)
+    {
+        printf("\n\nrow =%d\n",row);
+        for(int k=0; k<=bundle ; k++)
+        {
+            printf("k =%d\n",k);
+            //set target for input
+            if ( k%2 ==0)
+                target = k*(numRows -1) +row;
+            else 
+                target = (k+1)*(numRows -1)-row;
+            
+            if ((row ==0 ) && (k%2 ==0))
+            {
+                printf("count =%d ,target = %d\n",count,target);                
+                result[count] = s[target];
+                count ++;
+            }
+            else if ((row ==numRows-1 ) && (k%2==1))
+            {
+                printf("count =%d ,target = %d\n",count,target);                
+                result[count] = s[target];
+                count ++;
+            }
+            else if (row != 0 && row!= numRows-1)
+            {
+                printf("count =%d ,target = %d\n",count,target);                
+                result[count] = s[target];
+                count ++;
+            }
+            
+            //process remainder
+            if (k == bundle)
+            {
+                printf("\nPROCESS remainder!!\n");
+                if (remainderDir == true && sLen >= target -2*row +2*numRows)
+                {
+                    printf("CASE 1\n");
+                    printf("count =%d ,target = %d\n",count,target);      
+                    result[count] = s[target];
+                    count ++;
+                }
+                else if (remainderDir == false && sLen >= target +2*row)
+                {
+                    printf("CASE2\n");
+                    printf("count =%d ,target = %d\n",count,target);      
+                    result[count] = s[target];
+                    count ++;
+                }
+                    
+            }
+        }
+    }
+    
+    result[sLen] = '\0';
+    for (int i =0 ; result[i] ; i++)
+        printf("%c",result[i]);
+    return buf;
+}
