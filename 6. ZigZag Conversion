@@ -1,8 +1,6 @@
 
-
 char * convert(char * s, int numRows){
     int sLen = strlen(s);
-    printf("sLen = %d\n",sLen);
     char result[(sLen+1)];
     char *buf = &result;
     
@@ -11,7 +9,7 @@ char * convert(char * s, int numRows){
         result[0] = '\0';
         return buf;   
     }
-    else if (numRows == 1)
+    else if (numRows == 1 || sLen <=numRows)
     {
         for (int i =0 ; s[i] ; i++)
             result[i] = s[i];
@@ -20,64 +18,58 @@ char * convert(char * s, int numRows){
     }
     
     int target = 0;
-    int bundle = (sLen -1) / (numRows -1) ;//number of set in (numRows-1)
-    printf("bundle = %d\n",bundle);
     int remainder = sLen % (numRows -1) ;//if has remainder ?
-    printf("remainder = %d\n",remainder);
+    int bundle = (sLen -1 -remainder) / (numRows -1) ;//number of set in size of (numRows-1)
+
+    //Set remainder direction up or down
     bool remainderDir;
     int count = 0;
     if (bundle % 2 == 0)
-        remainderDir = true ;
+        remainderDir = true ;   //up
     else 
-        remainderDir  = false ;
+        remainderDir  = false ; //down
     
+    //Start put element in result row by row ,then bundle by bundle.
     for (int row =0 ; row<numRows ; row++)
     {
-        printf("\n\nrow =%d\n",row);
+        //printf("\n\nrow =%d\n",row);
         for(int k=0; k<=bundle ; k++)
         {
-            printf("k =%d\n",k);
-            //set target for input
-            if ( k%2 ==0)
+            //printf("k =%d\n",k);
+            
+            //Set target for input
+            if ( k%2 ==0)   //down dir
                 target = k*(numRows -1) +row;
-            else 
+            else            //up dir
                 target = (k+1)*(numRows -1)-row;
             
-            if ((row ==0 ) && (k%2 ==0))
+            if ((row ==0 ) && (k%2 !=0))                //ignore odd bundle for first row 
             {
-                printf("count =%d ,target = %d\n",count,target);                
-                result[count] = s[target];
-                count ++;
+                ;
             }
-            else if ((row ==numRows-1 ) && (k%2==1))
+            else if ((row ==numRows-1 ) && (k%2!=1))    //ignore even bundle for last row 
             {
-                printf("count =%d ,target = %d\n",count,target);                
-                result[count] = s[target];
-                count ++;
+                ;
             }
-            else if (row != 0 && row!= numRows-1)
+            else
             {
-                printf("count =%d ,target = %d\n",count,target);                
+                //printf("count =%d ,target = %d\n",count,target);                
                 result[count] = s[target];
                 count ++;
             }
             
-            //process remainder
-            if (k == bundle)
+            //this is the last bundle, check if it has remainder?
+            if (k == bundle) 
             {
-                printf("\nPROCESS remainder!!\n");
-                if (remainderDir == true && sLen >= target -2*row +2*numRows)
+                //printf("\nPROCESS remainder!!\n");
+                if (remainderDir == true && (sLen > target -2*row +2*(numRows-1)))
                 {
-                    printf("CASE 1\n");
-                    printf("count =%d ,target = %d\n",count,target);      
-                    result[count] = s[target];
+                    result[count] = s[(target -2*row +2*(numRows-1))];
                     count ++;
                 }
-                else if (remainderDir == false && sLen >= target +2*row)
-                {
-                    printf("CASE2\n");
-                    printf("count =%d ,target = %d\n",count,target);      
-                    result[count] = s[target];
+                else if (remainderDir == false && (sLen > target +2*row))
+                {   
+                    result[count] = s[(target +2*row)];
                     count ++;
                 }
                     
@@ -86,7 +78,5 @@ char * convert(char * s, int numRows){
     }
     
     result[sLen] = '\0';
-    for (int i =0 ; result[i] ; i++)
-        printf("%c",result[i]);
     return buf;
 }
