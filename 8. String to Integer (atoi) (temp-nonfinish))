@@ -1,0 +1,139 @@
+
+
+int myAtoi(char * s){
+    double result = 0.0;
+    int resultInt =0;
+    int sLen = strlen (s);
+    printf("sLen = %d\n",sLen);
+    int sign =1 ; //defult positive
+    int atLeastOneNumber =0;
+    int atMostOneSign =0;
+    
+    for (int i =0 ; i<sLen ; i++)
+    {
+        switch (s[i])
+        {
+            case '0':
+                {
+                    result = result *10;
+                    atLeastOneNumber =1;
+                    break;
+                }
+            case '1':
+                {
+                    result = result *10 + 1;
+                    atLeastOneNumber =1;
+                    break;
+                }
+            case '2':
+                {
+                    result = result *10 + 2;
+                    atLeastOneNumber =1;
+                    break;
+                }
+            case '3':
+                {
+                    result = result *10 + 3;
+                    atLeastOneNumber =1;
+                    break;
+                }
+            case '4':
+                {
+                    result = result *10 + 4;
+                    atLeastOneNumber =1;
+                    break;
+                }
+            case '5':
+                {
+                    result = result *10 + 5;
+                    atLeastOneNumber =1;
+                    break;
+                }
+            case '6':
+                {
+                    result = result *10 + 6;
+                    atLeastOneNumber =1;
+                    break;
+                }
+            case '7':
+                {
+                    result = result *10 + 7;
+                    atLeastOneNumber =1;
+                    break;
+                }
+            case '8':
+                {
+                    result = result *10 + 8;
+                    atLeastOneNumber =1;
+                    break;
+                }
+            case '9':
+                {
+                    result = result *10 + 9;
+                    atLeastOneNumber =1;
+                    break;
+                }
+            case ' ': //ignore white spqce
+                {
+                    if (atLeastOneNumber == 1)
+                    {
+                        if (sign == 0)
+                            result = -result;   
+                        resultInt = result;
+                        return resultInt;
+                    }
+                    else
+                        break;
+                }
+            case '+':
+                {
+                    atMostOneSign ++;
+                    printf("detect a sign of positive!!\n");
+                    if (atMostOneSign == 2)
+                        return 0;
+                    break;
+                }
+           case '-':
+                {
+                    if (atLeastOneNumber == 1)
+                    {
+                            if (sign == 0)
+                                result = -result;   
+                            resultInt = result;
+                            return resultInt;
+                    }
+                    atMostOneSign ++;
+                    printf("detect a sign of negative!!\n");
+                    sign = 0;
+                    if (atMostOneSign == 2)
+                        return 0; 
+                    break;
+                }
+           default:
+                {
+                    if (atLeastOneNumber == 1)
+                    {
+                        if (sign == 0)
+                            result = -result;   
+                        resultInt = result;
+                        return resultInt;
+                    }
+                    else
+                        return 0;
+                }
+        }
+        printf("result = %lf\n",result);
+    }
+    
+    if (sign == 0)
+        result = -result;
+    if (result > 2147483647)
+        return 2147483647;
+    else if ( result <-2147483648)
+        return -2147483648;
+    else 
+    {
+        resultInt = result;
+        return resultInt;
+    }   
+}
