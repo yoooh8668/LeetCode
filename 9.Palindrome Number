@@ -1,4 +1,18 @@
-/* Solution 1 : Same way as 5.Longest Palindromic Substring    
+bool isPalindrome(int x){
+    int xSave = x;
+    double xRevert = 0.0;
+    while( xSave > 0 )
+    {
+        xRevert = xRevert * 10 + xSave%10;
+        xSave /= 10;
+    }
+    if (xRevert == x)
+        return true;
+    return false;
+}
+
+
+/* Solution 2 : Same way as 5.Longest Palindromic Substring    
 bool isPalindrome(int x){
     if ( x < 0)
         return false;
