@@ -1,154 +1,43 @@
-
-
 bool isMatch(char * s, char * p){
     int sLen = strlen(s);
     int pLen = strlen(p);
-    
-    //check if pLen without *still larger then sLen
-    int starCount = 0;
-    for (int i=0 ; i<pLen ; i++)
+    bool dp[sLen+1][pLen+1] ;
+    for(int i=0 ; i<=sLen ; i++)
     {
-        if ( p[i] =='*')
-            starCount++;
-    }
-    if (sLen < (pLen - starCount*2))
-        return false;
-    
-    //check if s is match p from top
-    printf("TOP check\n");
-    int count =0;
-    for (int i=0 ; i<sLen ; i++)
-    {
-        if (count == pLen) //p is out of index ,and s is not checked complete.
+        for(int j=0 ; j<=pLen ; j++)
         {
-            printf("p is no element!\n");            
-            return false;
+            dp[i][j] = false;
         }
-
-        while(count < pLen)
+    }
+    dp[0][0] = true;
+    
+    for (int j=1; j<=pLen ; j++)
+    {
+        if(p[j-1] == '*' && dp[0][j-2]) 
         {
-            if (s[i] == p[count] || p[count] == '.')   //if s[i] == p[count]( or '.') ,check the next i of s[i]
+            dp[0][j] =true;
+        }
+    }
+    for (int i=1 ; i<=sLen ; i++)
+    {
+        for (int j=1 ; j<=pLen ; j++)
+        {
+            if(p[j-1] == s[i-1] || p[j-1] == '.')
             {
-                printf("case A\n");
-                count++;
-                break;
+                dp[i][j] = dp[i-1][j-1];
             }
-            else if ( p[count]=='*' && p[count-1]==s[i])   // p[count-1]* match s[i]
+            else if(p[j-1] == '*')
             {
-                printf("case B\n");
-                break;
-            }
-            else if ( p[count]=='*' && p[count-1]=='.')   // p[count-1]* match s[i]
-            {
-                printf("case C\n");
-                break;
-            }
-            else if ( p[count]=='*' )
-            {
-                printf("case D\n");
-                count++;
-            }
-            else if ( count+1 < pLen )                      //if next count exist, check if it is a '*'
-            {
-                printf("case E\n");
-                if ( p[count+1] == '*' )
+                if(p[j-2] != s[i-1] && p[j-2]!='.')
                 {
-                    printf("case E1\n");
-                    count+=2;
+                    dp[i][j] = dp[i][j-2];
                 }
                 else
                 {
-                    printf("case E2\n");
-                    return false;
+                    dp[i][j] = (dp[i][j-2] || dp[i][j-1] || dp[i-1][j]);
                 }
-            }
-            else 
-            {
-                printf("case NON MATCH\n");
-                return false;
             }
         }
     }
-    
-    //check if s is match p from botton
-    printf("BOTTON check\n");
-    count =pLen-1;
-    for (int i=sLen-1 ; i>=0 ; i--)
-    {
-        printf("i= %d count= %d\n",i,count);
-        if (count < 0) //p is out of index ,and s is not checked complete.
-        {
-            printf("p is no element!\n");            
-            return false;
-        }
-
-        while(count >= 0)
-        {
-            if (s[i] == p[count] || p[count] == '.')   //if s[i] == p[count]( or '.') ,check the next i of s[i]
-            {
-                printf("case A\n");
-                count--;
-                break;
-            }
-            else if ( p[count]=='*' && p[count-1]==s[i])   // p[count-1]* match s[i]
-            {
-                printf("case B\n");
-                break;
-            }
-            else if ( p[count]=='*' && p[count-1]=='.')   // p[count-1]* match s[i]
-            {
-                printf("case C\n");
-                break;
-            }
-            else if ( p[count]=='*' )
-            {
-                printf("case D\n");
-                count--;
-            }
-            else if ( count-1 >=0 )                      //if next count exist, check if it is a '*'
-            {
-                printf("case E\n");
-                if ( p[count-1] == '*' )
-                {
-                    printf("case E1\n");
-                    count--;
-                }
-                else
-                {
-                    printf("case E2\n");
-                    return false;
-                }
-            }
-            else 
-            {
-                printf("case NON MATCH\n");
-                return false;
-            }
-        }
-    }
-    
-    /*
-    int repeatCount =0;
-
-    printf("check remain p\n");
-    for (int i = count ; i < pLen ;i++)       //p is not read finish, check if something not match s last element?
-    {
-        printf("i = %d\n",i);
-        if (p[i] == '*')        //p is use '*' before, check rest element.
-        {
-            printf("CASE A\n");
-        }
-        else
-        {
-            printf("CASE B\n");
-            if ( p[i+1]=='*' )
-                i++;
-            else if( p[i] == s[sLen-i] )
-                ;
-            else 
-                return false;
-        }
-    }
-    */
-    return true;
+    return dp[sLen][pLen];
 }
