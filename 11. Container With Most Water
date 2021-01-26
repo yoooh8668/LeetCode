@@ -15,6 +15,10 @@ int maxArea(int* height, int heightSize){
 
 
 /*Online solution
+//Converge way ==> search from start / end
+//We search for the largest height[x] for extremum
+//if height[start] > height[end], end--,vise versa.
+//Then we can minimize the calculation to half.
 #define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
 #define MAX(X, Y) (((X) < (Y)) ? (Y) : (X))
 int maxArea(int* height, int heightSize){
