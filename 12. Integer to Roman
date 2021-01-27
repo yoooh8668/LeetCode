@@ -1,0 +1,79 @@
+
+
+char * intToRoman(int num){
+    int numSave[4];
+    //the roman char from big to small.
+    char roman[8] = {'M','D','C','L','X','V','I','\0'}; 
+    
+    int k=1000;
+    //save to numSave for each digit (1000,100,10,1)
+    for (int i=0 ; i<4 ; i++)
+    {
+        numSave[i] = num/k;
+        num%=k;
+        k/=10;
+    }
+    
+    int count =0;
+    char* resultStr = (char*)malloc(17 * sizeof(char));
+    //for each number rule, select the roman char.
+    for (int i=0; i<4 ; i++)
+    {
+        switch (numSave[i])
+        {
+            case 0:
+                break;
+            case 1:
+                resultStr[count] = roman[(i*2)];
+                count++;
+                break;
+            case 2:
+                resultStr[count] = roman[(i*2)];
+                resultStr[count+1] = roman[(i*2)];
+                count+=2;
+                break;
+            case 3:
+                resultStr[count] = roman[(i*2)];
+                resultStr[count+1] = roman[(i*2)];
+                resultStr[count+2] = roman[(i*2)];
+                count+=3;
+                break;
+            case 4:
+                resultStr[count] = roman[(i*2)];
+                resultStr[count+1] = roman[(i*2-1)];
+                count+=2;
+                break;
+            case 5:
+                resultStr[count] = roman[(i*2-1)];
+                count++;
+                break;
+            case 6:
+                resultStr[count] = roman[(i*2-1)];
+                resultStr[count+1] = roman[(i*2)];
+                count+=2;
+                break;
+            case 7:
+                resultStr[count] = roman[(i*2-1)];
+                resultStr[count+1] = roman[(i*2)];
+                resultStr[count+2] = roman[(i*2)];
+                count+=3;
+                break;
+            case 8:
+                resultStr[count] = roman[(i*2-1)];
+                resultStr[count+1] = roman[(i*2)];
+                resultStr[count+2] = roman[(i*2)];
+                resultStr[count+3] = roman[(i*2)];
+                count+=4;
+                break;
+            case 9:
+                resultStr[count] = roman[(i*2)];
+                resultStr[count+1] = roman[(i*2-2)];
+                count+=2;
+                break;
+            default:
+                break;
+        }
+    }
+    resultStr[count] = '\0';
+    return resultStr;
+}
