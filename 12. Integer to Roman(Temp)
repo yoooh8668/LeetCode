@@ -1,0 +1,78 @@
+
+
+char * intToRoman(int num){
+    int numSave = num;
+    int digits =0;
+    for (int i=0 ; numSave>0 ; i++)
+    {
+        digits++;
+        numSave/=10;
+    }
+    printf("digits = %d",digits);
+
+    char result [20]={'\0'};
+    int count =0;
+    for(int i=digits ; i>0 ; i--)
+    {
+        switch(num/pow(10.0,digits-1))
+        {
+            case 1:
+                if (i != 1)
+                {
+                    result[count] = 'I';
+                    count++
+                }
+                break;
+            case 2:
+                result[count] = 'I';
+                result[count+1] = 'I';
+                count+=2;
+                break;
+            case 3:
+                result[count] = 'I';
+                result[count+1] = 'I';
+                result[count+2] = 'I';
+                count+=3;
+                break;
+            case 4:
+                result[count] = 'I';
+                result[count+1] = 'V';
+                count+=2;
+                break;
+            case 5:
+                result[count] = 'V';
+                count++;
+                break;
+            case 6:
+                result[count] = 'V';
+                result[count+1] = 'I';
+                count+=2;
+                break;
+            case 7:
+                result[count] = 'V';
+                result[count+1] = 'I';
+                result[count+2] = 'I';
+                count+=3;
+                break;
+            case 8:
+                result[count] = 'V';
+                result[count+1] = 'I';
+                result[count+2] = 'I';
+                result[count+3] = 'I';
+                count+=4;
+                break;
+            case 9:
+                break;
+            case 0:
+                break;
+            default:
+                break;
+                
+                
+        }
+            
+        
+    }
+    char * result ;
+    return result;
+}
