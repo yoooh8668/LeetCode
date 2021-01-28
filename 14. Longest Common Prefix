@@ -1,0 +1,49 @@
+
+
+char * longestCommonPrefix(char ** strs, int strsSize){
+    
+    //prevent NULL input
+    if (strsSize == 0)
+        return "";
+    
+    //Save length for every string, and find the shortest string for finding prefix
+    int strLen[strsSize] ;
+    int target=0;                   //shortest string is at strs[target]
+    for(int i=0 ; i<strsSize ; i++)
+    {
+        strLen[i] = strlen(strs[i]);
+        //printf("sLen %i =%d\n",i,strLen[i]);
+        if (i>0 && strLen[i]<strLen[i-1]) //if current len is shorter then previous, become target
+            target = i;
+    }
+    //printf("target = %d\n",target);
+
+    //copy string of strs[target]
+    char* prefix = (char*)malloc((strLen[target]+1) *sizeof(char));
+    prefix[strLen[target]] = '\0';    
+    for(int i=0 ; i<strLen[target] ;i++)
+    {
+        prefix[i] = strs[target][i];
+    }
+    
+    //find prefix 
+    for(int i=0 ; i<strsSize ; i++)
+    {
+        //printf("Current i is %d\n",i);
+        for (int j=0 ; j<strLen[target] ; j++)
+        {
+            if (prefix[j] != strs[i][j] && j==0)
+            {
+                //printf("NO any prefix!!");
+                return "";
+            }
+            else if (prefix[j] != strs[i][j])
+            {
+                //printf("NOT prefix at [%d] = %c\n",j,prefix[j]);
+                prefix[j] = '\0';
+                break;
+            }
+        }
+    }
+    return prefix;
+}
