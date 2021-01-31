@@ -1,0 +1,76 @@
+
+
+/**
+ * Note: The returned array must be malloced, assume caller calls free().
+ */
+char ** letterCombinations(char * digits, int* returnSize){
+    char **result = (char**) malloc(sizeof(char*)*64);
+    *returnSize = 0;
+    int digitsLen = strlen(digits);
+    if (digitsLen == 0)
+        return result;
+    int firstColumn = 0;
+    returnSize=3;
+    result[0][0]='a';
+    result[1][0]='b';
+    result[2][0]='c';
+    
+    /*
+    switch (digits[0])
+    {
+        case '2':
+            result[*returnSize][0]='a';
+            result[*returnSize+1][0]='b';
+            result[*returnSize+2][0]='c';   
+            *returnSize=3;
+            break;
+        case '3':
+            result[*returnSize][0]='d';
+            result[*returnSize+1][0]='e';
+            result[*returnSize+2][0]='f';  
+            *returnSize=3;
+            break;
+        case '4':
+            result[*returnSize][0]='g';
+            result[*returnSize+1][0]='h';
+            result[*returnSize+2][0]='i';  
+            *returnSize=3;
+            break;
+        case '5':
+            result[*returnSize][0]='j';
+            result[*returnSize+1][0]='k';
+            result[*returnSize+2][0]='l';  
+            *returnSize=3;
+            break;
+        case '6':
+            result[*returnSize][0]='m';
+            result[*returnSize+1][0]='n';
+            result[*returnSize+2][0]='o';  
+            *returnSize=3;
+            break;
+        case '7':
+            result[*returnSize][0]='p';
+            result[*returnSize+1][0]='q';
+            result[*returnSize+2][0]='r';
+            result[*returnSize+3][0]='s';
+            *returnSize=4;
+            break;
+        case '8':
+            result[*returnSize][0]='t';
+            result[*returnSize+1][0]='u';
+            result[*returnSize+2][0]='v';  
+            *returnSize=3;
+            break;
+        case '9':
+            result[*returnSize][0]='w';
+            result[*returnSize+1][0]='x';
+            result[*returnSize+2][0]='y';  
+            result[*returnSize+3][0]='z';
+            *returnSize=4;
+            break;
+        default:
+            break;
+    }*/
+    digitsLen--;
+    return result;
+}
