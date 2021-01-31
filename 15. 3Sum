@@ -1,0 +1,69 @@
+
+
+/**
+ * Return an array of arrays of size *returnSize.
+ * The sizes of the arrays are returned as *returnColumnSizes array.
+ * Note: Both returned array and *columnSizes array must be malloced, assume caller calls free().
+ */
+
+int** threeSum(int* nums, int numsSize, int* returnSize, int** returnColumnSizes){
+    //sort from small to big
+    for (int i = 0; i < numsSize; i++) 
+    {
+        for (int j = 0; j < i; j++) 
+        {
+            if (nums[j] > nums[i])
+            {
+                int temp = nums[j];
+                nums[j] = nums[i];
+                nums[i] = temp;
+            }
+        }
+    }
+    int j=0;//j => second
+    int k=0;//k => end  
+    int sum=0;
+    int total=64;       //assume that resultSize is 64*int
+    *returnSize=0;
+    int **result=(int**)malloc(sizeof(int*)*total);
+    *returnColumnSizes=(int*)malloc(sizeof(int)*total);
+    for(int i=0;i<numsSize-2;i++)   //i => first
+    {
+        if( nums[i]>0 || nums[i] + nums[i+1] + nums[i+2] > 0 )  //if (first>0), or(the min of sum > 0) ==> this first has no result
+            break;
+        if( i>0 && nums[i] == nums[i-1]) // this is the same first ==> skip
+            continue;
+        j=i+1;          // second
+        k=numsSize-1;
+        while( j < k)
+        {
+            sum = nums[i]+nums[j]+nums[k];
+            if(sum < 0)
+                j++;
+            else if(sum > 0)
+                k--;
+            else  //sum =0
+            {
+                (*returnColumnSizes)[*returnSize]=3;
+                result[*returnSize]=(int*) malloc(sizeof(int)*3);
+                result[*returnSize][0]=nums[i];
+                result[*returnSize][1]=nums[j];
+                result[*returnSize][2]=nums[k];
+                j++;
+                k--;
+                (*returnSize)++;
+                while( j < k && nums[j] == nums[j-1] )  //second is the same ==> skip
+                    j++;
+                while( j < k && nums[k] == nums[k+1])   //end is the same    ==> skip
+                    k--;
+                if((*returnSize)==total)    //if returnSize is larger than 64(default), realloc a double size memory
+                {
+                    total*=2;
+                    *returnColumnSizes=(int*)realloc(*returnColumnSizes,sizeof(int)*total);
+                    result=(int**)realloc(result,sizeof(int*)*total);
+                }
+            }
+        }
+    }
+    return result;
+}
