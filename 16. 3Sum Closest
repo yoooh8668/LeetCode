@@ -1,7 +1,7 @@
-
+//Same way as 15.3Sum
 
 int threeSumClosest(int* nums, int numsSize, int target){
-    //sort
+    //sort from small to big
     for (int i = 0; i < numsSize; i++) 
     {
         for (int j = 0; j < i; j++) 
@@ -14,10 +14,11 @@ int threeSumClosest(int* nums, int numsSize, int target){
             }
         }
     }
-    int result=1000;
+    int result=1000;    //default result 1000
     int sum=0;
     int j=0;//second
     int k=0;//end
+    int diff =1000;     //default diff 1000
     for (int i=0; i<numsSize-2 ; i++)
     {
         j=i+1;          // second
@@ -25,20 +26,26 @@ int threeSumClosest(int* nums, int numsSize, int target){
         while(j<k)
         {
             sum = nums[i]+nums[j]+nums[k];
-            if (sum == target)
+            if (sum == target)          //if sum atch target ==> return target
                 return target;
             //printf("sum=%d\n",sum);
-            if (sum < target)
+            if (sum < target)           //sum too small==> second ++
             {
                 j++;
-                if (abs(target - sum)< abs(target-result))
+                if (abs(target - sum)< diff)
+                {
                     result = sum;
+                    diff = abs(target - sum);
+                }
             }
-            else if (sum > target)
+            else if (sum > target)      //sum too big==>end --
             {
                 k--;
-                if (abs(target - sum)< abs(target-result))
+                if (abs(target - sum)< diff)
+                {
                     result = sum;
+                    diff = abs(target - sum);
+                }
             }
         }
     }
