@@ -1,0 +1,46 @@
+
+
+int threeSumClosest(int* nums, int numsSize, int target){
+    //sort
+    for (int i = 0; i < numsSize; i++) 
+    {
+        for (int j = 0; j < i; j++) 
+        {
+            if (nums[j] > nums[i])
+            {
+                int temp = nums[j];
+                nums[j] = nums[i];
+                nums[i] = temp;
+            }
+        }
+    }
+    int result=1000;
+    int sum=0;
+    int j=0;//second
+    int k=0;//end
+    for (int i=0; i<numsSize-2 ; i++)
+    {
+        j=i+1;          // second
+        k=numsSize-1;   //end
+        while(j<k)
+        {
+            sum = nums[i]+nums[j]+nums[k];
+            if (sum == target)
+                return target;
+            //printf("sum=%d\n",sum);
+            if (sum < target)
+            {
+                j++;
+                if (abs(target - sum)< abs(target-result))
+                    result = sum;
+            }
+            else if (sum > target)
+            {
+                k--;
+                if (abs(target - sum)< abs(target-result))
+                    result = sum;
+            }
+        }
+    }
+    return result;
+}
