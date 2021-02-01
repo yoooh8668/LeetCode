@@ -70,7 +70,14 @@ char ** letterCombinations(char * digits, int* returnSize){
             break;
         default:
             break;
-    }*/
+    }
     digitsLen--;
+    return result;
+    */
+        char **result = (char**) malloc(sizeof(char*)*4000);
+    *returnSize = 0;
+    *returnSize+=2;
+    result[0] = 'a'+'b';
+    result[1] = "abc";
     return result;
 }
