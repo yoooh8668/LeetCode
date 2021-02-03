@@ -1,0 +1,110 @@
+
+
+/**
+ * Return an array of arrays of size *returnSize.
+ * The sizes of the arrays are returned as *returnColumnSizes array.
+ * Note: Both returned array and *columnSizes array must be malloced, assume caller calls free().
+ */
+int** fourSum(int* nums, int numsSize, int target, int* returnSize, int** returnColumnSizes){
+    int total=64;       //assume that resultSize is 64*int
+    *returnSize=0;
+    int **result=(int**)malloc(sizeof(int*)*total);
+    *returnColumnSizes=(int*)malloc(sizeof(int)*total);
+    
+    //sort from small to big
+    for (int i = 0; i < numsSize; i++) 
+    {
+        for (int j = 0; j < i; j++) 
+        {
+            if (nums[j] > nums[i])
+            {
+                int temp = nums[j];
+                nums[j] = nums[i];
+                nums[i] = temp;
+            }
+        }
+    }
+    
+    int k=0;
+    int p=numsSize-1;
+    int sum=0;
+    for (int i=0 ; i<numsSize-3 ;)
+    {
+        printf("i=%d\n",i);
+        for (int j=i+1 ; j<numsSize-2 ;)
+        {
+            printf("j=%d\n",j);
+            k=j+1;
+            p=numsSize-1;
+            while( k < p)
+            {
+                printf("k=%d\n",k);
+                printf("p=%d\n",p);
+                sum = nums[i]+nums[j]+nums[k]+nums[p];
+                if (sum > target)
+                {
+                    int pTemp=p;
+                    p--;
+                    while( p > 3 && nums[pTemp]==nums[p])
+                    {
+                        p--;
+                    }
+                }
+                else if (sum < target)
+                {
+                    int kTemp=k;
+                    k++;
+                    while( k < (numsSize-2) && nums[kTemp]==nums[k])
+                    {
+                        k++;
+                    }
+                }
+                else if (sum == target)
+                {
+                    printf("MATCH!!\n");
+                    (*returnColumnSizes)[*returnSize]=4;
+                    result[*returnSize]=(int*) malloc(sizeof(int)*4);
+                    result[*returnSize][0]=nums[i];
+                    result[*returnSize][1]=nums[j];
+                    result[*returnSize][2]=nums[k];
+                    result[*returnSize][3]=nums[p];
+                    int pTemp=p;
+                    p--;
+                    while( p > 3 && nums[pTemp]==nums[p])
+                    {
+                        p--;
+                    }
+                    int kTemp=k;
+                    k++;
+                    while( k < (numsSize-2) && nums[kTemp]==nums[k])
+                    {
+                        k++;
+                    }
+                    (*returnSize)++;
+                    printf("\n");
+                }
+            }
+            int jTemp=j;
+            j++;
+            while(j < (numsSize-3) && nums[jTemp]==nums[j])
+            {
+                j++;
+            }
+        }
+        int iTemp=i;
+        i++;
+        while( i < (numsSize-4) && nums[iTemp]==nums[i])
+        {
+            i++;
+        }
+    }
+    
+    if((*returnSize)==total)    //if returnSize is larger than 64(default), realloc a double size memory
+    {
+        total*=2;
+        *returnColumnSizes=(int*)realloc(*returnColumnSizes,sizeof(int)*total);
+        result=(int**)realloc(result,sizeof(int*)*total);
+    }
+    
+    return result;
+}
