@@ -40,3 +40,36 @@ struct ListNode* removeNthFromEnd(struct ListNode* head, int n){
     target->next = target->next->next;
     return head;
 }
+
+
+/*Online solution ==> no need to search the size of list
+struct ListNode* removeNthFromEnd(struct ListNode* head, int n){
+    //if only one element
+    if(!head->next){
+        return NULL;
+    }
+    struct ListNode* beforeDelete = head;
+    struct ListNode* temp = head;
+    
+    //temp is the n-th node from start 
+    for(int i = 0; i < n; i++){
+        temp = temp->next;
+    }
+    
+    //if temp==NULL ==> size == n ==> remove first element
+    if(!temp){
+        return head->next; //return second node
+    }
+    
+    //set temp to the last element, brfoerDelete move at the same time 
+    //when temp is reach the end, brforeDelete is one element before the one that need to be deleted
+    while(temp->next != NULL){
+        beforeDelete = beforeDelete->next;
+        temp = temp->next;
+    }
+    
+    //skip the deleted one
+    beforeDelete->next = beforeDelete->next->next;
+    return head;
+}
+*/
