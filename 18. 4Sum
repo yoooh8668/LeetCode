@@ -6,6 +6,8 @@
  * Note: Both returned array and *columnSizes array must be malloced, assume caller calls free().
  */
 int** fourSum(int* nums, int numsSize, int target, int* returnSize, int** returnColumnSizes){
+    
+    //initial variable
     int total=64;       //assume that resultSize is 64*int
     *returnSize=0;
     int **result=(int**)malloc(sizeof(int*)*total);
@@ -30,22 +32,18 @@ int** fourSum(int* nums, int numsSize, int target, int* returnSize, int** return
     int sum=0;
     for (int i=0 ; i<numsSize-3 ;)
     {
-        printf("i=%d\n",i);
         for (int j=i+1 ; j<numsSize-2 ;)
         {
-            printf("j=%d\n",j);
             k=j+1;
             p=numsSize-1;
             while( k < p)
             {
-                printf("k=%d\n",k);
-                printf("p=%d\n",p);
                 sum = nums[i]+nums[j]+nums[k]+nums[p];
                 if (sum > target)
                 {
                     int pTemp=p;
                     p--;
-                    while( p > 3 && nums[pTemp]==nums[p])
+                    while( p >= 3 && nums[pTemp]==nums[p])
                     {
                         p--;
                     }
@@ -54,14 +52,13 @@ int** fourSum(int* nums, int numsSize, int target, int* returnSize, int** return
                 {
                     int kTemp=k;
                     k++;
-                    while( k < (numsSize-2) && nums[kTemp]==nums[k])
+                    while( k <= (numsSize-2) && nums[kTemp]==nums[k])
                     {
                         k++;
                     }
                 }
                 else if (sum == target)
                 {
-                    printf("MATCH!!\n");
                     (*returnColumnSizes)[*returnSize]=4;
                     result[*returnSize]=(int*) malloc(sizeof(int)*4);
                     result[*returnSize][0]=nums[i];
@@ -69,31 +66,28 @@ int** fourSum(int* nums, int numsSize, int target, int* returnSize, int** return
                     result[*returnSize][2]=nums[k];
                     result[*returnSize][3]=nums[p];
                     int pTemp=p;
+                    int kTemp=k;
                     p--;
-                    while( p > 3 && nums[pTemp]==nums[p])
+                    k++;
+                    //if next k & p is both the same value.==>skip next k & p
+                    while( p >= 3 && nums[pTemp]==nums[p] && k <= (numsSize-2) && nums[kTemp]==nums[k]) 
                     {
                         p--;
-                    }
-                    int kTemp=k;
-                    k++;
-                    while( k < (numsSize-2) && nums[kTemp]==nums[k])
-                    {
                         k++;
                     }
                     (*returnSize)++;
-                    printf("\n");
                 }
             }
             int jTemp=j;
             j++;
-            while(j < (numsSize-3) && nums[jTemp]==nums[j])
+            while(j <= (numsSize-3) && nums[jTemp]==nums[j])
             {
                 j++;
             }
         }
         int iTemp=i;
         i++;
-        while( i < (numsSize-4) && nums[iTemp]==nums[i])
+        while( i <= (numsSize-4) && nums[iTemp]==nums[i])
         {
             i++;
         }
