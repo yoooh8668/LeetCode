@@ -1,34 +1,36 @@
-bool checkInternel (char *s ,int i , int j)
-{
-    printf("\ni=%d j=%d\n",i,j);
-    if (s[i]==')' || s[i]==']' || s[i]=='}') //if not start
-    {
-        printf("START WITH END CHAR");
-        return false;
-    }
-    int p =j;
-    while (p!=i)
-    {
-        if ( (s[i] == '(' && s[p] ==')') || (s[i] == '[' && s[p] ==']') || (s[i] == '{' && s[p] =='}') )
-        {
-            printf("STILL CHECK FOR %d %d\n",i+1,p-1);
-            if( checkInternel(s,i+1,p-1) )
-            {
-                i=p+1;
-                p=j;
-            }
-            else 
-                return false;
-        }
-        p--;
-    }
-    return true;
-}
+
 
 bool isValid(char * s){
-    int sLen = strlen(s); //1 <= s.length <= 10^4
-    printf("sLen=%d\n",sLen);
-    if (sLen == 1)
+    int sLen = strlen(s);
+    //odd sLen always false
+    if (sLen %2 == 1)
         return false;
-    return checkInternel(s, 0, sLen-1);
+    
+    int count =sLen;
+    for (int i=0 ; i<=sLen-2 ;i++)
+    {
+        if (s[i])                   //s[i] != NULL
+        {
+            for (int j=i+1 ; j<=sLen-1 ;)
+            {
+                if( !s[j] )         //s[j] == NULL
+                    j++;
+                else if (  (s[i]=='(' && s[j]==')') || (s[i]=='{' && s[j]=='}') || (s[i]=='[' && s[j]==']') )
+                {
+                    s[i] =0;
+                    s[j] =0;
+                    i=-1;
+                    count-=2;
+                    if (count == 0)
+                        return true;
+                    break;
+                }
+                else
+                    break;
+            }
+        }
+        else 
+            i++;
+    }
+    return false;
 }
