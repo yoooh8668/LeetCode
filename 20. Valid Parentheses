@@ -1,0 +1,28 @@
+bool checkInternel (char *s ,int i , int j)
+{
+    if (s[i]!='(' || s[i]!='[' || s[i]!='{') //if not start
+        return false;
+    int p =j;
+    while (p!=i)
+    {
+        if ( (s[i] == '(' && s[p] ==')') || (s[i] == '[' && s[p] ==']') || (s[i] == '{' && s[p] =='}') )
+        {
+            if ((p-i) == 1) // p is next to i
+            {
+                return true;
+            }
+            else
+            {
+                return checkInternel(s,i+1,p-1);
+            }
+        p--;
+    }
+    return false;
+}
+
+bool isValid(char * s){
+    int sLen = strlen(s); //1 <= s.length <= 10^4
+    if (sLen == 1)
+        return false;
+    return checkInternel(s, 0, sLen-1);
+}
