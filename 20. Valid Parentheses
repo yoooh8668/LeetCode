@@ -51,25 +51,18 @@ bool isValid(char * s){
             if(top>=1)                                          //stack is non-NULL
             {
                 if(abs(stack[top-1]-stack[top])<3)              // (-) = 1,  [-] = 2,  {-} = 2
-                {
                     top = top-2;
-                }
                 else
-                {
                     return false;
-                }
             }
             else                                                //stack is NULL && add a end mark
-            {
                 return false;
-            }
         }
             
     }
+    free(stack);
     if(top < 0)     //finish check && stack is NULL
-    {
         return true;
-    }
     return false;
 }
 */
