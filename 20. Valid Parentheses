@@ -34,3 +34,42 @@ bool isValid(char * s){
     }
     return false;
 }
+
+/*C online solution ==> stack
+bool isValid(char * s){
+    
+    int  sLen = strlen(s);
+    int  top = -1;                                      //stack top;
+    char* stack = (char*)malloc(sizeof(char)*10000);
+
+    for(int i=0;i<sLen;i++)
+    {
+        top = top + 1;
+        stack[top] = s[i];                              //put current s[i]
+        if((s[i] == ')') || (s[i] == '}') || (s[i] == ']') )    //if end mark get into the stack
+        {
+            if(top>=1)                                          //stack is non-NULL
+            {
+                if(abs(stack[top-1]-stack[top])<3)              // (-) = 1,  [-] = 2,  {-} = 2
+                {
+                    top = top-2;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else                                                //stack is NULL && add a end mark
+            {
+                return false;
+            }
+        }
+            
+    }
+    if(top < 0)     //finish check && stack is NULL
+    {
+        return true;
+    }
+    return false;
+}
+*/
