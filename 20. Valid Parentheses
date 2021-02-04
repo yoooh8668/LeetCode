@@ -1,7 +1,11 @@
 bool checkInternel (char *s ,int i , int j)
 {
-    if (s[i]!='(' || s[i]!='[' || s[i]!='{') //if not start
+    printf("\ni=%d j=%d\n",i,j);
+    if (s[i]==')' || s[i]==']' || s[i]=='}') //if not start
+    {
+        printf("START WITH END CHAR");
         return false;
+    }
     int p =j;
     while (p!=i)
     {
@@ -9,12 +13,15 @@ bool checkInternel (char *s ,int i , int j)
         {
             if ((p-i) == 1) // p is next to i
             {
-                return true;
+                printf("TRUE");
+                return true;   
             }
             else
             {
-                return checkInternel(s,i+1,p-1);
+                printf("STILL CHECK FOR %d %d\n",i+1,p-1);
+                return checkInternel(s,i+1,p-1);   
             }
+        }
         p--;
     }
     return false;
@@ -22,6 +29,7 @@ bool checkInternel (char *s ,int i , int j)
 
 bool isValid(char * s){
     int sLen = strlen(s); //1 <= s.length <= 10^4
+    printf("sLen=%d\n",sLen);
     if (sLen == 1)
         return false;
     return checkInternel(s, 0, sLen-1);
