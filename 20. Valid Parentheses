@@ -1,5 +1,4 @@
 
-
 bool isValid(char * s){
     int sLen = strlen(s);
     //odd sLen always false
@@ -35,33 +34,33 @@ bool isValid(char * s){
     return false;
 }
 
-/*C online solution ==> stack
+/*C online solution ==> stack  every end mark('}',')',']') must pair with a start mark.
 bool isValid(char * s){
     
     int  sLen = strlen(s);
-    int  top = -1;                                      //stack top;
+    int  top = -1;                                  //stack top;
     char* stack = (char*)malloc(sizeof(char)*10000);
 
-    for(int i=0;i<sLen;i++)
+    for(int i=0;i<sLen;i++)                         //check end mark
     {
         top = top + 1;
-        stack[top] = s[i];                              //put current s[i]
-        if((s[i] == ')') || (s[i] == '}') || (s[i] == ']') )    //if end mark get into the stack
+        stack[top] = s[i];                          //push current s[i] into stack
+        if((s[i] == ')') || (s[i] == '}') || (s[i] == ']') )    //if s[i] is end mark => check the stack if pairs with start mark
         {
-            if(top>=1)                                          //stack is non-NULL
+            if(top>=1)                                  //stack is non-NULL
             {
                 if(abs(stack[top-1]-stack[top])<3)              // (-) = 1,  [-] = 2,  {-} = 2
-                    top = top-2;
+                    top = top-2;                                //pair!! , pop this two element
                 else
-                    return false;
+                    return false;                               //non-pair 
             }
-            else                                                //stack is NULL && add a end mark
+            else                                        //stack is NULL && add a end mark
                 return false;
         }
             
     }
     free(stack);
-    if(top < 0)     //finish check && stack is NULL
+    if(top < 0)     //finish check end mark && stack is NULL
         return true;
     return false;
 }
