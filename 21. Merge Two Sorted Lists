@@ -10,27 +10,27 @@
 struct ListNode* mergeTwoLists(struct ListNode* l1, struct ListNode* l2){
     struct ListNode* temp;
 
-    int lenL1=0;
-    int lenL2=0;
-    temp =l1;
-    while (temp!=NULL)
-    {
-        lenL1++;
-        temp=temp->next;
-    }
-    temp =l2;
-    while (temp!=NULL)
-    {
-        lenL2++;
-        temp=temp->next;
-    }
-    
     //check if any list that is NULL
-    if(lenL1==0)
+    //l1 is NULL?
+    temp =l1;
+    int count =0;
+    while (count==0 && l1)      
+    {
+        count++;
+    }
+    if(count==0)
         return l2;
-    else if(lenL2==0)
-        return l1;
     
+    //l2 is NULL?
+    count=0;
+    temp =l2;
+    while (count==0 && l2)
+    {
+        count++;
+    }
+    if(count==0)
+        return l1;
+
     //determine the start list
     struct ListNode* start;
     if (l1->val < l2->val)
@@ -44,7 +44,9 @@ struct ListNode* mergeTwoLists(struct ListNode* l1, struct ListNode* l2){
         l2=l2->next;
     }
     temp=start;
-    while( l1!=NULL && l2!=NULL)
+    
+    //start sort til l1 or l2 are NULL
+    while( l1 && l2)
     {
         if (l1->val < l2->val)
         {
@@ -59,18 +61,12 @@ struct ListNode* mergeTwoLists(struct ListNode* l1, struct ListNode* l2){
             l2=l2->next;
         }
     }
-    if (l1==NULL)
-    {
+    
+    //connect the remained
+    if ( !l1 )
         temp->next=l2;
-        temp=l2;
-        l2=l2->next;  
-    }
-    else if (l2==NULL)
-    {
+    else
         temp->next=l1;
-        temp=l1;
-        l1=l1->next;
-    }
-
+    
     return start;
 }
