@@ -11,20 +11,18 @@ bool checkInternel (char *s ,int i , int j)
     {
         if ( (s[i] == '(' && s[p] ==')') || (s[i] == '[' && s[p] ==']') || (s[i] == '{' && s[p] =='}') )
         {
-            if ((p-i) == 1) // p is next to i
+            printf("STILL CHECK FOR %d %d\n",i+1,p-1);
+            if( checkInternel(s,i+1,p-1) )
             {
-                printf("TRUE");
-                return true;   
+                i=p+1;
+                p=j;
             }
-            else
-            {
-                printf("STILL CHECK FOR %d %d\n",i+1,p-1);
-                return checkInternel(s,i+1,p-1);   
-            }
+            else 
+                return false;
         }
         p--;
     }
-    return false;
+    return true;
 }
 
 bool isValid(char * s){
