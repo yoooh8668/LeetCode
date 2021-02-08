@@ -1,0 +1,84 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     struct ListNode *next;
+ * };
+ */
+
+
+struct ListNode* mergeKLists(struct ListNode** lists, int listsSize){
+    //for lists that size smaller than 2
+    if (listsSize == 0)
+        return NULL;
+    else if (listsSize ==1)
+        return lists[0];
+    
+    //find start lists that is non-NULL
+    int startPoint =0;
+    for (int i=0 ; i<listsSize-1 ; i++)
+    {
+        if (!lists[i])
+            startPoint++;
+        else
+            break;
+    }
+    
+    //merge start
+    struct ListNode* start;//return value
+    struct ListNode* temp; 
+    struct ListNode* l1;
+    struct ListNode* l2;
+    start = lists[startPoint];
+    for (int i=startPoint ; i<=listsSize -2 ; i++) 
+    {
+        l1 =start;
+        l2 =lists[i+1];
+        
+        //check if l2 is NULL?
+        int count=0;
+        while (count==0 && l2)
+        {
+            count++;
+        }
+        if(count==0)
+            continue;
+
+        //determine the start list
+        if (l1->val < l2->val)
+        {
+            start=l1;
+            l1=l1->next;
+        }
+        else
+        {
+            start=l2;
+            l2=l2->next;
+        }
+        temp=start;
+
+        //start sort til l1 or l2 are NULL
+        while( l1 && l2)
+        {
+            if (l1->val < l2->val)
+            {
+                temp->next=l1;
+                temp=l1;
+                l1=l1->next;
+            }
+            else
+            {
+                temp->next=l2;
+                temp=l2;
+                l2=l2->next;
+            }
+        }
+
+        //connect the remained
+        if ( !l1 )
+            temp->next=l2;
+        else
+            temp->next=l1;
+    }
+    return start;
+}
