@@ -80,6 +80,11 @@ struct ListNode* mergeKLists(struct ListNode** lists, int listsSize){
 
 
 /* C online solution ==>Recursive
+//merge two lists into one list, Save every list that generated this way.
+//Then, recursive it.
+//This way can reduce the calculation time because there is no large result during calculation.
+
+//Same way as online solution 21.Merge Two Sorted Lists
 struct ListNode* mergeLists(struct ListNode* l1, struct ListNode* l2){
     if (!l1) return l2;
     if (!l2) return l1;
@@ -100,21 +105,23 @@ struct ListNode* mergeKLists(struct ListNode** lists, int listsSize) {
     if (listsSize == 1)
         return lists[0];
     
+    //reducedNum = half of the size(round up)
     int reducedNum = listsSize / 2;
     if (listsSize % 2) reducedNum++;
     
     struct ListNode** reducedLists = (struct ListNode**) malloc(reducedNum * sizeof(struct ListNode*));
      
     int i = 0;
+    //merge every two lists, and save them.
     while (i < listsSize) {
         if (i + 1 == listsSize) {
             reducedLists[i / 2] = lists[i];
             break;
         }
-        reducedLists[i / 2] = mergeLists(lists[i], lists[i + 1]);
+        reducedLists[i / 2] = mergeLists(lists[i], lists[i + 1]);       //merged list[0] and list[1], save to reducedLists[0];
         i += 2;
     }
     
-    return mergeKLists(reducedLists, reducedNum);
+    return mergeKLists(reducedLists, reducedNum);                       //recursive this function for reducedList.
 }
 */
