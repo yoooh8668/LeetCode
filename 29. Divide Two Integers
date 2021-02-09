@@ -1,0 +1,65 @@
+
+
+int divide(int dividend, int divisor){
+    int sign1=1;
+    int sign2=1;
+    int min1=0;
+    
+    //overFlow situation
+    if (divisor==INT_MIN)
+    {
+        if (dividend ==INT_MIN)
+            return 1;
+        else 
+            return 0;
+    }
+    if (dividend==INT_MIN)
+    {
+        if (divisor ==-1)   //overFlow ==>return INT_MAX
+            return INT_MAX;
+        min1=1;
+        dividend++;
+    }
+
+    
+    if (dividend<0)
+    {
+        sign1=0;
+        dividend=abs(dividend);
+    }
+    if (divisor<0)
+    {
+        sign2=0;
+        divisor=abs(divisor);
+    }
+    
+    //start calulation
+    int result=0;
+    if (divisor==1)
+        result = dividend;
+    else
+    {
+        while(dividend >= divisor)
+        {
+            dividend-=divisor;
+            result++;
+        }
+    }
+    
+    //if dividend == INT_MIX
+    if (min1==1)
+    {
+        if (result == INT_MAX)
+            return INT_MIN;
+        else if ((dividend+1)>=divisor)
+            result++;
+    }
+    
+    //result
+    if (sign1!=sign2 && result!=0)
+    {
+        result= -result;
+    }
+    
+    return result;
+}
