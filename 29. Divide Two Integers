@@ -21,7 +21,7 @@ int divide(int dividend, int divisor){
         dividend++;
     }
 
-    
+    //define sign of two number
     if (dividend<0)
     {
         sign1=0;
