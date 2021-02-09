@@ -1,0 +1,21 @@
+
+
+int strStr(char * haystack, char * needle){
+    int haystackLen = strlen(haystack);
+    int needleLen = strlen(needle);
+    
+    if (needleLen == 0)
+        return 0;
+    
+    for (int i=0 ; i<=haystackLen-needleLen ;i++) //if remain element larger then needleLen, continue search.
+    {
+        for (int j=0 ; j<needleLen ;j++)
+        {
+            if (haystack[i+j] !=needle[j] )       //if non-match, search next i.
+                break;
+            if (j==needleLen-1)                   //if all needle matched, return current i.
+                return i;
+        }
+    }
+    return -1;
+}
