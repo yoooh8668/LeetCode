@@ -42,3 +42,48 @@ struct ListNode* reverseKGroup(struct ListNode* head, int k){
     }
     return start;
 }
+
+
+/*C online solution==> stack
+struct ListNode* reverseKGroup(struct ListNode* head, int k) {
+  // At any given time, phead will be a pointer to the head of the k-list we are
+  // manipulating. During the first iteration, it will point to the head
+  // pointer. During subsequent iterations, it will point to the next pointer of
+  // the last node in the previous k-list.
+  struct ListNode** phead = &head;
+
+  while (*phead) {
+    // Find the node that should be the end of the k-list.
+    struct ListNode* kend = *phead;
+    for (int i = 0; i < k; ++i) {
+      // We are done if the rest of the list is too short.
+      if (!kend) return head;
+      kend = kend->next;
+    }
+
+    // Save the original head for later.
+    struct ListNode* orig_head = *phead;
+
+    // Now treat the list as a stack. Pop a node from the original list, and
+    // push it onto the k-list.
+    struct ListNode* khead = kend;
+    while (*phead != kend) {
+      // Pop from original.
+      struct ListNode* n = *phead;
+      *phead = n->next;
+
+      // Push to k-list.
+      n->next = khead;
+      khead = n;
+    }
+    // New head should be head of the k-list.
+    *phead = khead;
+
+    // The original head is now the last node in the k-list.
+    // Use its next pointer as the head pointer for the next iteration.
+    phead = &(orig_head->next);
+  }
+
+  return head;
+}
+*/
