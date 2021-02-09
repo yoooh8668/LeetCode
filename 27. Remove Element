@@ -21,3 +21,24 @@ int removeElement(int* nums, int numsSize, int val){
     }
     return (numsSize-valCount);
 }
+
+/* C online solution ==> replace(save calculation time)
+//If match, replace it with the last element, length -1 (return Size-1).
+//If non-match, continue search (index +1).
+//if index reach length, finish search.
+int removeElement(int* nums, int numsSize, int val){
+    int length = numsSize;
+    int index = 0;
+    while ( index < length )
+    {
+         if ( nums[index] == val )
+         {
+             nums[index] = nums[length - 1];
+             length--;
+         }
+        else 
+            index++;
+    }
+     return length;  
+}
+*/
