@@ -1,0 +1,53 @@
+
+
+/**
+ * Note: The returned array must be malloced, assume caller calls free().
+ */
+char ** generateParenthesis(int n, int* returnSize){
+    //initial variable
+    int total=64;       //assume that resultSize is 64*char
+    *returnSize=0;
+    int **result=(int**)malloc(sizeof(char*)*total);
+    char buf[16];
+    
+    /*solve as math 
+    '('=>1
+    ')'=>0
+    If n=3, largest number in binaryis 111000 which means ((())).
+    And smallest number in binary is 101010 which means ()()().
+    By add 2 to small number will get another result 101100 which means ()(()).
+    By add 8 to samll number will get another result 110010 which means (())().
+    By add 10 will get another too (2+8) 110100 which means (()())
+    */
+    int maxTarget =2;
+    int minTarget =2;
+    int length = 1;
+    
+    while (length<n)
+    {
+        maxTarget*=4;
+        maxTarget+=pow(2,length+1);
+        minTarget*=4;
+        minTarget+=2;
+        length+=1;
+    }
+    printf("maxTarget = %d\n",maxTarget);
+    printf("minTarget = %d\n",minTarget);
+    
+    /*This is addNumber value. Symbolize the realAddNumber we need to add on minTarget.
+    6    5    4    3    2    1    0   (addNumber, max 127)
+    2^13 2^11 2^9  2^7  2^5  2^3  2^1 (realAddNumber)
+    After each add, addNumber will +1, then we calculate the realNumber.
+    */
+    int addNumber = 1; 
+    int realAddNumber =2;
+    while ( minTarget+realAddNumber >  )
+    
+    
+    buf[0] = '(';
+    buf[1] = ')';
+    result[*returnSize]=(char*) malloc(sizeof(char)*16);
+    strcpy(result[(*returnSize)], buf);
+    (*returnSize)++;
+    return result;
+}
