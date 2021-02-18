@@ -12,13 +12,6 @@ void nextPermutation(int* nums, int numsSize){
     {
         if (nums[i-1]>=nums[i])
             continue;
-        else if(i == numsSize-1) 
-        {
-            temp = nums[i];
-            nums[i] = nums[i-1];
-            nums[i-1] = temp;
-            return nums;
-        }
         else
         {
             //find the number bigger then nums[i-1]
