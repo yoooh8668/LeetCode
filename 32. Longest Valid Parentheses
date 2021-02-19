@@ -1,10 +1,16 @@
-int pairWithStart(char * s,int start){
+/*******************************
+1.search every start char check one time.
+  Use the modify function of "20. Valid Parentheses".
+  Time complexity:O(n^2)
+*******************************/
+
+int pairWithStart(char * s,int start){  //pairWithStart : Return maxLen with start char.
     
     int  sLen = strlen(s);
     int  top = -1;
     int  currentMatch=start;
     
-    //After called-function return, space will auto call free. We don't need to malloc a memory.
+    //After called-function return, function will auto call free. We don't need to malloc a memory.
     char stack[sLen];
     //char* stack = (char*)malloc(sizeof(char)*sLen);
 
@@ -52,4 +58,46 @@ int longestValidParentheses(char * s){
         currentLen = ( currentLen >= computeLen ) ? currentLen : computeLen;
     }
     return currentLen;
+}
+
+
+
+/******************************
+2.check only once.
+  Rather char, stack save the index of string that need to check pair.
+  Every time we pair, we pop the stack and check the length for now by looking into the stack top.
+  Remenber, if stack is null, we need to push the previous index.
+  Time complexity:O(n)
+*****************************/
+
+int longestValidParentheses(char * s){
+    int maxLen=0;
+    int sLen = strlen(s);
+    
+    if (sLen == 0)
+        return 0;
+    
+    int stack[sLen+1];
+    int top = 0;
+    stack[top] = -1;
+    for (int i=0 ; i<sLen ; i++)
+    {
+        if (s[i]=='(')
+        {
+            top++;
+            stack[top] = i;
+        }
+        else if (stack[top]!=-1 && s[stack[top]]=='(') // s[stack[top]] exist && stack top == '(' ==>match
+        {
+            top--;
+            maxLen = (maxLen >= i-stack[top] )? maxLen : i-stack[top];  //save maxLen
+        }
+        else //if non pair or the stack is NULL ==> reset the stack.
+        {
+            top=0;
+            stack[top]=i;
+        }
+    }
+    
+    return maxLen;
 }
