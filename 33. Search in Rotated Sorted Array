@@ -1,13 +1,69 @@
-/*
+/**************************
   1.Time complexity = O(n)
   Just search one by one XD.
-*/
+**************************/
 
 int search(int* nums, int numsSize, int target){
     for (int i=0 ; i<numsSize ;i++)
     {
         if (nums[i]==target)
             return i;
+    }
+    return -1;
+}
+
+
+/**************************
+  2.use half search
+  Time complexity = O(log n)
+  Binary search
+**************************/
+
+int search(int* nums, int numsSize, int target){
+    
+    if (numsSize == 1 && nums[0]==target)
+        return 0;
+    else 
+        return -1;
+    
+    int start =0;
+    int end =numsSize-1;
+    int half;
+    
+    while (1)
+    {
+        if (nums[start]==target)
+            return start;
+        if (nums[end]==target)
+            return end;
+        
+        half = (end+start)/2;
+        if (nums[half]==target)
+            return half;
+        else if (half==start)
+            return -1;
+        else if (nums[half]>nums[start]) //rising up section 
+        {
+            if (nums[target] > nums[half] || nums[start]<nums[target])
+            {
+                start = half;
+            }
+            else
+            {
+                end = half;
+            }
+        }
+        else //rising down section
+        {
+            if (nums[target] > nums[half] && nums[start]>nums[target])
+            {
+                start = half;
+            }
+            else
+            {
+                end = half;
+            }
+        }
     }
     return -1;
 }
