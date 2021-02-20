@@ -1,53 +1,95 @@
+//Modified function from 20. Valid Parentheses
+bool isValid(char * s){
+    
+    int  sLen = strlen(s);
+    int  top = -1;
+    char stack[sLen+1]; //array don't need to be malloced.
 
+    for(int i=0;i<sLen;i++) 
+    {
+        top = top + 1;
+        stack[top] = s[i];
+        if(s[i] == ')')
+        {
+            if(top>=1) 
+            {
+                if(stack[top]-stack[top-1]==1)
+                    top = top-2;
+                else
+                    return false;
+            }
+            else
+                return false;
+        }
+    }
+    if(top < 0) 
+        return true;
+    return false;
+}
 
 /**
  * Note: The returned array must be malloced, assume caller calls free().
  */
 char ** generateParenthesis(int n, int* returnSize){
-    //initial variable
-    int total=64;       //assume that resultSize is 64*char
-    *returnSize=0;
-    int **result=(int**)malloc(sizeof(char*)*total);
-    char buf[16];
     
-    /*solve as math 
-    '('=>1
-    ')'=>0
-    If n=3, largest number in binaryis 111000 which means ((())).
-    And smallest number in binary is 101010 which means ()()().
-    By add 2 to small number will get another result 101100 which means ()(()).
-    By add 8 to samll number will get another result 110010 which means (())().
-    By add 10 will get another too (2+8) 110100 which means (()())
-    */
-    int maxTarget =2;
-    int minTarget =2;
-    int length = 1;
-    
-    while (length<n)
-    {
-        maxTarget*=4;
-        maxTarget+=pow(2,length+1);
-        minTarget*=4;
-        minTarget+=2;
-        length+=1;
+    //for each n, there is a different returnSize. set the two largest to its returnSize.
+    //8=>1430, 7=>429, 6=>132, 5=>42, 4=>14, 3=>5 ,2=>2 ,1=>1
+    int total=0;
+    switch(n) {
+    case 8:
+        total=1430;
+        break;
+    case 7:
+        total=429;
+        break;
+    default:
+        total=132;
+        break;
     }
-    printf("maxTarget = %d\n",maxTarget);
-    printf("minTarget = %d\n",minTarget);
     
-    /*This is addNumber value. Symbolize the realAddNumber we need to add on minTarget.
-    6    5    4    3    2    1    0   (addNumber, max 127)
-    2^13 2^11 2^9  2^7  2^5  2^3  2^1 (realAddNumber)
-    After each add, addNumber will +1, then we calculate the realNumber.
-    */
-    int addNumber = 1; 
-    int realAddNumber =2;
-    while ( minTarget+realAddNumber >  )
+    //malloc result
+    char **result = malloc(sizeof(char*)*total);
+    //malloc for each string
+    for (int i = 0; i < total; i++)
+        result[i] = malloc(2*n+1);
     
+    *returnSize=0;
+    int minNumber=0;
+    int maxNumber=0;
+    //'(' =1 ,')'=0
     
-    buf[0] = '(';
-    buf[1] = ')';
-    result[*returnSize]=(char*) malloc(sizeof(char)*16);
-    strcpy(result[(*returnSize)], buf);
-    (*returnSize)++;
+    //create minNumber ()()...()() = 1010...1010
+    //create maxNumber ((((...)))) = 1111...0000
+    for (int i=1 ; i<=n ; i++)
+    {
+        minNumber<<=2;
+        minNumber+=2;
+        maxNumber<<=2;
+        maxNumber += pow(2,i);
+    }
+
+    char buf[(2*n)+1];
+    int count=0;
+    
+    //For each number between minNumber and maxNumber, check if it is valid?
+    for (int i=minNumber ; i<=maxNumber ; i++)
+    {
+        count=0;
+        //change number to char form.
+        for (int j=i ; j>0 ;j/=2) 
+        {
+            if (j%2==0)
+                buf[2*n-1-(count++)]=')'; //buf[2*n-1-count]=')';      count++;
+            else 
+                buf[2*n-1-(count++)]='(';
+        }
+        buf[count]='\0';
+        
+        //check if it is valid?
+        if (isValid(buf))
+        {
+            strcpy(result[(*returnSize)++], buf);
+        }
+    }  
     return result;
 }
