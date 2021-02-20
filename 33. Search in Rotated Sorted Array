@@ -94,3 +94,127 @@ int search(int* nums, int numsSize, int target){
     else
         return result-numsSize+pivot;
 }
+
+/**************************
+  3.Use binary search without finding pivot.
+  Time complexity = O(log n)
+  Binary checking current section state. If full-sorted condition matched, switch to binarySearch.
+**************************/
+
+int binarySearch(int* nums, int start, int end,int target)
+{
+    int half=0;
+    //check if target is at start or end?
+    if (nums[start]==target)
+        return start;
+    else if (nums[end]==target)
+        return end;
+    
+    while(1)
+    {    
+        int half=(start+end)/2;
+
+        if (nums[half]==target)
+            return half;
+        else if (half==start) //no element that to be searched
+            return -1;
+        else if (nums[half]>target) //at left side
+            end = half;
+        else                        //at right side
+            start = half;
+    }
+}
+
+int search(int* nums, int numsSize, int target){
+    
+    int start=0;
+    int end =numsSize-1;
+    int half=(start+end)/2;
+    //binary search pivot
+    while(start != half)
+    {
+        //check if target is at start ,end or half?
+        if (nums[start]==target)
+            return start;
+        else if (nums[end]==target)
+            return end;
+        else if (nums[half]==target)
+            return half;
+        
+        //target is at full rising up section.(half<target<end)
+        if(nums[half]<target && target<nums[end])
+            return binarySearch(nums, half, end, target);
+        
+        //target is at full rising up section.(start<target<half)
+        else if (nums[half]>target && target>nums[start])
+            return binarySearch(nums, start, half, target);
+        
+        //( target>half && half>start ) or ( target<half && half>end ) ==> target is at right section
+        else if ((target>nums[half])&&(nums[half]>nums[start]) || (target<nums[half])&&(nums[half]>nums[end]))
+            start=half;
+        
+        //( target>half && half<start ) or ( target<half && half<end ) ==> target is at left section
+        else
+            end=half;
+
+        half=(start+end)/2;
+    }
+    return binarySearch(nums, start, end, target);
+    
+}
+
+/**************************
+  4.Just use binary search in one function.
+  Time complexity = O(log n)
+  Binary search and check current section state.
+**************************/
+
+int search(int* nums, int numsSize, int target){
+    
+    int start=0;
+    int end =numsSize-1;
+    int half=(start+end)/2;
+    
+    //start=half condition (numsSize = 1 or 2)
+    for (int i=0 ; start == half && i<=numsSize ; i++)
+    {
+        if (i==numsSize)
+            return -1;
+        if (nums[i]==target)
+            return i;
+    }
+    
+    //check if target is at start or end?
+    if (nums[start]==target)
+        return start;
+    else if (nums[end]==target)
+        return end;
+    
+    //Binary search until no half.
+    while(start != half)
+    {
+        //check if target is at half?
+        if (nums[half]==target)
+            return half;
+        
+        //target is at full rising up section.(half<target<end)
+        if(nums[half]<target && target<nums[end])
+            start=half;
+        
+        //target is at full rising up section.(start<target<half)
+        else if (nums[half]>target && target>nums[start])
+            end=half;
+        
+        //( target>half && half>start ) or ( target<half && half>end ) ==> target is at right section
+        else if ((target>nums[half])&&(nums[half]>nums[start]) || (target<nums[half])&&(nums[half]>nums[end]))
+            start=half;
+        
+        //( target>half && half<start ) or ( target<half && half<end ) ==> target is at left section
+        else
+            end=half;
+
+        half=(start+end)/2;
+    }
+    return -1;
+    
+}
