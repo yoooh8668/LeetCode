@@ -71,8 +71,8 @@ char ** generateParenthesis(int n, int* returnSize){
     char buf[(2*n)+1];
     int count=0;
     
-    //For each number between minNumber and maxNumber, check if it is valid?
-    for (int i=minNumber ; i<=maxNumber ; i++)
+    //For every two number between minNumber and maxNumber, check if it is valid?
+    for (int i=minNumber ; i<=maxNumber ; i+=2) 
     {
         count=0;
         //change number to char form.
