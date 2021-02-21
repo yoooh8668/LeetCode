@@ -147,3 +147,196 @@ int* searchRange(int* nums, int numsSize, int target, int* returnSize){
     result[1]=end;
     return result;
 }
+
+
+/*********************
+3.Binary search for target and then binary search start/end.
+*********************/
+
+int binarySearch(int* nums, int start, int end,int target)
+{
+    int half=0;
+    //check if target is at start or end?
+    if (nums[start]==target)
+        return start;
+    else if (nums[end]==target)
+        return end;
+    
+    half=(start+end)/2;
+    
+    while(half!=start)
+    {    
+        if (nums[half]==target)
+            return half;
+        else if (nums[half]>target) //at left side
+            end = half;
+        else                        //at right side
+            start = half;
+        half=(start+end)/2;
+    }
+    return -1;
+}
+
+int rightIndexSearch(int* nums, int start, int end,int target)
+{
+    int half=0;
+    half = (start+end)/2;
+    while(half!=start)
+    {
+        if (nums[half]==target)
+            end = half;
+        else
+            start=half;
+        half=(start+end)/2;    
+    }
+    return end;
+}
+
+int leftIndexSearch(int* nums, int start, int end,int target)
+{
+    int half=0;
+    end++; //index fix for last element.
+    
+    half = (start+end)/2;
+    while(start!=half)
+    {
+        if (nums[half]==target)
+            start = half;
+        else if (nums[half]>target)
+            end=half;
+        
+        half=(start+end)/2;    
+    }
+    return start;
+}
+
+/**
+ * Note: The returned array must be malloced, assume caller calls free().
+ */
+int* searchRange(int* nums, int numsSize, int target, int* returnSize){
+    int *result = malloc(sizeof(int)*2);
+    *returnSize=2;
+    
+    //numsSize ==0
+    if (numsSize==0)
+    {
+        result[0]=-1;
+        result[1]=-1;
+        return result;
+    }
+    
+    int targetFound=binarySearch(nums,0,numsSize-1,target);
+    int end;
+    int start;
+    
+    // at least one match.
+    if (targetFound != -1) 
+    {
+        start = rightIndexSearch(nums,0,targetFound,target);
+        end =  leftIndexSearch(nums,targetFound,numsSize-1,target);
+    }
+    else 
+    {
+        result[0]=-1;
+        result[1]=-1;
+        return result;
+    }
+    result[0]=start;
+    result[1]=end;
+    return result;
+}
+
+/***************************
+4.Combine right/left index search function.
+***************************/
+int binarySearch(int* nums, int start, int end,int target)
+{
+    int half=0;
+    //check if target is at start or end?
+    if (nums[start]==target)
+        return start;
+    else if (nums[end]==target)
+        return end;
+    
+    half=(start+end)/2;
+    
+    while(half!=start)
+    {    
+        if (nums[half]==target)
+            return half;
+        else if (nums[half]>target) //at left side
+            end = half;
+        else                        //at right side
+            start = half;
+        half=(start+end)/2;
+    }
+    return -1;
+}
+
+int sameIndexSearch(int* nums, int start, int end,int target, bool left)
+{
+    int half=0;
+    //index fix for last element.
+    if (left)
+        end++;
+    
+    half = (start+end)/2;
+    while(half!=start)
+    {
+        if (nums[half]==target)
+        {
+            if (left)
+                start = half;
+            else
+                end = half;
+        }
+        else
+        {
+            if(left)
+                end=half;
+            else
+                start=half;
+        }
+        half=(start+end)/2;    
+    }
+    if(left)
+        return start;
+    else 
+        return end;
+}
+
+/**
+ * Note: The returned array must be malloced, assume caller calls free().
+ */
+int* searchRange(int* nums, int numsSize, int target, int* returnSize){
+    int *result = malloc(sizeof(int)*2);
+    *returnSize=2;
+    
+    //numsSize ==0
+    if (numsSize==0)
+    {
+        result[0]=-1;
+        result[1]=-1;
+        return result;
+    }
+    
+    int targetFound=binarySearch(nums,0,numsSize-1,target);
+    int end;
+    int start;
+    
+    // at least one match.
+    if (targetFound != -1) 
+    {
+        start = sameIndexSearch(nums,0,targetFound,target,0);
+        end =  sameIndexSearch(nums,targetFound,numsSize-1,target,1);
+    }
+    else 
+    {
+        result[0]=-1;
+        result[1]=-1;
+        return result;
+    }
+    result[0]=start;
+    result[1]=end;
+    return result;
+}
