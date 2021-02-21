@@ -1,0 +1,76 @@
+/**************************
+1.Directly finding.
+  Search until match item,
+  Use flag to determine whether the start/end are finish finding.
+**************************/
+int* searchRange(int* nums, int numsSize, int target, int* returnSize){
+    int start = -1;
+    int end = -1;
+    int startFlag=0;
+    int endFlag=0;
+    int *result = malloc(sizeof(int)*2);
+    *returnSize=2;
+    
+    //numsSize ==0
+    if (numsSize==0)
+    {
+        result[0]=-1;
+        result[1]=-1;
+        return result;
+    }
+    
+    //finding target
+    for (int i =0 ; i<numsSize;i++)
+    {
+        //Finding start
+        if (nums[i]==target)
+        {
+            start=i;
+            startFlag=1;
+            for (int j=i+1 ; j<numsSize ;j++)
+            {
+                //at lease one end
+                if (nums[j]==target)
+                {
+                    end=j;
+                    continue;
+                }
+                //all end are be found.
+                else
+                {
+                    end=j-1;
+                    endFlag=1;
+                    break;
+                }
+            }
+            break;
+        }
+    }
+    
+    //All finish
+    if (startFlag==1 && endFlag==1)
+    {
+        result[0]=start;
+        result[1]=end;
+    }
+    //end searching reach the end of array, still finish.
+    else if (startFlag==1 && endFlag==0 && end!=-1)
+    {
+        result[0]=start;
+        result[1]=end; //numsSize-1
+    }
+    //Couldn't find an end, end = start.
+    else if (startFlag==1 && endFlag==0 && end==-1)
+    {
+        result[0]=start;
+        result[1]=start;;
+    }
+    //Couldn't find a start.
+    else
+    {
+        result[0]=-1;
+        result[1]=-1;
+    }
+    return result;
+
+}
