@@ -1,0 +1,35 @@
+int binarySearch(int* nums,int numsSize,int target)
+{
+    int start=0;
+    int end = numsSize-1;
+    int half=0;
+    //check if target is at start or end?
+    if (nums[start]==target)
+        return start;
+    else if (nums[end]==target)
+        return end;
+    else if (nums[start]>target) //target is smaller then nums[0]
+        return 0;
+    else if (nums[end]<target)   //target is latger then nums[numsSize-1]
+        return end+1;
+    
+    half=(start+end)/2;
+    
+    while(half!=start)
+    {    
+        if (nums[half]==target)
+            return half;
+        else if (nums[half]>target) //at left side
+            end = half;
+        else                        //at right side
+            start = half;
+        half=(start+end)/2;
+    }
+    
+    //if no match => return start+1 index.
+    return start+1;
+}
+
+int searchInsert(int* nums, int numsSize, int target){
+    return binarySearch(nums,numsSize,target);
+}
