@@ -1,0 +1,72 @@
+
+
+bool isValidSudoku(char** board, int boardSize, int* boardColSize){
+    //Start to check by row.
+    for (int i=0 ; i<9 ; i++)
+    {
+        for (int j=0 ; j<9 ; j++)
+        {
+            if (board[i][j] != '.') // If it's '.'==>Skip
+            {
+                for (int k=j+1 ; k<9 ; k++)
+                {
+                    if (board[i][j] == board[i][k])
+                    {
+                        return false;
+                    }
+                }
+            }
+        }
+    }
+    
+    //Start to check by column.
+    for (int i=0 ; i<9 ; i++)
+    {
+        for (int j=0 ; j<9 ; j++)
+        {
+            if (board[j][i] != '.') // If it's '.'==>Skip
+            {
+                for (int k=j+1 ; k<9 ; k++)
+                {
+                    if (board[j][i] == board[k][i])
+                    {
+                        return false;
+                    }
+                }
+            }
+        }
+    }
+    
+    
+    //Start to check by 3x3 square.
+    int row=0;
+    int col=0;
+    int row2=0;
+    int col2=0;
+    
+    for (int i=0 ; i<9 ; i+=3)
+    {
+        for (int j=0 ; j<9 ; j+=3)
+        {
+            for (int k=0 ; k<9 ; k++)
+            {
+                row = k/3;
+                col = k%3;
+                if (board[i+row][j+col]!='.') // If it's '.'==>Skip
+                {
+                    for (int p=k+1 ; p<9 ; p++)
+                    {
+                        row2 = p/3;
+                        col2 = p%3;
+                        if (board[i+row][j+col] == board[i+row2][j+col2])
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    //printf("3x3 finish\n");
+    return true;
+}
