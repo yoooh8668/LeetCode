@@ -55,22 +55,30 @@ bool isValidSudoku(char** board, int boardSize, int* boardColSize){
     return true;
 }
 
-
-void solveSudoku(char** board, int boardSize, int* boardColSize){
-    int count =0;
-    while (count < 81)
+/***sudokuAdder***
+  Adder add an number to count which char is '.', then pass another count to next Adder.
+  If Next Adder return false, then switch another number.
+  If number 1~9 are all failed, set count back to '.' and return false.
+***/
+bool sudokuAdder(char** board, int boardSize, int* boardColSize, int count){
+    int countNext=count+1;
+    if (board[countNext/9][countNext%9] != '.')
+        countNext++;
+    for (int i=49 ; i<=58 ; i++) //ASCII 49='1' , 57='9'.
     {
-        if (board[count/9][count%9] != '.')
-            count++;
-        else 
+        if (i==58)
         {
-            for (int i=1 ; i<10 ; i++)
-            {
-                board[count/9][count%9] = i;
-                if ( isValidSudoku(board,9,9) )
-                    break;
-            }
-            count++;
+            board[count/9][count%9] = '.'; //reset
+            return false;
+        }
+        board[count/9][count%9] = i; 
+        if (isValidSudoku(......))
+        {
+            sudokuAdder(.......,countNext)
         }
     }
+}
+
+
+void solveSudoku(char** board, int boardSize, int* boardColSize){
 }
