@@ -1,4 +1,6 @@
-
+/******************************
+1.check row=>col=>3x3
+******************************/
 
 bool isValidSudoku(char** board, int boardSize, int* boardColSize){
     //Start to check by row.
@@ -68,5 +70,66 @@ bool isValidSudoku(char** board, int boardSize, int* boardColSize){
         }
     }
     //printf("3x3 finish\n");
+    return true;
+}
+
+
+/******************************
+2.check row=>col=>3x3 in same loop.
+******************************/
+bool isValidSudoku(char** board, int boardSize, int* boardColSize){
+    //variable that for 3x3 sub-boxes
+    int row=0;
+    int col=0;
+    int row2=0;
+    int col2=0;
+    
+    for (int i=0 ; i<9 ; i++)
+    {
+        for (int j=0 ; j<9 ; j++)
+        {
+            //printf("board[%d][%d]=%c\n",i,j,board[i][j]);
+            if (board[i][j] != '.') // If it's '.'==>Skip
+            {
+                //checking by row
+                for (int k=j+1 ; k<9 ; k++)
+                {
+                    if (board[i][j] == board[i][k])
+                    {
+                        return false;
+                    }
+                }
+                //checking by column
+                for (int k=i+1 ; k<9 ; k++)
+                {
+                    if (board[i][j] == board[k][j])
+                    {
+                        return false;
+                    }
+                }
+            }
+            //checking by 3x3 sub-boxes
+            if ( i%3==0 && j%3==0)
+            {
+                for (int k=0 ; k<9 ; k++)
+                {
+                    row = k/3;
+                    col = k%3;
+                    if (board[i+row][j+col]!='.') // If it's '.'==>Skip
+                    {
+                        for (int p=k+1 ; p<9 ; p++)
+                        {
+                            row2 = p/3;
+                            col2 = p%3;
+                            if (board[i+row][j+col] == board[i+row2][j+col2])
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
     return true;
 }
