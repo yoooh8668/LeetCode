@@ -87,11 +87,10 @@ bool sudokuAdder(char** board, int boardSize, int* boardColSize, int count)
         {
             ret = sudokuAdder(board,9,boardColSize,countNext);
             if(ret)
-                return true;
+                break;
         }
     }
-    //for compile 
-    return false;
+    return true;
 }
 
 
