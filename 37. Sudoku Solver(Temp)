@@ -60,25 +60,47 @@ bool isValidSudoku(char** board, int boardSize, int* boardColSize){
   If Next Adder return false, then switch another number.
   If number 1~9 are all failed, set count back to '.' and return false.
 ***/
-bool sudokuAdder(char** board, int boardSize, int* boardColSize, int count){
+bool sudokuAdder(char** board, int boardSize, int* boardColSize, int count)
+{    
+    //If input count is 81 or larger, finish checking.
+    if (count == 81)
+        return true;
+    
+    //Find next count that to be added.
     int countNext=count+1;
-    if (board[countNext/9][countNext%9] != '.')
+    bool ret=false;
+    while (countNext < 81 && board[countNext/9][countNext%9] != '.')
+    {
         countNext++;
+    }
+    
+    //for this count, try 1~9, and check if it's valid ?
     for (int i=49 ; i<=58 ; i++) //ASCII 49='1' , 57='9'.
     {
-        if (i==58)
+        if (i==58) //if 1~9 are all inValid => reset to '.' and return false. 
         {
             board[count/9][count%9] = '.'; //reset
             return false;
         }
         board[count/9][count%9] = i; 
-        if (isValidSudoku(......))
+        if (isValidSudoku(board,9,boardColSize)) // if current number is valid ==> add number to countNext
         {
-            sudokuAdder(.......,countNext)
+            ret = sudokuAdder(board,9,boardColSize,countNext);
+            if(ret)
+                return true;
         }
     }
+    //for compile 
+    return false;
 }
 
 
 void solveSudoku(char** board, int boardSize, int* boardColSize){
+    
+    int count =0 ;
+    while (board[count/9][count%9] != '.')
+    {
+        count++;
+    }
+    sudokuAdder(board,9,boardColSize,count);
 }
