@@ -133,3 +133,58 @@ bool isValidSudoku(char** board, int boardSize, int* boardColSize){
     }
     return true;
 }
+
+/***********************
+3.Use three array to set index of whether the number is appeared before in row/col/box. 
+  Use this function for next question.
+***********************/
+bool isValidSudoku(char** board, int boardSize, int* boardColSize){
+    int (*row)[9] = (int(*)[9])malloc(9*9*sizeof(int));
+    int (*col)[9] = (int(*)[9])malloc(9*9*sizeof(int));
+    int (*box)[9] = (int(*)[9])malloc(9*9*sizeof(int));
+    //Initialize all element to 0
+    for (int i=0; i<81 ;i++)
+    {
+        row[i/9][i%9]=0;
+        col[i/9][i%9]=0;
+        box[i/9][i%9]=0;
+    }
+    //Is this sudoku valid ?
+    bool valid=1;
+    
+    int boxIndex=0;
+    int num=0;
+    for(int i = 0 ; i < 9; i++)
+    {
+        if (! valid)
+            break;
+        for(int j = 0; j < 9; j++)
+        {
+            if(board[i][j] == '.')
+                continue;
+            
+            //'1'~'9' corresponding to 0 ~ 8
+            num = board[i][j] - '1';
+            //boxIndex = (row/3)*3 + col/3;
+            //0 <= boxIndex <= 8
+            boxIndex = (i/3)*3 + j/3;
+            
+            //If current num appears in corresponding index of row/col/box. ==> inValid.
+            if(row[i][num]|col[j][num]|box[boxIndex][num])
+            {
+                valid=false;
+                break;
+            }
+            //If the num isn't repeated. ==> set corresponding index to 1.
+            row[i][num] = col[j][num] = box[boxIndex][num] = 1;
+        }
+    }
+    
+	free(row);
+    free(col);
+    free(box);
+    if(valid)
+        return true;
+    else
+        return false;
+}
