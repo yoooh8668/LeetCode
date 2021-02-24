@@ -103,3 +103,117 @@ void solveSudoku(char** board, int boardSize, int* boardColSize){
     }
     sudokuAdder(board,9,boardColSize,count);
 }
+
+
+/******************************
+TEMP
+******************************/
+bool sudokuAdder(cher** board, int** row, int** col, int** box, int count){
+    //If input count is 81 or larger, finish checking.
+    if (count == 81)
+        return true;
+    
+    //Find next count that to be added.
+    int countNext=count+1;
+    bool ret=false;
+    int num=0;
+    int boxIndex = ((count/3)/3)*3 + (count%3)/3;
+    while (countNext < 81 && board[countNext/9][countNext%9] != '.')
+    {
+        countNext++;
+    }
+    
+    //for this count, try 1~9, and check if it's valid ?
+    for (int i=49 ; i<=58 ; i++) //ASCII 49='1' , 57='9'.
+    {
+        num = i-'1';
+        if (i==58) //if 1~9 are all inValid => reset to '.' and return false. 
+        {
+            return false;
+        }
+        
+        //check if num is repeated ?
+        if(row[count/9][num]|col[count%9][num]|box[boxIndex][num])
+            continue;
+        else
+        {
+            //If the num isn't repeated. ==> try set corresponding index to 1.
+            row[count/9][num] = col[count%9][num] = box[boxIndex][num] =1;
+            //Add sudoku to countNext
+            ret = sudokuAdder(board, row, col, box, countNext);
+            //countNext is valid ==> add number to board.
+            if(ret)
+            {
+                board[count/9][count%9] = i; 
+                break;
+            }
+            //countNext is inValid ==> change new number.
+            else
+                row[count/9][num] = col[count%9][num] = box[boxIndex][num] =0 ; //reset
+        }
+    }
+    return true;
+}
+
+//Before start add a number, we first set the corresponding table for checking repeat.
+void writeCheckArray(char** board, int boardSize, int* boardColSize, int** row, int** col , int** box){
+    int boxIndex=0;
+    int num=0;
+    for(int i = 0 ; i < 9; i++)
+    {
+        for(int j = 0; j < 9; j++)
+        {
+            if(board[i][j] == '.')
+                continue;
+            //'1'~'9' corresponding to 0 ~ 8
+            num = board[i][j] - '1';
+            /*boxIndex = (row/3)*3 + col/3;
+              0 <= boxIndex <= 8 */
+            boxIndex = (i/3)*3 + j/3;
+            //write num to corresponding index to 1.
+            row[i][num] = col[j][num] = box[boxIndex][num] = 1;
+        }
+    }
+}
+
+void solveSudoku(char** board, int boardSize, int* boardColSize){
+    //create double pointer of row/col/box
+	int **row = (int**)malloc(9*sizeof(int*));
+    int **col = (int**)malloc(9*sizeof(int*));
+    int **box = (int**)malloc(9*sizeof(int*));
+	for (int i = 0; i < 9; i++) 
+    {
+		row[i] = (int*)malloc(9*sizeof(int)); 
+        col[i] = (int*)malloc(9*sizeof(int)); 
+        box[i] = (int*)malloc(9*sizeof(int)); 
+    }
+    //Initialize all element to 0
+    for (int i=0; i<81 ;i++)
+    {
+        row[i/9][i%9]=0;
+        col[i/9][i%9]=0;
+        box[i/9][i%9]=0;
+    }
+    
+    //write current board to row/col/box.
+    writeCheckArray(board,9,boardColSize,row,col,box);
+    
+    
+    int count=0;
+    while (board[count/9][count%9] != '.')
+    {
+        count++;
+    }
+    sudokuAdder(board,row,col,box,count);
+    
+    //free memory
+	for (int i = 0; i < 9; i++) 
+    {
+		free(row[i]);
+        free(col[i]);
+     	free(box[i]);
+    }
+	free(row);
+    free(col);
+    free(box);
+}
