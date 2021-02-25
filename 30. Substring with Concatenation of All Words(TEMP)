@@ -85,15 +85,20 @@ bool isSwap(char** table, int start , int end)
 }
 
 //permutate string.
-void permutate(char** table, int begin, int end) 
+void permutate(char** table, int begin, int end,char* s) 
 {
     printf("permutate begin=%d,end=%d\n",begin,end);
     //begin = end ==>finish permutate.
     if  (begin == end)
-    {         
+    {
         for(int i = 0; i <= begin; i++)
+        {
             printf("%s ,", table[i]);         //print this permutation
-        printf("\n");        
+            strcat(resultTemp,table[i]);
+        }
+        printf("\n");
+        char resultTemp[5000];
+        if (strstr(s,resultTemp))
         count++;                 //new condition
     }
    else
@@ -105,7 +110,7 @@ void permutate(char** table, int begin, int end)
             {
                 printf("START SWAP for %d and %d\n",begin,i);
                 swap(table,begin,i);
-                permutate(table, begin + 1, end);//premutate next element
+                permutate(table, begin + 1, end,char* s);//premutate next element
                 swap(table,begin,i);
            }
         }
@@ -116,14 +121,12 @@ void permutate(char** table, int begin, int end)
 void swap(char** table,int a,int b)
 {
     char temp[31];
-    printf("words[a]=%s\n",table[a]);
-    printf("words[b]=%s\n",table[b]);
-    strcpy(temp,table[a]);
-    printf("temp=%s\n",temp);
-    strcpy(table[a],table[b]);/////////////////////////////////FAILED HERE/////////////////////////////////////////
-    printf("words[a] new =%s\n",table[a]);
-    strcpy(table[b],temp);
-    printf("words[b] new =%s\n",table[b]);
+    if (a!=b)
+    {
+        strcpy(temp,table[a]);
+        strcpy(table[a],table[b]);
+        strcpy(table[b],temp);
+    }
 }
 /**
  * Note: The returned array must be malloced, assume caller calls free().
