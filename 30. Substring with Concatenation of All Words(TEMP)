@@ -1,3 +1,6 @@
+/****************************
+Permutation by char is complete
+****************************/
 //Environment count for result number 
 int count = 0;     
 
@@ -56,6 +59,82 @@ int* findSubstring(char * s, char ** words, int wordsSize, int* returnSize){
     char list[] = {'3','5','8','2','8','2'};    
     permutate(list, 0, 5);
     printf("total:%d\n", count);     //輸出n的個數
+    *returnSize = count;
+    return result;
+}
+
+/****************************
+Try to change it as char**
+https://blog.csdn.net/hackbuteer1/article/details/7462447
+https://www.itread01.com/content/1549687685.html
+https://medium.com/@cashbooktw/c-%E8%AA%9E%E8%A8%80%E7%9A%84%E5%AD%97%E4%B8%B2%E8%A4%87%E8%A3%BD-94da3884dc6e
+****************************/
+//Environment count for result number 
+int count = 0;
+
+//Define whether current string need to be swap. 
+//If this string never appears before, then return yes.
+bool isSwap(char** table, int start , int end)
+{
+	for(int i = start ; i < end ; i++)
+	{
+		if((strcmp(table[i],table[end]))==0)
+			return false;
+	}
+	return true;
+}
+
+//permutate string.
+void permutate(char** table, int begin, int end) 
+{
+    printf("permutate begin=%d,end=%d\n",begin,end);
+    //begin = end ==>finish permutate.
+    if  (begin == end)
+    {         
+        for(int i = 0; i <= begin; i++)
+            printf("%s ,", table[i]);         //print this permutation
+        printf("\n");        
+        count++;                 //new condition
+    }
+   else
+    {
+        for(int i = begin; i <= end; i++)
+        {
+            printf("i=%d, begin=%d,end=%d\n",i,begin,end);
+            if(isSwap(table, begin , i))
+            {
+                printf("START SWAP for %d and %d\n",begin,i);
+                swap(table,begin,i);
+                permutate(table, begin + 1, end);//premutate next element
+                swap(table,begin,i);
+           }
+        }
+    }
+}
+
+//Swap Function
+void swap(char** table,int a,int b)
+{
+    char temp[31];
+    printf("words[a]=%s\n",table[a]);
+    printf("words[b]=%s\n",table[b]);
+    strcpy(temp,table[a]);
+    printf("temp=%s\n",temp);
+    strcpy(table[a],table[b]);/////////////////////////////////FAILED HERE/////////////////////////////////////////
+    printf("words[a] new =%s\n",table[a]);
+    strcpy(table[b],temp);
+    printf("words[b] new =%s\n",table[b]);
+}
+/**
+ * Note: The returned array must be malloced, assume caller calls free().
+ */
+int* findSubstring(char * s, char ** words, int wordsSize, int* returnSize){
+    int *result=(int*)malloc(sizeof(int)*200);
+    //char temp[5];
+    //strcpy(temp,words[0]);
+    //printf("words[0]=%s\n",temp);
+    permutate(words, 0, wordsSize-1);
+    printf("total:%d\n", count);
     *returnSize = count;
     return result;
 }
