@@ -1,4 +1,7 @@
-
+/***************************
+1.Analysis result to resultTemp.
+  Put back to result and continue.
+***************************/
 
 char * countAndSay(int n){
     //Define index base on n.
@@ -53,4 +56,88 @@ char * countAndSay(int n){
         saveCount=0;
     }
     return result;
+}
+
+/***************************
+2.n is even =>Analysis result to resultTemp.
+  n is oss  =>Analysis resultTemp to result.
+  Save the time of copy char back to result.
+***************************/
+char * countAndSay(int n){
+    //Define index base on n. (Not sure why the index is more bigger than '38. Count and Say (1.)')
+    int index;
+    if(n >= 24)
+        index=6000;
+    else if (n >= 20)
+        index=1000;
+    else if (n >= 15)
+        index = 500;
+    else
+        index = 100;
+        
+    char* result=malloc(sizeof(char)*(index));
+    char* resultTemp=malloc(sizeof(char)*(index));
+    result[0]='1';
+    result[1]=0;
+    int checkCount=0;
+    int repeatCount=1;
+    int saveCount=0;
+    
+    //for n>=2 start countAndSay
+    for (int i=2 ; i<=n+1 ; i++)
+    {
+        //Even => result to resultTemp
+        if (i%2==0)
+        {
+            //If result still has element to check.
+            while(result[checkCount]!=0)
+            {
+                while(result[checkCount+1]!=0 && result[checkCount]==result[checkCount+1])
+                {
+                    checkCount++;
+                    repeatCount++;
+                }
+                resultTemp[saveCount]=48+repeatCount;
+                resultTemp[saveCount+1]=result[checkCount];
+                saveCount+=2;
+                checkCount++;
+                repeatCount=1;
+            }
+            //set '\0' to end.
+            resultTemp[saveCount]=0;
+        }
+        //Odd  => result to resultTemp
+        else
+        {
+            //If resultTemp still has element to check.
+            while(resultTemp[checkCount]!=0)
+            {
+                while(resultTemp[checkCount+1]!=0 && resultTemp[checkCount]==resultTemp[checkCount+1])
+                {
+                    checkCount++;
+                    repeatCount++;
+                }
+                result[saveCount]=48+repeatCount;
+                result[saveCount+1]=resultTemp[checkCount];
+                saveCount+=2;
+                checkCount++;
+                repeatCount=1;
+            }
+            //set '\0' to end.
+            result[saveCount]=0;
+        }
+        //reset number
+        checkCount=0;
+        saveCount=0;   
+    }
+    if (n%2==0) //return resultTemp
+    {
+        free(result);
+        return resultTemp;
+    }
+    else       //return result
+    {
+        free(resultTemp);
+        return result;
+    }
 }
