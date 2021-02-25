@@ -1,0 +1,61 @@
+//Environment count for result number 
+int count = 0;     
+
+//Define whether current string need to be swap. 
+//If this string never appears before, then return yes.
+bool isSwap(char* start , char* end)
+{
+	char *temp;
+	for(temp = start ; temp < end ; temp++)
+	{
+		if(*temp == *end)
+			return false;
+	}
+	return true;
+}
+
+//permutate string.
+//
+void permutate(char list[], int begin, int end)      //產生list[begin:end]的所有排列
+{      
+    //begin = end ==>finish permutate.
+    if  (begin == end)
+    {         
+        for(int i = 0; i <= begin; i++)            
+            printf("%c ", list[i]);         //print this permutation
+        printf("\n");        
+        count++;                 //new condition
+    }
+   else    
+    {        
+        for(int i = begin; i <= end; i++)       
+        {            
+       		if(isSwap(&list[begin] , &list[i]))
+            {
+                swap(&list[begin], &list[i]);             
+                permutate(list, begin + 1, end);            
+                swap(&list[begin], &list[i]);        
+           }
+        }    
+    }
+}
+
+//Swap Function
+void swap(char *a, char *b)
+{    
+    char temp;    
+    temp = *a;    
+    *a = *b;    
+    *b = temp;
+} 
+/**
+ * Note: The returned array must be malloced, assume caller calls free().
+ */
+int* findSubstring(char * s, char ** words, int wordsSize, int* returnSize){
+    int *result=(int*)malloc(sizeof(int)*200);
+    char list[] = {'3','5','8','2','8','2'};    
+    permutate(list, 0, 5);
+    printf("total:%d\n", count);     //輸出n的個數
+    *returnSize = count;
+    return result;
+}
