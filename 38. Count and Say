@@ -1,0 +1,56 @@
+
+
+char * countAndSay(int n){
+    //Define index base on n.
+    int index = 0;
+    if(n >= 25)
+        index=4500;
+    else if (n >= 22)
+        index=1000;
+    else if (n >= 16)
+        index = 500;
+    else
+        index = 100;
+        
+    char* result=malloc(sizeof(char)*(index));
+    char resultTemp[index];
+    
+    //This is the base for n=1;
+    result[0]='1';
+    result[1]=0;
+    
+    int checkCount=0;
+    int repeatCount=1;
+    int saveCount=0;
+    
+    //for n>=2 start countAndSay
+    for (int i=2 ; i<=n ; i++)
+    {
+        //If result still has element to check.
+        while(result[checkCount]!=0)
+        {
+            //If checkCount+1 exist and checkCount==checkCount+1 ==>repeated
+            while(result[checkCount+1]!=0 && result[checkCount]==result[checkCount+1])
+            {
+                checkCount++;
+                repeatCount++;
+            }
+            resultTemp[saveCount]=48+repeatCount; //ASCII
+            resultTemp[saveCount+1]=result[checkCount];
+            saveCount+=2;
+            checkCount++;
+            repeatCount=1;
+        }
+        //set '\0' to end.
+        resultTemp[saveCount]=0;
+        
+        //Save resultTemp back to result.
+        for (int j=0; j<=strlen(resultTemp) ; j++)
+        {
+            result[j]=resultTemp[j];
+        }
+        checkCount=0;
+        saveCount=0;
+    }
+    return result;
+}
