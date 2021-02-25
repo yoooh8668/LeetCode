@@ -47,7 +47,7 @@ char * countAndSay(int n){
         //set '\0' to end.
         resultTemp[saveCount]=0;
         
-        //Save resultTemp back to result.
+        //Copy resultTemp back to result.
         for (int j=0; j<=strlen(resultTemp) ; j++)
         {
             result[j]=resultTemp[j];
@@ -60,8 +60,8 @@ char * countAndSay(int n){
 
 /***************************
 2.n is even =>Analysis result to resultTemp.
-  n is oss  =>Analysis resultTemp to result.
-  Save the time of copy char back to result.
+  n is odd  =>Analysis resultTemp to result.
+  This way saves the time of copy char back to result.
 ***************************/
 char * countAndSay(int n){
     //Define index base on n. (Not sure why the index is more bigger than '38. Count and Say (1.)')
