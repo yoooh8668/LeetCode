@@ -1,73 +1,5 @@
 /****************************
-Permutation by char is complete
-****************************/
-//Environment count for result number 
-int count = 0;     
-
-//Define whether current string need to be swap. 
-//If this string never appears before, then return yes.
-bool isSwap(char* start , char* end)
-{
-	char *temp;
-	for(temp = start ; temp < end ; temp++)
-	{
-		if(*temp == *end)
-			return false;
-	}
-	return true;
-}
-
-//permutate string.
-//
-void permutate(char list[], int begin, int end)      //產生list[begin:end]的所有排列
-{      
-    //begin = end ==>finish permutate.
-    if  (begin == end)
-    {         
-        for(int i = 0; i <= begin; i++)            
-            printf("%c ", list[i]);         //print this permutation
-        printf("\n");        
-        count++;                 //new condition
-    }
-   else    
-    {        
-        for(int i = begin; i <= end; i++)       
-        {            
-       		if(isSwap(&list[begin] , &list[i]))
-            {
-                swap(&list[begin], &list[i]);             
-                permutate(list, begin + 1, end);            
-                swap(&list[begin], &list[i]);        
-           }
-        }    
-    }
-}
-
-//Swap Function
-void swap(char *a, char *b)
-{    
-    char temp;    
-    temp = *a;    
-    *a = *b;    
-    *b = temp;
-} 
-/**
- * Note: The returned array must be malloced, assume caller calls free().
- */
-int* findSubstring(char * s, char ** words, int wordsSize, int* returnSize){
-    int *result=(int*)malloc(sizeof(int)*200);
-    char list[] = {'3','5','8','2','8','2'};    
-    permutate(list, 0, 5);
-    printf("total:%d\n", count);     //輸出n的個數
-    *returnSize = count;
-    return result;
-}
-
-/****************************
-Try to change it as char**
-https://blog.csdn.net/hackbuteer1/article/details/7462447
-https://www.itread01.com/content/1549687685.html
-https://medium.com/@cashbooktw/c-%E8%AA%9E%E8%A8%80%E7%9A%84%E5%AD%97%E4%B8%B2%E8%A4%87%E8%A3%BD-94da3884dc6e
+environment variable will continue add on ==> even is the next question.
 ****************************/
 //Environment count for result number 
 int count = 0;
@@ -85,21 +17,40 @@ bool isSwap(char** table, int start , int end)
 }
 
 //permutate string.
-void permutate(char** table, int begin, int end,char* s) 
+void permutate(char** table, int begin, int end,char* targetStr,int* result) 
 {
     printf("permutate begin=%d,end=%d\n",begin,end);
     //begin = end ==>finish permutate.
-    if  (begin == end)
+    if (begin == end)
     {
+        char resultTemp[5000]={0};        //create a permutate to run strstr
         for(int i = 0; i <= begin; i++)
         {
             printf("%s ,", table[i]);         //print this permutation
             strcat(resultTemp,table[i]);
         }
         printf("\n");
-        char resultTemp[5000];
-        if (strstr(s,resultTemp))
-        count++;                 //new condition
+        printf("resultTemp = %s \n", resultTemp);
+        int tempLen = strlen(resultTemp);
+        printf("resultTemp length = %d \n", tempLen);
+        char targetStrSave[10001]={0};
+        strcpy(targetStrSave,targetStr);
+        printf("targetStrSave=%s\n",targetStrSave);
+        char* previousIndex;
+        while(strstr(targetStrSave,resultTemp)!=NULL)
+        {
+            printf("Compare SUCCESS!!\n");
+            //printf("target is at %p\n",strstr(targetStrSave,resultTemp));
+            previousIndex = strstr(targetStrSave,resultTemp);
+            //printf("target is at %p\n",previousIndex);
+            //printf("start  is at %p\n",targetStrSave);
+            //printf("Is at index of %d\n",previousIndex-targetStrSave);
+            result[count++] = previousIndex - targetStrSave;
+            if (strlen(targetStr) - tempLen - (previousIndex-targetStrSave) > tempLen)
+                strcpy(targetStrSave,targetStr + tempLen + (previousIndex-targetStrSave));
+            else
+                targetStrSave[0]='\0';
+        }
     }
    else
     {
@@ -110,7 +61,7 @@ void permutate(char** table, int begin, int end,char* s)
             {
                 printf("START SWAP for %d and %d\n",begin,i);
                 swap(table,begin,i);
-                permutate(table, begin + 1, end,char* s);//premutate next element
+                permutate(table, begin + 1, end,targetStr,result);//premutate next element
                 swap(table,begin,i);
            }
         }
@@ -133,10 +84,7 @@ void swap(char** table,int a,int b)
  */
 int* findSubstring(char * s, char ** words, int wordsSize, int* returnSize){
     int *result=(int*)malloc(sizeof(int)*200);
-    //char temp[5];
-    //strcpy(temp,words[0]);
-    //printf("words[0]=%s\n",temp);
-    permutate(words, 0, wordsSize-1);
+    permutate(words, 0, wordsSize-1,s,result);
     printf("total:%d\n", count);
     *returnSize = count;
     return result;
