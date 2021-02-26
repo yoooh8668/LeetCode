@@ -1,5 +1,9 @@
 /*****************************************
-(A)This is the correct answer.
+(A)Use full permauation.
+   For each time we create one, strstr search if it is in string s.
+   If does, save it to the result.
+   
+   This is the correct answer.
    But encounter: "Time Limit Exceeded" in 151 / 176 test cases passed.
    Maybe we don't need to use full permutation way because it has so many non-used result.
 *****************************************/
