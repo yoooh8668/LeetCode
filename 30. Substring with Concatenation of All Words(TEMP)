@@ -9,12 +9,12 @@ int count = 0;
 //If this string never appears before, then return yes.
 bool isSwap(char** table, int start , int end)
 {
-	for(int i = start ; i < end ; i++)
-	{
-		if((strcmp(table[i],table[end]))==0)
-			return false;
-	}
-	return true;
+    for(int i = start ; i < end ; i++)
+    {
+        if(!strcmp(table[i],table[end]))
+            return false;
+    }
+    return true;
 }
 
 //permutate string.
@@ -40,7 +40,8 @@ void permutate(char** table, int begin, int end,char* targetStr,int* result)
             previousIndex = strstr(targetStr+shiftNumber,resultTemp);
         }
     }
-   else
+    //still have non-finished element.
+    else
     {
         for(int i = begin; i <= end; i++)
         {
@@ -48,7 +49,7 @@ void permutate(char** table, int begin, int end,char* targetStr,int* result)
             {
                 swap(table,begin,i);
                 permutate(table, begin + 1, end,targetStr,result);//premutate next element
-                swap(table,begin,i);
+                swap(table,begin,i);//recover 
            }
         }
     }
