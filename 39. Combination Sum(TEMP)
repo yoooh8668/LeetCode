@@ -1,0 +1,79 @@
+
+
+/**
+ * Return an array of arrays of size *returnSize.
+ * The sizes of the arrays are returned as *returnColumnSizes array.
+ * Note: Both returned array and *columnSizes array must be malloced, assume caller calls free().
+ */
+int** combinationSum(int* candidates, int candidatesSize, int target, int* returnSize, int** returnColumnSizes){
+    int **result=malloc(sizeof(int*)*50);
+    int end = candidatesSize-1;
+    int start = end;
+    int stack [target+1]={0};
+    int top = -1;
+    int sum = 0;
+    
+    while (end!=-1)
+    {
+        printf("\nend=%d\n",end);
+        top++;
+        stack[top]=end;
+
+        //create sum
+        sum=0;
+        for (int i=0 ; i<=top ;i++)
+        {
+            sum+=candidates[stack[i]];
+        }
+
+        if (sum == target)
+        {
+            printf("match !! result=[");
+            for (int i=top; i>=0 ; i--)
+            {
+                printf("%d\t\n",candidates[stack[i]]);
+            }
+        }
+        else if (sum < target)
+        {
+            continue;
+        }
+
+        //start change
+        start--;
+        else
+        {
+            for (int i=top ; i>=0 ; i--)
+            {
+                if (stack[i])
+            }
+        }
+
+        //pop or not? ==> determine top position
+        //if still have smaller element.
+        if (stack[top] != 0)
+        {
+            top--;
+        }
+        //pop all smallest element.
+        else
+        {
+            top--;
+            while(top != -1 && stack[top]==0)
+            {
+                top--;
+            }
+        }
+    }
+    
+    
+    *returnColumnSizes=malloc(sizeof(int)*50);
+    *returnSize=0;
+    (*returnColumnSizes)[*returnSize]=3;
+    result[*returnSize]=malloc(sizeof(int)*3);
+    result[*returnSize][0]=1;
+    result[*returnSize][1]=2;
+    result[*returnSize][2]=5;
+    (*returnSize)++;
+    return result;
+}
