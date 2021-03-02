@@ -6,18 +6,21 @@
  * Note: Both returned array and *columnSizes array must be malloced, assume caller calls free().
  */
 int** combinationSum(int* candidates, int candidatesSize, int target, int* returnSize, int** returnColumnSizes){
-    int **result=malloc(sizeof(int*)*50);
+    int **result=malloc(sizeof(int*)*200);
+    *returnColumnSizes=malloc(sizeof(int)*200);
+    *returnSize=0;
     int end = candidatesSize-1;
     int start = end;
-    int stack [target+1]={0};
+    int stack [target+1];
     int top = -1;
     int sum = 0;
     
     while (end!=-1)
     {
-        printf("\nend=%d\n",end);
+        printf("end=%d\n",end);
         top++;
-        stack[top]=end;
+        stack[top]=start;
+        //printf("top=%d, stack[top]= %d\n",top,stack[top]);
 
         //create sum
         sum=0;
@@ -28,52 +31,48 @@ int** combinationSum(int* candidates, int candidatesSize, int target, int* retur
 
         if (sum == target)
         {
-            printf("match !! result=[");
+            (*returnColumnSizes)[*returnSize]=(top+1);
+            result[*returnSize]=malloc(sizeof(int)*(top+1));
+            //printf("match !! result=[");
             for (int i=top; i>=0 ; i--)
             {
-                printf("%d\t\n",candidates[stack[i]]);
+                //printf("value=%d\n",candidates[stack[i]]);
+                result[*returnSize][top-i]=candidates[stack[i]];
+                //printf("result=%d\n",result[*returnSize][top-i]);
             }
+            (*returnSize)++;
+            //printf("\n");
         }
         else if (sum < target)
         {
             continue;
         }
 
-        //start change
-        start--;
-        else
-        {
-            for (int i=top ; i>=0 ; i--)
-            {
-                if (stack[i])
-            }
-        }
 
-        //pop or not? ==> determine top position
-        //if still have smaller element.
-        if (stack[top] != 0)
+        /*
+          pop function
+          Pop one element, if poped one was 0, pop continue and pop additional one element.
+          If last element is poped, end--.
+        */
+        //printf("[pop] it is last element\n");
+        //pop til stack[top]==0 
+        while(top>=0 && stack[top]==0)
         {
+            start=stack[top]-1;
             top--;
         }
-        //pop all smallest element.
-        else
+        //still has element ==> top--.
+        if (top != -1)
         {
+            start=stack[top]-1;
             top--;
-            while(top != -1 && stack[top]==0)
-            {
-                top--;
-            }
+        }
+        //if no element ==> end--.
+        if (top==-1)
+        {
+            end--;
+            start=end;
         }
     }
-    
-    
-    *returnColumnSizes=malloc(sizeof(int)*50);
-    *returnSize=0;
-    (*returnColumnSizes)[*returnSize]=3;
-    result[*returnSize]=malloc(sizeof(int)*3);
-    result[*returnSize][0]=1;
-    result[*returnSize][1]=2;
-    result[*returnSize][2]=5;
-    (*returnSize)++;
     return result;
 }
