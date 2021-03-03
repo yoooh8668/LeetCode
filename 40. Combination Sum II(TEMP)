@@ -1,4 +1,30 @@
+/*************************************
+Use the same way as '39. Combination Sum'.
+But we create a NoRepeat array and count array.
+when the sum is match, check if it has more count than count array.
+*************************************/
 
+bool checkCountInRange(int* candidatesCount, int count, int* stack, int top)
+{
+    int candidatesCountSave[count];
+    //copy candidatesCount.
+    for (int i=0; i<count ;i++)
+    {
+        candidatesCountSave[i]=candidatesCount[i];
+    }
+    //count the element in stack
+    for (int i=0; i<=top ;i++)
+    {
+        candidatesCountSave[stack[i]]--;
+    }
+    //check if over-use?
+    for (int i=0; i<count ; i++)
+    {
+        if (candidatesCountSave[i]<0)
+            return false;
+    }
+    return true;
+}
 
 /**
  * Return an array of arrays of size *returnSize.
@@ -6,7 +32,7 @@
  * Note: Both returned array and *columnSizes array must be malloced, assume caller calls free().
  */
 int** combinationSum2(int* candidates, int candidatesSize, int target, int* returnSize, int** returnColumnSizes){
-    //sort candidates 
+    //sort candidates START+++
     for (int i = 0; i < candidatesSize; i++) 
     {
         for (int j = 0; j < i; j++) 
@@ -19,16 +45,33 @@ int** combinationSum2(int* candidates, int candidatesSize, int target, int* retu
             }
         }
     }
-    for (int i = 0; i < candidatesSize ; i++) 
+    //sort candidates END---
+    
+    //create count of candidates table START+++
+    int candidatesCount[candidatesSize+1];
+    int candidatesNoRepeat[candidatesSize+1];
+    int count=1;
+    candidatesNoRepeat[0]=candidates[0];
+    candidatesCount[0]=1;
+    for (int i=1 ;i<candidatesSize ;i++)
     {
-        printf("%d,",candidates[i]);
+        if (candidatesNoRepeat[count-1]==candidates[i])
+            candidatesCount[count-1]++;
+        else
+        {
+            candidatesNoRepeat[count]=candidates[i];
+            candidatesCount[count]=1;
+            count++;
+        }
     }
-    printf("\n");
+    candidatesNoRepeat[count]=NULL;
+    candidatesCount[count]=NULL;
+    //create count of candidates table END---
     
     int **result=malloc(sizeof(int*)*128);
     *returnColumnSizes=malloc(sizeof(int)*128);
     *returnSize=0;
-    int end = candidatesSize-1;
+    int end = count-1;
     int start = end;
     
     //Stack => save the index of candidates that to be sum.
@@ -41,30 +84,6 @@ int** combinationSum2(int* candidates, int candidatesSize, int target, int* retu
     //If smallest one was finished. return.
     while (end!=-1)
     {
-        printf("end= %d\n",end);
-        printf("start= %d\n",start);
-        if (candidates[end] > target)
-        {
-            while(end>=1 && candidates[end]==candidates[end-1])
-            {
-                end--;
-            }
-            end--;
-            start=end;
-            continue;
-        }
-        if (start==-1)//no element to be use.
-        {
-            while(end>=1 && candidates[end]==candidates[end-1])
-            {
-                end--;
-            }
-            end--;
-            start=end;
-            top=-1;
-            continue;
-        }
-        
         top++;
         stack[top]=start;
 
@@ -72,53 +91,49 @@ int** combinationSum2(int* candidates, int candidatesSize, int target, int* retu
         sum=0;
         for (int i=0 ; i<=top ;i++)
         {
-            sum+=candidates[stack[i]];
+            sum+=candidatesNoRepeat[stack[i]];
         }
 
         //sum == target =>add new result.
         if (sum == target)
         {
-            (*returnColumnSizes)[*returnSize]=(top+1);
-            result[*returnSize]=malloc(sizeof(int)*(top+1));
-            printf("match !! result=[");
-            for (int i=top; i>=0 ; i--)
+            if (checkCountInRange(&candidatesCount,count,&stack,top))
             {
-                printf("%d  ",candidates[stack[i]]);
-                result[*returnSize][top-i]=candidates[stack[i]];
+                (*returnColumnSizes)[*returnSize]=(top+1);
+                result[*returnSize]=malloc(sizeof(int)*(top+1));
+                //printf("match !! result=[");
+                for (int i=top; i>=0 ; i--)
+                {
+                    //printf("%d\t",candidates[stack[i]]);
+                    result[*returnSize][top-i]=candidatesNoRepeat[stack[i]];
+                }
+                (*returnSize)++;
+                //printf(" ] \n");
             }
-            (*returnSize)++;
-            printf(" ] \n");
         }
         //If sum < target => continue add start.
         else if (sum < target)
-        {
-            start--;
             continue;
-        }
         
-        //pop function START
-        //pop all that candidates[stack[top]] is smallest number.
-        while(top>=0 && candidates[stack[top]]==candidates[0])
+        /*pop function START
+          If sum >= target => call pop function. 
+          Pop one element, if poped one was 0, pop continue and pop additional one element.
+          ==>first pop all 0, than pop one element.
+          If last element is poped, end--.*/
+        //pop all that stack[top]==0 
+        while(top>=0 && stack[top]==0)
             top--;
 
-        //set start. (if start == poped one ==> skip)      
-        if (top!=-1)
-            start=stack[top]-1;
-        
-        while (top>=0 && start>=0 && candidates[stack[top]] == candidates[start] )
-            start--;
-        
         //pop one element.
         if (top != -1)
             top--;
         
+        //set start. (The next of poped one.)
+        start=stack[top+1]-1;
+        
         //if no element ==> end--.
         if (top==-1)
         {
-            while(end>=1 && candidates[end]==candidates[end-1])
-            {
-                end--;
-            }
             end--;
             start=end;
         }
