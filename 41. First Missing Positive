@@ -1,0 +1,40 @@
+
+
+int firstMissingPositive(int* nums, int numsSize){
+    /*nums must include number 1~n
+      search the array nums if there is a missing number 
+      If does fine the smallest one.
+      If doesn't  return the largest+1 .
+    */
+    //If NULL input => return 1.
+    if(numsSize==0)
+        return 1;  
+    
+    /*swap nums 
+      expect to arrange like nums[0]=1, nums[1]=2, nums[2]=3 ......
+      nums[1-1]=1 , nums[nums[0]-1]=1 
+      target position of nums[i] is "nums[nums[i]-1]"
+      nums[n] > numsSize ==> ignore
+      nums[n] <= 0       ==> ignore
+      at right position  ==> ignore (target position is current position)
+    */
+    int temp=0;
+    for(int i=0;i<numsSize;i++)
+    {  
+       if(nums[i]<=numsSize && nums[i] > 0 && nums[nums[i]-1]!=nums[i])
+       { 
+           temp = nums[nums[i]-1];  
+           nums[nums[i]-1] = nums[i];  
+           nums[i] = temp;  
+           i--;  //continue check the swaped number.
+       }  
+    }  
+
+    for(int i=0;i<numsSize;i++)
+    {  
+        if(nums[i]!=i+1)  
+            return i+1;  
+    }
+    //All nums are exist ==> reurn numsSize +1.
+    return numsSize+1; 
+}
