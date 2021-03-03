@@ -6,21 +6,24 @@
  * Note: Both returned array and *columnSizes array must be malloced, assume caller calls free().
  */
 int** combinationSum(int* candidates, int candidatesSize, int target, int* returnSize, int** returnColumnSizes){
-    int **result=malloc(sizeof(int*)*200);
-    *returnColumnSizes=malloc(sizeof(int)*200);
+    int **result=malloc(sizeof(int*)*128);
+    *returnColumnSizes=malloc(sizeof(int)*128);
     *returnSize=0;
     int end = candidatesSize-1;
     int start = end;
+    
+    //Stack => save the index of candidates that to be sum.
     int stack [target+1];
     int top = -1;
+    
     int sum = 0;
     
+    //Add from the largest one to smallest one.
+    //If smallest one was finished. return.
     while (end!=-1)
     {
-        printf("end=%d\n",end);
         top++;
         stack[top]=start;
-        //printf("top=%d, stack[top]= %d\n",top,stack[top]);
 
         //create sum
         sum=0;
@@ -29,6 +32,7 @@ int** combinationSum(int* candidates, int candidatesSize, int target, int* retur
             sum+=candidates[stack[i]];
         }
 
+        //sum == target =>add new result.
         if (sum == target)
         {
             (*returnColumnSizes)[*returnSize]=(top+1);
@@ -36,43 +40,39 @@ int** combinationSum(int* candidates, int candidatesSize, int target, int* retur
             //printf("match !! result=[");
             for (int i=top; i>=0 ; i--)
             {
-                //printf("value=%d\n",candidates[stack[i]]);
+                //printf("%d\t",candidates[stack[i]]);
                 result[*returnSize][top-i]=candidates[stack[i]];
-                //printf("result=%d\n",result[*returnSize][top-i]);
             }
             (*returnSize)++;
-            //printf("\n");
+            //printf(" ] \n");
         }
+        //If sum < target => continue add start.
         else if (sum < target)
-        {
             continue;
-        }
-
-
-        /*
-          pop function
+        
+        /*pop function START
+          If sum >= target => call pop function. 
           Pop one element, if poped one was 0, pop continue and pop additional one element.
-          If last element is poped, end--.
-        */
-        //printf("[pop] it is last element\n");
-        //pop til stack[top]==0 
+          ==>first pop all 0, than pop one element.
+          If last element is poped, end--.*/
+        //pop all that stack[top]==0 
         while(top>=0 && stack[top]==0)
-        {
-            start=stack[top]-1;
             top--;
-        }
-        //still has element ==> top--.
+
+        //pop one element.
         if (top != -1)
-        {
-            start=stack[top]-1;
             top--;
-        }
+        
+        //set start. (The next of poped one.)
+        start=stack[top+1]-1;
+        
         //if no element ==> end--.
         if (top==-1)
         {
             end--;
             start=end;
         }
+        //pop function END
     }
     return result;
 }
