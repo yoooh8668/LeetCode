@@ -1,0 +1,128 @@
+
+
+/**
+ * Return an array of arrays of size *returnSize.
+ * The sizes of the arrays are returned as *returnColumnSizes array.
+ * Note: Both returned array and *columnSizes array must be malloced, assume caller calls free().
+ */
+int** combinationSum2(int* candidates, int candidatesSize, int target, int* returnSize, int** returnColumnSizes){
+    //sort candidates 
+    for (int i = 0; i < candidatesSize; i++) 
+    {
+        for (int j = 0; j < i; j++) 
+        {
+            if (candidates[j] > candidates[i])
+            {
+                int temp = candidates[j];
+                candidates[j] = candidates[i];
+                candidates[i] = temp;
+            }
+        }
+    }
+    for (int i = 0; i < candidatesSize ; i++) 
+    {
+        printf("%d,",candidates[i]);
+    }
+    printf("\n");
+    
+    int **result=malloc(sizeof(int*)*128);
+    *returnColumnSizes=malloc(sizeof(int)*128);
+    *returnSize=0;
+    int end = candidatesSize-1;
+    int start = end;
+    
+    //Stack => save the index of candidates that to be sum.
+    int stack [target+1];
+    int top = -1;
+    
+    int sum = 0;
+    
+    //Add from the largest one to smallest one.
+    //If smallest one was finished. return.
+    while (end!=-1)
+    {
+        printf("end= %d\n",end);
+        printf("start= %d\n",start);
+        if (candidates[end] > target)
+        {
+            while(end>=1 && candidates[end]==candidates[end-1])
+            {
+                end--;
+            }
+            end--;
+            start=end;
+            continue;
+        }
+        if (start==-1)//no element to be use.
+        {
+            while(end>=1 && candidates[end]==candidates[end-1])
+            {
+                end--;
+            }
+            end--;
+            start=end;
+            top=-1;
+            continue;
+        }
+        
+        top++;
+        stack[top]=start;
+
+        //create sum
+        sum=0;
+        for (int i=0 ; i<=top ;i++)
+        {
+            sum+=candidates[stack[i]];
+        }
+
+        //sum == target =>add new result.
+        if (sum == target)
+        {
+            (*returnColumnSizes)[*returnSize]=(top+1);
+            result[*returnSize]=malloc(sizeof(int)*(top+1));
+            printf("match !! result=[");
+            for (int i=top; i>=0 ; i--)
+            {
+                printf("%d  ",candidates[stack[i]]);
+                result[*returnSize][top-i]=candidates[stack[i]];
+            }
+            (*returnSize)++;
+            printf(" ] \n");
+        }
+        //If sum < target => continue add start.
+        else if (sum < target)
+        {
+            start--;
+            continue;
+        }
+        
+        //pop function START
+        //pop all that candidates[stack[top]] is smallest number.
+        while(top>=0 && candidates[stack[top]]==candidates[0])
+            top--;
+
+        //set start. (if start == poped one ==> skip)      
+        if (top!=-1)
+            start=stack[top]-1;
+        
+        while (top>=0 && start>=0 && candidates[stack[top]] == candidates[start] )
+            start--;
+        
+        //pop one element.
+        if (top != -1)
+            top--;
+        
+        //if no element ==> end--.
+        if (top==-1)
+        {
+            while(end>=1 && candidates[end]==candidates[end-1])
+            {
+                end--;
+            }
+            end--;
+            start=end;
+        }
+        //pop function END
+    }
+    return result;
+}
