@@ -1,4 +1,22 @@
 
+/********************
+result[0] = num1[size-1-0]*nums2[size-1-0]+
+            carry[0]
+            
+result[1] = num1[size-1-0]*nums2[size-1-1]+
+            num1[size-1-1]*nums2[size-1-0]+
+            carry[1]
+            
+result[2] = num1[size-1-0]*nums2[size-1-2]+
+            num1[size-1-1]*nums2[size-1-1]+
+            num1[size-1-1]*nums2[size-1-1]+
+            carry[2]
+....
+result[i] = (num1[size-1-j]*num2[size-1-i+j])while(int j=0 ; i-j>=0)
+            + carry[i]
+
+Then swap result.
+********************/
 
 char * multiply(char * num1, char * num2){
     int num1Len=strlen(num1);
