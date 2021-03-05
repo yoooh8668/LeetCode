@@ -1,4 +1,4 @@
- /*****************************
+  /*****************************
  1.Just answer below XD:
  *****************************/
  double myPow(double x, int n){
@@ -54,5 +54,59 @@ double myPow(double x, int n){
     if (nMin)
         result*=x;
     
+    return result;
+}
+
+/*****************************
+A)Time Limit Exceed, use direct multiply.
+  Try to reduce calculation time by add an (x=1.0 || x=-1.0) condition.
+  But double varible seems to be un-compared.
+  Even I try to use the precision compare way...
+ *****************************/
+ //compares if the float f1 is equal with f2 and returns 1 if true and 0 if false
+ bool compare_float(double f1, double f2)
+ {
+    double precision = 0.000001;
+    if (fabs(f1-f2)<precision)
+        return true;
+    else
+        return false;
+ }
+
+double myPow(double x, int n){
+    double result=1.0;
+    double onePos=1.0;
+    double oneNeg=-1.0;
+
+    int negative=0;
+    if (n<0)
+    {
+        n=abs(n);
+        negative=1;
+    }
+    else if(n==0)
+        return 1.0;
+
+    //x=1.0 or x= -1.0 condition
+    /**********Failed**********/
+    if (compare_float(x,onePos))
+        return 1.0;
+    else if (compare_float(x,oneNeg))
+    {
+        if (n/2==1)
+            return -1.0;
+        else
+            return 1.0;
+    }
+
+    while (n>0)
+    {
+        result*=x;
+        n--;
+    }
+
+    if(negative)
+        result = 1/result;
+
     return result;
 }
