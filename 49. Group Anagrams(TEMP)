@@ -1,0 +1,105 @@
+/***************************
+1.Create a copy of strs (strsSave)
+  Sort every element in strsSave, then compare every element in array.
+  Save the index of anagrams.
+  Use the saved index to create a result
+***************************/
+//Sort str of strsSave
+void bubble_sort(char* target) {
+    int targetLen=strlen(target);
+    for (int i=0 ; i<targetLen ; i++) 
+    {
+        for (int j=0 ; j<i ; j++) 
+        {
+            if (target[j] > target[i]) 
+            {
+                char temp = target[j];
+                target[j] = target[i];
+                target[i] = temp;
+            }
+        }
+    }
+}
+//
+
+/**
+ * Return an array of arrays of size *returnSize.
+ * The sizes of the arrays are returned as *returnColumnSizes array.
+ * Note: Both returned array and *columnSizes array must be malloced, assume caller calls free().
+ */
+char *** groupAnagrams(char ** strs, int strsSize, int* returnSize, int** returnColumnSizes){
+    
+    char strsSave[strsSize][strsSize];
+    for (int i=0 ; i<strsSize ; i++)
+    {
+        strcpy(strsSave[i],strs[i]);
+        bubble_sort(strsSave[i]);
+        printf("SORT strsSave[%d]=%s\n",i,strsSave[i]);
+    }
+    printf("malloc finish\n");
+    int result[strsSize+2][strsSize+2];
+    int compareMatrix[strsSize];
+    int count1=0;
+    int count2=1;
+    for (int i=0 ; i<strsSize ; i++)
+    {
+        compareMatrix[i]=0;
+    }
+    
+    for (int i=0 ; i<strsSize ;i++)
+    {
+        //If it has been compared ==>skip.
+        if(!compareMatrix[i])
+        {
+            printf("\nFOR i=%d search\n",i);
+            result[count1][0]=1;
+            result[count1][count2]=i;
+            printf("result[%d][%d]=%d\n",count1,count2,result[count1][count2]);
+            count2++;
+            for (int j=i+1 ; j<strsSize ; j++)
+            {
+                if(!compareMatrix[j])
+                {
+                    if (!strcmp(strsSave[i],strsSave[j]))
+                    {
+                        result[count1][0]++;
+                        result[count1][count2]=j;
+                        printf("result[%d][%d]=%d\n",count1,count2,result[count1][count2]);
+                        count2++;
+                        compareMatrix[j]++;
+                        printf("j= %d is the same as i\n",j);
+                    }
+                }
+            }
+            count1++;
+            count2=1;
+        }
+    }
+    /*
+    printf("\n\n\nPRINTF RESULT\n");
+    for (int i=0 ; i<count1 ; i++)
+    {
+        for (int j=1 ; j<=result[i][0] ; j++)
+        {
+            printf("result[%d][%d]=%d\n",i,j,result[i][j]);
+        }
+    }*/  
+    
+    char*** finalResult=(char***)malloc(sizeof(char**)*count1);
+    *returnSize=count1;
+    *returnColumnSizes=(int*)malloc(sizeof(int)*count1);
+    printf("\n\n\nCreate final result\n");
+    for (int i=0 ; i<count1 ; i++)
+    {
+        (*returnColumnSizes)[i]=result[i][0];
+        finalResult[i]=(char**) malloc(sizeof(char*)*(result[i][0]));
+        for (int j=0 ; j<result[i][0] ; j++)
+        {
+            finalResult[i][j]=(char*) malloc(sizeof(char)*strlen(strs[result[i][j+1]]));
+            strcpy(&finalResult[i][j],strs[result[i][j+1]]);
+            printf("final[%d][%d]= %s\n",i,j,&finalResult[i][j]);
+        }
+    }
+    
+    return &finalResult;
+}
