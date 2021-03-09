@@ -91,6 +91,8 @@ char *** groupAnagrams(char ** strs, int strsSize, int* returnSize, int** return
     //assert(finalResult);
     
     *returnSize = count1;
+    char temp[strsSize];
+    //char (*temp)[count1][strsSize] = (char(*)[count1])malloc(count1*strsSize*sizeof(char*));
      for (int i=0 ; i<count1 ; i++)
      {
         retcolsizes[i] = result[i][0];
@@ -100,23 +102,12 @@ char *** groupAnagrams(char ** strs, int strsSize, int* returnSize, int** return
         for (int j=0 ; j<result[i][0] ; j++)
         {
             finalResult[i][j] = malloc(sizeof(char)*strsSize);
-            char temp[strsSize];
             strcpy(temp,strs[result[i][j+1]]);
-            
-            /***************************FAILED HERE:ASSIGN TEMP WILL ALWAYS GOT A STRANGE VALUE**************************/
-            //finalResult[i][j]=temp;
-            /***temp is not malloc, so the finalResult lost the value. even we declare temp[count1][strsSize][strsSize]****/
-            
-            printf("finalResult[%d][%d][0]=%c\n",i,j,finalResult[i][j][0]);
+            strcpy(finalResult[i][j],temp);
+            printf("finalResult[%d][%d]=%s\n",i,j,finalResult[i][j]);
         }
-     }
-    finalResult[0][0]="eat";
-    finalResult[0][1]="tea";
-    finalResult[0][2]="ate";
-    finalResult[1][0]="tan";
-    finalResult[1][1]="nat";
-    finalResult[2][0]="bat";
-     
+     }    
+    
     printf("\n\n\nPRINTF FINALRESULT\n");
     for (int i=0 ; i<count1 ; i++)
     {
