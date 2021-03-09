@@ -9,8 +9,10 @@ void bubble_sort(char* target) {
     int targetLen=strlen(target);
     for (int i=0 ; i<targetLen ; i++) 
     {
+        printf("bubble i=%d\n",i);
         for (int j=0 ; j<i ; j++) 
         {
+            printf("bubble j=%d\n",j);
             if (target[j] > target[i]) 
             {
                 char temp = target[j];
@@ -27,11 +29,12 @@ void bubble_sort(char* target) {
  * Note: Both returned array and *columnSizes array must be malloced, assume caller calls free().
  */
 char *** groupAnagrams(char ** strs, int strsSize, int* returnSize, int** returnColumnSizes){
-    
-    char strsSave[strsSize][strsSize];
+    printf("strsSize=%d\n",strsSize);
+    char strsSave[strsSize][strsSize+1];
     for (int i=0 ; i<strsSize ; i++)
     {
         strcpy(strsSave[i],strs[i]);
+        printf("END?\n");
         bubble_sort(strsSave[i]);
         printf("SORT strsSave[%d]=%s\n",i,strsSave[i]);
     }
@@ -74,27 +77,15 @@ char *** groupAnagrams(char ** strs, int strsSize, int* returnSize, int** return
             count2=1;
         }
     }
-    /*
-    printf("\n\n\nPRINTF RESULT\n");
-    for (int i=0 ; i<count1 ; i++)
-    {
-        for (int j=1 ; j<=result[i][0] ; j++)
-        {
-            printf("result[%d][%d]=%d\n",i,j,result[i][j]);
-        }
-    }*/  
-    
+
     char ***finalResult = malloc(strsSize * sizeof(char **));
     int *retcolsizes = malloc(strsSize * sizeof(int));
     *returnColumnSizes = retcolsizes;
-    //assert(*returnColumnSizes);
-    //assert(finalResult);
-    
+
     *returnSize = count1;
     char temp[strsSize];
-    //char (*temp)[count1][strsSize] = (char(*)[count1])malloc(count1*strsSize*sizeof(char*));
-     for (int i=0 ; i<count1 ; i++)
-     {
+    for (int i=0 ; i<count1 ; i++)
+    {
         retcolsizes[i] = result[i][0];
         //printf("retcolsize[%d]=%d\n",i,retcolsizes[i]);
         finalResult[i] = malloc(sizeof(char *)*strsSize);
@@ -106,8 +97,8 @@ char *** groupAnagrams(char ** strs, int strsSize, int* returnSize, int** return
             strcpy(finalResult[i][j],temp);
             printf("finalResult[%d][%d]=%s\n",i,j,finalResult[i][j]);
         }
-     }    
-    
+    }    
+
     printf("\n\n\nPRINTF FINALRESULT\n");
     for (int i=0 ; i<count1 ; i++)
     {
@@ -116,6 +107,6 @@ char *** groupAnagrams(char ** strs, int strsSize, int* returnSize, int** return
             printf("finalResult[%d][%d]=%s\n",i,j,finalResult[i][j]);
         }
     }
-    
-     return finalResult;
+
+    return finalResult;
 }
