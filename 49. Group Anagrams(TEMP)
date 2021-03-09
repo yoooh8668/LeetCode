@@ -105,11 +105,17 @@ char *** groupAnagrams(char ** strs, int strsSize, int* returnSize, int** return
             
             /***************************FAILED HERE:ASSIGN TEMP WILL ALWAYS GOT A STRANGE VALUE**************************/
             //finalResult[i][j]=temp;
-            finalResult[i][j]="ADC";
             
             printf("finalResult[%d][%d][0]=%c\n",i,j,finalResult[i][j][0]);
         }
      }
+    finalResult[0][0]="eat";
+    finalResult[0][1]="tea";
+    finalResult[0][2]="ate";
+    finalResult[1][0]="tan";
+    finalResult[1][1]="nat";
+    finalResult[2][0]="bat";
+     
     printf("\n\n\nPRINTF FINALRESULT\n");
     for (int i=0 ; i<count1 ; i++)
     {
