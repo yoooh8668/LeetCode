@@ -110,3 +110,114 @@ char *** groupAnagrams(char ** strs, int strsSize, int* returnSize, int** return
     
     return finalResult;
 }
+
+
+/***************************************
+2.Reduce the reduce step from 1.
+***************************************/
+//Sort strsSave
+void quick_sort(char* arr, int first_index, int last_index) {
+    int pivotIndex, index_a, index_b;
+    char temp;
+
+    if (first_index < last_index) 
+    {
+        pivotIndex = first_index;
+        index_a = first_index;
+        index_b = last_index;
+
+        while (index_a < index_b) 
+        {
+            while (arr[index_a] <= arr[pivotIndex] && index_a < last_index) 
+            {
+                index_a++;
+            }
+            while (arr[index_b] > arr[pivotIndex]) 
+            {
+                index_b--;
+            }
+
+            if (index_a < index_b) 
+            {
+                temp = arr[index_a];
+                arr[index_a] = arr[index_b];
+                arr[index_b] = temp;
+            }
+        }
+
+        temp = arr[pivotIndex];
+        arr[pivotIndex] = arr[index_b];
+        arr[index_b] = temp;
+
+        quick_sort(arr, first_index, index_b - 1);
+        quick_sort(arr, index_b + 1, last_index);
+    }
+}
+
+
+/**
+ * Return an array of arrays of size *returnSize.
+ * The sizes of the arrays are returned as *returnColumnSizes array.
+ * Note: Both returned array and *columnSizes array must be malloced, assume caller calls free().
+ */
+char *** groupAnagrams(char ** strs, int strsSize, int* returnSize, int** returnColumnSizes){
+    //strsSave is the sort of strs.
+    char strsSave[strsSize][101];
+    for (int i=0 ; i<strsSize ; i++)
+    {
+        strcpy(strsSave[i],strs[i]);
+        quick_sort(strsSave[i],0,strlen(strs[i])-1);
+    }
+    //If it has been compared, set compareMatrix to 1.
+    //Next search will skip this index.
+    int compareMatrix[strsSize];
+    int count1=0;
+    int count2=1;
+    for (int i=0 ; i<strsSize ; i++)
+    {
+        compareMatrix[i]=0;
+    }
+    
+    //create finalResult for return.
+    char ***finalResult = malloc(strsSize * sizeof(char **));
+    int *retcolsizes = malloc(strsSize * sizeof(int));
+    *returnColumnSizes = retcolsizes;
+    *returnSize=0;
+    //start compare. put the Anagrams index to same row of result.
+    //result[i][0] is the number of the Anagrams in this chars.
+    //EX: result[1]=[2,0,3]  ,means Anagrams1 has two str, one is strs[0], the other is strs[3].
+    //EX: result[3]=[1,5]    ,means Anagrams3 has only one str,is strs[5].
+    for (int i=0 ; i<strsSize ;i++)
+    {
+        //If it has been compared ==>skip.
+        if(!compareMatrix[i])
+        {
+            retcolsizes[(*returnSize)]=1;
+            finalResult[(*returnSize)] = malloc(sizeof(char *)*strsSize);
+            finalResult[(*returnSize)][retcolsizes[(*returnSize)]-1] = malloc(sizeof(char)*(101));
+            if (strs[i]==NULL)
+                finalResult[(*returnSize)][retcolsizes[(*returnSize)]-1]=NULL;
+            else
+                strcpy(finalResult[(*returnSize)][retcolsizes[(*returnSize)]-1],strs[i]);
+            for (int j=i+1 ; j<strsSize ; j++)
+            {
+                //If it has been compared ==>skip.
+                if(!compareMatrix[j])
+                {
+                    if (!strcmp(strsSave[i],strsSave[j]))
+                    {
+                        retcolsizes[(*returnSize)]++;
+                        finalResult[(*returnSize)][retcolsizes[(*returnSize)]-1] = malloc(sizeof(char)*(101));
+                        if (strs[j]==NULL)
+                            finalResult[(*returnSize)][retcolsizes[(*returnSize)]-1]=NULL;
+                        else
+                            strcpy(finalResult[(*returnSize)][retcolsizes[(*returnSize)]-1],strs[j]);
+                        compareMatrix[j]++;
+                    }
+                }
+            }
+        (*returnSize)++;
+        }
+    }
+    return finalResult;
+}
