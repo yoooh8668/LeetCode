@@ -1,0 +1,16 @@
+bool canJump(int* nums, int numsSize){
+    int maxReachablePoint=0;
+    //Find max-reachable point of every index.
+    //If max-reachable point is equal/larger than numsSize ==> true.
+    //If search to current max-reachable point, and can't update new point ==> false.
+    for (int start=0 ; start<=maxReachablePoint; start++)
+    {
+        //update new max reachable point.
+        if(nums[start]+start > maxReachablePoint)
+            maxReachablePoint = nums[start] + start;
+        //If reachable point is equal/larger than end point==>true.
+        if(maxReachablePoint >= numsSize-1)
+            return true;
+    }
+    return false;
+}
