@@ -115,7 +115,7 @@ char *** groupAnagrams(char ** strs, int strsSize, int* returnSize, int** return
 /***************************************
 2.Reduce the reduce step from 1.
 ***************************************/
-//Sort strsSave
+//Sort strsSave (quick sort)
 void quick_sort(char* arr, int first_index, int last_index) {
     int pivotIndex, index_a, index_b;
     char temp;
@@ -129,13 +129,10 @@ void quick_sort(char* arr, int first_index, int last_index) {
         while (index_a < index_b) 
         {
             while (arr[index_a] <= arr[pivotIndex] && index_a < last_index) 
-            {
                 index_a++;
-            }
+
             while (arr[index_b] > arr[pivotIndex]) 
-            {
                 index_b--;
-            }
 
             if (index_a < index_b) 
             {
