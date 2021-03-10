@@ -1,0 +1,29 @@
+/*****************************
+Use the same way as 55. Jump Game.
+Search the max reachable point.
+
+pA < pB 
+and
+pA+nums[pA] > pB+nums[pB]
+The step that can jump to B must can jump to A !!!!
+The step that jump to B switch to A, and jump to pA+nums[pA].
+
+==>If i search to current position, step+1 and current position switch to maxPoint.
+*****************************/
+int jump(int* nums, int numsSize){
+    int step=0;
+    int current=0;
+    int maxPoint=0;
+    for(int i =0;i<numsSize-1;i++) 
+    {
+        //update the new maxPoint.
+        maxPoint=(maxPoint > nums[i]+i)? maxPoint:nums[i]+i;
+        
+        if(i==current) 
+        {
+            step++;
+            current=maxPoint;
+        }
+    }
+    return step;
+}
