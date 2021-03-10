@@ -1,0 +1,78 @@
+//Global variable for count permutation number.
+int count=0;
+
+//Swap Function
+void swap(int* table,int a,int b)
+{
+    int temp;
+    temp=table[a];
+    table[a]=table[b];
+    table[b]=temp;
+}
+
+//Define whether current int need to be swap?
+//If this string never appears before, then return yes.
+bool isSwap(int* table, int start , int end)
+{
+    for(int i = start ; i < end ; i++)
+    {
+        if(table[i]==table[end])
+            return false;
+    }
+    return true;
+}
+
+void permutate(int* table, int begin, int end, int** result, int* retcolsizes) 
+{
+    //begin = end ==>finish permutate.
+    if (begin == end)
+    {
+        result[count]=malloc(sizeof(int)*(end+1));
+        retcolsizes[count]=end+1;
+        for (int i=0 ; i < end+1 ; i++)
+            result[count][i]=table[i];
+
+        count++;
+    }
+    //still have non-finished element.
+    else
+    {
+        for(int i = begin; i <= end; i++)
+        {
+            if(isSwap(table, begin , i))
+            {
+                swap(table,begin,i);
+                permutate(table, begin + 1, end, result, retcolsizes);//premutate next element
+                swap(table,begin,i);//recover 
+            }
+        }
+    }
+}
+
+/**
+ * Return an array of arrays of size *returnSize.
+ * The sizes of the arrays are returned as *returnColumnSizes array.
+ * Note: Both returned array and *columnSizes array must be malloced, assume caller calls free().
+ */
+int** permuteUnique(int* nums, int numsSize, int* returnSize, int** returnColumnSizes){
+    //Set malloc number by numsSize.
+    int total;
+    if (numsSize>=6)
+        total=720;
+    else if (numsSize==5)
+        total=120;
+    else
+        total=30;
+        
+    //malloc result
+    int** result=malloc(sizeof(int*)*total);
+    int *retcolsizes = malloc(sizeof(int)*total);
+    *returnColumnSizes = retcolsizes;
+    
+    //clear for next question.
+    count=0;
+    
+    permutate(nums, 0, numsSize-1, result, retcolsizes);
+    *returnSize = count;
+    return result;
+}
