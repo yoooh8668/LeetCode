@@ -194,7 +194,7 @@ char *** groupAnagrams(char ** strs, int strsSize, int* returnSize, int** return
         {
             retcolsizes[(*returnSize)]=1;
             finalResult[(*returnSize)] = malloc(sizeof(char *)*strsSize);
-            finalResult[(*returnSize)][retcolsizes[(*returnSize)]-1] = malloc(sizeof(char)*(101));
+            finalResult[(*returnSize)][retcolsizes[(*returnSize)]-1] = malloc(sizeof(char)*(strlen(strs[i]))+1);
             if (strs[i]==NULL)
                 finalResult[(*returnSize)][retcolsizes[(*returnSize)]-1]=NULL;
             else
@@ -207,7 +207,7 @@ char *** groupAnagrams(char ** strs, int strsSize, int* returnSize, int** return
                     if (!strcmp(strsSave[i],strsSave[j]))
                     {
                         retcolsizes[(*returnSize)]++;
-                        finalResult[(*returnSize)][retcolsizes[(*returnSize)]-1] = malloc(sizeof(char)*(101));
+                        finalResult[(*returnSize)][retcolsizes[(*returnSize)]-1] = malloc(sizeof(char)*(strlen(strs[j]))+1);
                         if (strs[j]==NULL)
                             finalResult[(*returnSize)][retcolsizes[(*returnSize)]-1]=NULL;
                         else
