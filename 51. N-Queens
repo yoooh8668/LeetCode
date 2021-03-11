@@ -1,0 +1,132 @@
+/************************************
+1.Recursive add Q.
+  Add Q row by row without further check.
+  Add check if current Q is valid?
+  if valid and all row is added. ==> add result.
+  if valid and all row is not added. ==> Recursive add Q for next row.
+  
+  if invalid try add Q to next column.
+************************************/
+
+int count=0;
+//check whether Q is valid?
+bool isQueenValid(char** table, int size, int currRow){
+    for (int i=0 ; i<=currRow ; i++)
+    {
+        for (int j=0 ; j<size ; j++)
+        {
+            //start analyze
+            if (table[i][j]=='Q')
+            {
+                //column search
+                for(int p=1 ; (i+p) <= currRow ;p++)
+                {
+                    if (table[i+p][j]=='Q')
+                        return false;
+                }
+                //left-down search
+                for(int p=1 ; (i+p) <= currRow && (j-p) >= 0 ;p++)
+                {
+                    if (table[i+p][j-p]=='Q')
+                        return false;
+                }
+                //right-down search
+                for(int p=1 ; (i+p) <= currRow && (j+p) < size ;p++)
+                {
+                    if (table[i+p][j+p]=='Q')
+                        return false;
+                }
+                //continue check next row.
+                break;
+            }
+        }
+    }
+    return true;
+}
+
+//recursive add Q.
+void addQueen(char** table, int row, int size, char*** result, int* retcolsizes){
+    for (int i=0 ; i<size ; i++)
+    {
+        table[row][i]='Q';
+        if (isQueenValid(table, size, row))
+        {
+            if (row==size-1)//last element is complete.
+            {
+                //put table in result
+                result[count]=malloc(sizeof(char*)*size);
+                retcolsizes[count]=size;
+                for(int p=0; p<size ; p++)
+                {
+                    result[count][p]=malloc(sizeof(char)*size+1);
+                    for (int q=0; q<size ; q++)
+                    {
+                        if (table[p][q]=='Q')
+                            result[count][p][q]='Q';
+                        else
+                            result[count][p][q]='.';
+                    }
+                    result[count][p][size]='\0';
+                }
+                count++;
+            }
+            else
+                addQueen(table, row+1, size, result, retcolsizes);
+        }
+        table[row][i]='.';
+    }
+}
+
+/**
+ * Return an array of arrays of size *returnSize.
+ * The sizes of the arrays are returned as *returnColumnSizes array.
+ * Note: Both returned array and *columnSizes array must be malloced, assume caller calls free().
+ */
+char *** solveNQueens(int n, int* returnSize, int** returnColumnSizes){
+    //malloc table of temp result.
+    int** table=malloc(sizeof(int*)*n);
+    for (int i=0 ; i<n ;i++)
+    {
+        table[i]=malloc(sizeof(int)*n);
+    }
+    for (int i=0 ;i<n;i++)
+    {
+        for (int j=0; j<n ;j++)
+            table[i][j]='.';
+    }
+    
+    //create the total number that memory required .
+    int total=0;
+    switch(n){
+        case 7:
+            total=40;
+            break;
+        case 8:
+            total=92;
+            break;
+        case 9:
+            total=352;
+            break;
+        default:
+            total=10;
+            break;
+    }
+    
+    char*** result=malloc(sizeof(char**)*total);
+    int *retcolsizes = malloc(sizeof(int)*total);
+    *returnColumnSizes = retcolsizes;
+    count=0;
+    
+    //Call addQueen function
+    addQueen(table, 0, n, result, retcolsizes);
+    
+    //free table
+    for (int i=0 ; i<n ;i++)
+    {
+        free(table[i]);
+    }
+    free(table);
+    
+    (*returnSize)=count;
+    return result;
+}
