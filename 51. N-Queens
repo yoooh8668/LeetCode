@@ -7,8 +7,9 @@
   
   if invalid try add Q to next column.
 ************************************/
-
+//Global varible counter.
 int count=0;
+
 //check whether Q is valid?
 bool isQueenValid(char** table, int size, int currRow){
     for (int i=0 ; i<=currRow ; i++)
