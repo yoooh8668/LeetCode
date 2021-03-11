@@ -23,6 +23,9 @@ int jump(int* nums, int numsSize){
         {
             step++;
             current=maxPoint;
+            //break when current is reach the end.
+            if (current >= numsSize-1)
+                break;
         }
     }
     return step;
