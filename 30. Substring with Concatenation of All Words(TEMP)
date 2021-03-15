@@ -4,7 +4,7 @@
    If does, save it to the result.
    
    This is the correct answer.
-   But encounter: "Time Limit Exceeded" in 151 / 176 test cases passed.
+   But encounter: "Time Limit Exceeded" in 169 / 176 test cases passed.
    Maybe we don't need to use full permutation way because it has so many non-used result.
 *****************************************/
 //Environment count for result number 
@@ -17,6 +17,21 @@ bool isSwap(char** table, int start , int end)
     for(int i = start ; i < end ; i++)
     {
         if(!strcmp(table[i],table[end]))
+            return false;
+    }
+    return true;
+}
+
+//If the str before begin is not exist in targetStr ==> break permutate.
+bool strstrExist(char** table, int begin , char* targetStr)
+{
+    char resultTemp[10000]={0};
+    char* strstrIndex;
+    for(int i = 0 ; i < begin ; i++)
+    {
+        strcat(resultTemp,table[i]);
+        strstrIndex = strstr(targetStr,resultTemp);
+        if (strstrIndex==NULL)
             return false;
     }
     return true;
@@ -48,13 +63,16 @@ void permutate(char** table, int begin, int end,char* targetStr,int* result)
     //still have non-finished element.
     else
     {
-        for(int i = begin; i <= end; i++)
+        if (strstrExist(table, begin, targetStr))
         {
-            if(isSwap(table, begin , i))
-            {
-                swap(table,begin,i);
-                permutate(table, begin + 1, end,targetStr,result);//premutate next element
-                swap(table,begin,i);//recover 
+           for(int i = begin; i <= end; i++)
+           {
+               if(isSwap(table, begin , i))
+               {
+                   swap(table,begin,i);
+                   permutate(table, begin + 1, end,targetStr,result);//premutate next element
+                   swap(table,begin,i);//recover 
+              }
            }
         }
     }
