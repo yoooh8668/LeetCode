@@ -1,5 +1,6 @@
-
-
+/********************************
+1.clear the space from end, then search char until reach ' '.
+********************************/
 int lengthOfLastWord(char * s){
     int count=0;
     int start=0;
@@ -13,14 +14,37 @@ int lengthOfLastWord(char * s){
         else
             break;
     }
-    
-    //printf("start=%d end=%d\n",start,end);
     for (int i=end; i>=0 ;i--)
     {
         if (s[i]==' ')
             break;
         else
             count++;
+    }
+    return  count;
+}
+/************************************
+2.combine the two section.
+************************************/
+int lengthOfLastWord(char * s){
+    int count=0;
+    int start=0;
+    int end = strlen(s)-1;
+    int flag=0;
+    for (int i=end; i>=0 ;i--)
+    {
+        if (s[i]==' ')
+        {
+            if (flag==0)    //if no char had been found ==> continue search.
+                continue;
+            else            //if found at least one element ==> break.
+                break;
+        }
+        else
+        {
+            count++;
+            flag=1;//found a char
+        }
     }
     return  count;
 }
