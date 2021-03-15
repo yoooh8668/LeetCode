@@ -1,3 +1,6 @@
+/************************************
+1.Same as 51. N-Queens. function 1.
+************************************/
 int count=0;
 //check whether Q is valid?
 bool isQueenValid(char** table, int size, int currRow){
@@ -85,6 +88,113 @@ int totalNQueens(int n){
         free(table[i]);
     }
     free(table);
+    
+    return count;
+}
+
+/************************************
+2.Same as 51. N-Queens. function 2.
+************************************/
+int count=0;
+
+//recursive add Q.
+void addQueen(char** table, int row, int size, int* col, int* rSlash, int* lSlash){
+    //initialize table
+    if (row==0)
+    {
+        for (int i=0 ;i<size;i++)
+        {
+            for (int j=0; j<size;j++)
+                table[i][j]='.';
+        }
+    }
+    
+    //place 'Q' by column
+    for (int i=0 ; i<size ; i++)
+    {
+        //If current position is not repeat other 'Q', try add 'Q'.
+        if (!(col[i] || rSlash[(size-1-row)+i] || lSlash[row+i]))
+        {
+            table[row][i]='Q';
+            col[i]=1;
+            rSlash[(size-1-row)+i]=1;
+            lSlash[row+i]=1;
+            
+            if (row==size-1)//last element is complete.
+                count++;
+            else
+                addQueen(table, row+1, size, col, rSlash, lSlash);
+            
+            //remove 'Q' and col/slash
+            table[row][i]='.';
+            col[i]=0;
+            rSlash[(size-1-row)+i]=0;
+            lSlash[row+i]=0;
+        }
+    }
+}
+
+/**
+ * Return an array of arrays of size *returnSize.
+ * The sizes of the arrays are returned as *returnColumnSizes array.
+ * Note: Both returned array and *columnSizes array must be malloced, assume caller calls free().
+ */
+int totalNQueens(int n){
+    //malloc table of temp result.
+    int** table=malloc(sizeof(int*)*n);
+    for (int i=0 ; i<n ;i++)
+    {
+        table[i]=malloc(sizeof(int)*n);
+    }
+    
+    //create the total number that memory required .
+    int total=0;
+    switch(n){
+        case 7:
+            total=40;
+            break;
+        case 8:
+            total=92;
+            break;
+        case 9:
+            total=352;
+            break;
+        default:
+            total=10;
+            break;
+    }
+
+    //create pointer of col/slash
+    int *col = (int*)malloc(n*sizeof(int));
+    int *rSlash = (int*)malloc((2*n-1)*sizeof(int));
+    int *lSlash = (int*)malloc((2*n-1)*sizeof(int));
+
+    //Initialize all element to 0
+    for (int i=0; i<(2*n-1) ;i++)
+    {
+        if (i<n)
+            col[i]=0;
+
+        rSlash[i]=0;
+        lSlash[i]=0;
+    }
+
+    count=0;
+    
+    //Call addQueen function
+    addQueen(table, 0, n, col, rSlash, lSlash);
+    
+    //free table
+    for (int i=0 ; i<n ;i++)
+    {
+        free(table[i]);
+    }
+    free(table);
+    
+    //free col/slash
+    free(col);
+    free(rSlash);
+    free(lSlash);
     
     return count;
 }
