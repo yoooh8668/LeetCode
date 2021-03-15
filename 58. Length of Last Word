@@ -1,0 +1,26 @@
+
+
+int lengthOfLastWord(char * s){
+    int count=0;
+    int start=0;
+    int end = strlen(s)-1;
+    
+    //clear space from end.
+    for(int i=end ; i>=0 ; i--)
+    {
+        if (s[i]==' ')
+            end--;
+        else
+            break;
+    }
+    
+    //printf("start=%d end=%d\n",start,end);
+    for (int i=end; i>=0 ;i--)
+    {
+        if (s[i]==' ')
+            break;
+        else
+            count++;
+    }
+    return  count;
+}
