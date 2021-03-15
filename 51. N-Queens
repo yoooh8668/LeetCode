@@ -131,3 +131,150 @@ char *** solveNQueens(int n, int* returnSize, int** returnColumnSizes){
     (*returnSize)=count;
     return result;
 }
+/************************************
+2.Recursive add Q.
+  Add 'Q' row by row. 
+  Add add a col/slash array that indicate that whether current section is dominated by other 'Q'.
+  rSlash example(n=4):
+       |row 
+   col |0  1  2  3
+   ----|------------
+     0 |3  4  5  6
+     1 |2  3  4  5
+     2 |1  2  3  4
+     3 |0  1  2  3
+  rSlash[7] ==> 2*n-1
+  rSlash[(n-1-row) + col]
+
+  lSlash example(n=4):
+       |row 
+   col |0  1  2  3
+   ----|------------
+     0 |0  1  2  3
+     1 |1  2  3  4
+     2 |2  3  4  5
+     3 |3  4  5  6
+  lSlash[7] ==> 2*n-1
+  lSlash[row + col]
+************************************/
+int count=0;
+
+//recursive add Q.
+void addQueen(char** table, int row, int size, char*** result, int* retcolsizes, int* col, int* rSlash, int* lSlash){
+    //initialize table
+    if (row==0)
+    {
+        for (int i=0 ;i<size;i++)
+        {
+            for (int j=0; j<size;j++)
+                table[i][j]='.';
+        }
+    }
+    
+    //place 'Q' by column
+    for (int i=0 ; i<size ; i++)
+    {
+        //If current position is not repeat other 'Q', try add 'Q'.
+        if (!(col[i] || rSlash[(size-1-row)+i] || lSlash[row+i]))
+        {
+            table[row][i]='Q';
+            col[i]=1;
+            rSlash[(size-1-row)+i]=1;
+            lSlash[row+i]=1;
+            
+            if (row==size-1)//last element is complete.
+            {
+                //put table in result
+                result[count]=malloc(sizeof(char*)*size);
+                retcolsizes[count]=size;
+                for(int p=0; p<size ; p++)
+                {
+                    result[count][p]=malloc(sizeof(char)*size+1);
+                    for (int q=0; q<size ; q++)
+                    {
+                        result[count][p][q]=table[p][q];
+                    }
+                    result[count][p][size]='\0';
+                }
+                count++;
+            }
+            else
+                addQueen(table, row+1, size, result, retcolsizes, col, rSlash, lSlash);
+            
+            //remove 'Q' and col/slash
+            table[row][i]='.';
+            col[i]=0;
+            rSlash[(size-1-row)+i]=0;
+            lSlash[row+i]=0;
+        }
+    }
+}
+
+/**
+ * Return an array of arrays of size *returnSize.
+ * The sizes of the arrays are returned as *returnColumnSizes array.
+ * Note: Both returned array and *columnSizes array must be malloced, assume caller calls free().
+ */
+char *** solveNQueens(int n, int* returnSize, int** returnColumnSizes){
+    //malloc table of temp result.
+    int** table=malloc(sizeof(int*)*n);
+    for (int i=0 ; i<n ;i++)
+    {
+        table[i]=malloc(sizeof(int)*n);
+    }
+    
+    //create the total number that memory required .
+    int total=0;
+    switch(n){
+        case 7:
+            total=40;
+            break;
+        case 8:
+            total=92;
+            break;
+        case 9:
+            total=352;
+            break;
+        default:
+            total=10;
+            break;
+    }
+
+    //create pointer of col/slash
+    int *col = (int*)malloc(n*sizeof(int));
+    int *rSlash = (int*)malloc((2*n-1)*sizeof(int));
+    int *lSlash = (int*)malloc((2*n-1)*sizeof(int));
+
+    //Initialize all element to 0
+    for (int i=0; i<(2*n-1) ;i++)
+    {
+        if (i<n)
+            col[i]=0;
+
+        rSlash[i]=0;
+        lSlash[i]=0;
+    }
+    
+    char*** result=malloc(sizeof(char**)*total);
+    int *retcolsizes = malloc(sizeof(int)*total);
+    *returnColumnSizes = retcolsizes;
+    count=0;
+    
+    //Call addQueen function
+    addQueen(table, 0, n, result, retcolsizes, col, rSlash, lSlash);
+    
+    //free table
+    for (int i=0 ; i<n ;i++)
+    {
+        free(table[i]);
+    }
+    free(table);
+    
+    //free col/slash
+    free(col);
+    free(rSlash);
+    free(lSlash);
+    
+    (*returnSize)=count;
+    return result;
+}
