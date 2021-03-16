@@ -1,0 +1,55 @@
+/***********************************
+1.First sort interval, and than combine interval.
+************************************/
+int** merge(int** intervals, int intervalsSize, int* intervalsColSize, int* returnSize, int** returnColumnSizes){
+    //sort start
+    int temp;
+    for (int i = 1; i < intervalsSize; i++) 
+    {
+        for (int j = 0; j < i; j++) 
+        {
+            if (intervals[j][0] > intervals[i][0])
+            {
+                temp = intervals[j][0];
+                intervals[j][0] = intervals[i][0];
+                intervals[i][0] = temp;
+                temp = intervals[j][1];
+                intervals[j][1] = intervals[i][1];
+                intervals[i][1] = temp;
+            }
+        }
+    }
+    
+    int** result=malloc(sizeof(int*)*intervalsSize);
+    int *retcolsizes = malloc(sizeof(int)*intervalsSize);
+    *returnColumnSizes = retcolsizes;
+    *returnSize=0;
+    
+    int min=intervals[0][0];
+    int max=intervals[0][1];
+    for (int i=1 ; i<intervalsSize ; i++)
+    {
+        if (max >= intervals[i][0] )
+        {
+            min = (min < intervals[i][0])?min:intervals[i][0];
+            max = (max > intervals[i][1])?max:intervals[i][1];
+        }
+        else
+        {
+            result[(*returnSize)]=malloc(sizeof(int)*2);
+            retcolsizes[(*returnSize)]=2;
+            result[(*returnSize)][0]=min;
+            result[(*returnSize)][1]=max;
+            min = intervals[i][0];
+            max = intervals[i][1];
+            (*returnSize)++;
+        }
+    }
+    result[(*returnSize)]=malloc(sizeof(int)*2);
+    retcolsizes[(*returnSize)]=2;
+    result[(*returnSize)][0]=min;
+    result[(*returnSize)][1]=max;
+    (*returnSize)++;
+    
+    return result;
+}
