@@ -1,0 +1,89 @@
+/*********************************************
+1.Create a array(temp) that number 1 to matrixNumbers, that indicate a spiral order.
+  matrix[i][j] = Result[k], k=temp[i][j].
+*********************************************/
+/**
+ * Note: The returned array must be malloced, assume caller calls free().
+ */
+int* spiralOrder(int** matrix, int matrixSize, int* matrixColSize, int* returnSize){
+    int matrixSizeCol=matrixColSize[0];
+    int matrixNumbers= matrixSize*matrixSizeCol;
+    int* result=malloc(sizeof(int)*matrixNumbers);
+    
+    //Clear temp
+    int temp[matrixSize][matrixSizeCol];
+    for (int i=0; i<matrixSize ;i++)
+    {
+        for (int j=0; j<matrixSizeCol ;j++)
+        {
+            //If searching temp[i][j]=10000, means temp[i][j] is not put a element yet.
+            temp[i][j]=10000;
+        }
+    }
+    int direction=0;
+    int row=0;
+    int col=0;
+    for (int i=0; i<matrixNumbers ;i++)
+    {
+        if (direction==0)//right
+        {
+            if (col==matrixSizeCol || temp[row][col]!=10000)
+            {
+                col--;
+                row++;
+                i--;
+                direction++;
+                continue;
+            }
+            temp[row][col++]=i;
+        }
+        else if (direction==1)//down
+        {
+            if (row==matrixSize || temp[row][col]!=10000)
+            {
+                row--;
+                col--;
+                i--;
+                direction++;
+                continue;
+            }
+            temp[row++][col]=i;
+        }
+        else if (direction==2)//left
+        {
+            if (col == -1 || temp[row][col]!=10000)
+            {
+                col++;
+                row--;
+                i--;
+                direction++;
+                continue;
+            }
+            temp[row][col--]=i;
+        }
+        else                    //up
+        {
+            if (row < 0 || temp[row][col]!=10000)
+            {
+                row++;
+                col++;
+                i--;
+                direction=0;
+                continue;
+            }
+            temp[row--][col]=i;
+        }
+        
+    }
+    printf("END1?");
+    for (int i=0; i<matrixSize ;i++)
+    {
+        for (int j=0; j<matrixSizeCol ;j++)
+        {
+            result[temp[i][j]]=matrix[i][j];
+        }
+    }
+    printf("END2?");
+    *returnSize=matrixNumbers;
+    return result;
+}
