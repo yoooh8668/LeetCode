@@ -75,7 +75,6 @@ int* spiralOrder(int** matrix, int matrixSize, int* matrixColSize, int* returnSi
         }
         
     }
-    printf("END1?");
     for (int i=0; i<matrixSize ;i++)
     {
         for (int j=0; j<matrixSizeCol ;j++)
@@ -83,7 +82,6 @@ int* spiralOrder(int** matrix, int matrixSize, int* matrixColSize, int* returnSi
             result[temp[i][j]]=matrix[i][j];
         }
     }
-    printf("END2?");
     *returnSize=matrixNumbers;
     return result;
 }
