@@ -15,7 +15,7 @@ int** generateMatrix(int n, int* returnSize, int** returnColumnSizes){
         retcolsizes[i]=n;
         for (int j=0 ; j<n ; j++)
         {
-            result[i][j]=401;
+            result[i][j]=0;
         }
     }
     
@@ -26,7 +26,7 @@ int** generateMatrix(int n, int* returnSize, int** returnColumnSizes){
     {
         if (direction==0)//right
         {
-            if (col==n || result[row][col]!=401)
+            if (col==n || result[row][col]!=0)
             {
                 col--;
                 row++;
@@ -38,7 +38,7 @@ int** generateMatrix(int n, int* returnSize, int** returnColumnSizes){
         }
         else if (direction==1)//down
         {
-            if (row==n || result[row][col]!=401)
+            if (row==n || result[row][col]!=0)
             {
                 row--;
                 col--;
@@ -50,7 +50,7 @@ int** generateMatrix(int n, int* returnSize, int** returnColumnSizes){
         }
         else if (direction==2)//left
         {
-            if (col == -1 || result[row][col]!=401)
+            if (col == -1 || result[row][col]!=0)
             {
                 col++;
                 row--;
@@ -62,7 +62,7 @@ int** generateMatrix(int n, int* returnSize, int** returnColumnSizes){
         }
         else                    //up
         {
-            if (row ==-1 || result[row][col]!=401)
+            if (row ==-1 || result[row][col]!=0)
             {
                 row++;
                 col++;
