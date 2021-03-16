@@ -85,3 +85,77 @@ int* spiralOrder(int** matrix, int matrixSize, int* matrixColSize, int* returnSi
     *returnSize=matrixNumbers;
     return result;
 }
+
+/****************************
+2.function 1 without using temp array.
+****************************/
+/**
+ * Note: The returned array must be malloced, assume caller calls free().
+ */
+int* spiralOrder(int** matrix, int matrixSize, int* matrixColSize, int* returnSize){
+    int matrixSizeCol=matrixColSize[0];
+    int matrixNumbers= matrixSize*matrixSizeCol;
+    int* result=malloc(sizeof(int)*matrixNumbers);
+    
+    int direction=0;
+    int row=0;
+    int col=0;
+    for (int i=0; i<matrixNumbers ;i++)
+    {
+        if (direction==0)//right
+        {
+            if (col==matrixSizeCol || matrix[row][col]==101)
+            {
+                col--;
+                row++;
+                i--;
+                direction++;
+                continue;
+            }
+            result[i]=matrix[row][col];
+            matrix[row][col++]=101;
+        }
+        else if (direction==1)//down
+        {
+            if (row==matrixSize || matrix[row][col]==101)
+            {
+                row--;
+                col--;
+                i--;
+                direction++;
+                continue;
+            }
+            result[i]=matrix[row][col];
+            matrix[row++][col]=101;
+        }
+        else if (direction==2)//left
+        {
+            if (col == -1 || matrix[row][col]==101)
+            {
+                col++;
+                row--;
+                i--;
+                direction++;
+                continue;
+            }
+            result[i]=matrix[row][col];
+            matrix[row][col--]=101;
+        }
+        else                    //up
+        {
+            if (row < 0 || matrix[row][col]==101)
+            {
+                row++;
+                col++;
+                i--;
+                direction=0;
+                continue;
+            }
+            result[i]=matrix[row][col];
+            matrix[row--][col]=101;
+        }
+        
+    }
+    *returnSize=matrixNumbers;
+    return result;
+}
