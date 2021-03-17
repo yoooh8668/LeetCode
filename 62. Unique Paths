@@ -1,0 +1,112 @@
+/*************************************
+1.Count 
+  ((m-1)+(n-1))!
+  ---------------
+  (m-1)!*(n-1)!
+*************************************/
+int uniquePaths(int m, int n){
+    int numbers=m-1+n-1;
+    unsigned long long int count=1;
+    int target;
+    
+    //need to start from bigger one to prevent overflow.
+    target=(m > n)? m : n;
+    
+    //m! ~ (numbers)!
+    for (int i=target ; i<=numbers ; i++)
+    {
+        count*=i;
+    }
+    
+    //1! ~ (n-1)!
+    for (int i=1 ; i<numbers-target+2 ; i++)
+    {
+        count/=i;
+    }
+    return count;
+}
+/*************************************
+2.Online solution 
+  Using DP.
+*************************************/
+int uniquePaths(int m, int n){
+    unsigned long long int dp[m][n];
+    
+    for (int i = 0; i < m; i++)
+        for (int j = 0; j < n; j++){
+            if (i > 0 && j > 0)
+                dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+            else
+                dp[i][j] = 1;
+        }
+    
+    return dp[m - 1][n - 1];
+}
+/*************************************
+3.This is the permutation way.
+  But encounter 'Time Limit Exceeded'.
+  Looks like we don't have to permutate the result.
+*************************************/
+//Global variable for count permutation number.
+int count=0;
+
+bool isSwap(int* table, int start , int end)
+{
+    for(int i = start ; i < end ; i++)
+    {
+        if ( table[i]==table[end] )
+            return false;
+    }
+    return true;
+}
+
+void permutate(int* table, int begin, int end) 
+{
+    //begin = end ==>finish permutate.
+    if (begin == end)
+        count++;
+    //still have non-finished element.
+    else
+    {
+        for(int i = begin; i <= end; i++)
+        {
+            if(isSwap(table, begin , i))
+            {
+                swap(table,begin,i);
+                permutate(table, begin + 1, end);//premutate next element
+                swap(table,begin,i);//recover 
+            }
+        }
+    }
+}
+
+//Swap Function
+void swap(int* table,int a,int b)
+{
+    int temp;
+    temp=table[a];
+    table[a]=table[b];
+    table[b]=temp;
+}
+
+
+int uniquePaths(int m, int n){
+    int numbers=m-1+n-1;
+    if (numbers==0)
+        return 1;
+    int* table=malloc(sizeof(int)*numbers);
+    count=0;
+    
+    for (int i=0 ; i<numbers ; i++)
+    {
+        if (i < m-1)
+            table[i]=0;
+        else
+            table[i]=1;
+    }
+    
+    permutate(table, 0, numbers-1);
+    
+    free(table);
+    return count;
+}
