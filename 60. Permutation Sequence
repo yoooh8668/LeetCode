@@ -1,0 +1,61 @@
+char searchNonNull(char* order, int n,int target){
+    int count =0;
+    for (int i=0 ; i<n ; i++)
+    {
+        if (order[i] != '0')
+        {
+            if (count == target)
+            {
+                order[i] = '0';
+                return i+49;
+            }
+            else if (count !=target)
+                count++;
+        }
+    }
+    //exception
+    return '?';
+}
+
+char * getPermutation(int n, int k){
+    int orderNumber[9]={0,1,2,6,24,120,720,5040,40320};
+    char* result=malloc(sizeof(char)*(n+1));
+    if (n==1)
+    {
+        result[0]='1';
+        result[1]='\0';
+        return result;
+    }
+    
+    char* order=malloc(sizeof(char)*(n+1));
+    //initial order that store 1~n
+    //if put one number in the result, change that poaiotion to '0'
+    for (int i=0 ; i<n ; i++)
+    {
+        order[i]=i+49;
+    }
+    order[n]='\0';
+    
+    //the permutate is start from 1, changing it from 0.
+    k--;
+    
+    //the result position
+    int count=0;
+    int nTemp=n;
+    
+    //determine the position that need to be added.
+    int tempPosition=0;
+    while(count<n)
+    {
+        tempPosition = k/orderNumber[nTemp-1];
+        result[count++]=searchNonNull(order, n, tempPosition);
+        k%=orderNumber[nTemp-1];
+        if (nTemp!=2)
+            nTemp--;
+    }
+    
+    free(order);
+    
+    result[n]='\0';
+    return result;
+}
