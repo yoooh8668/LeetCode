@@ -30,16 +30,17 @@ int uniquePaths(int m, int n){
   Using DP.
 *************************************/
 int uniquePaths(int m, int n){
-    unsigned long long int dp[m][n];
-    
+    int dp[m][n];
     for (int i = 0; i < m; i++)
         for (int j = 0; j < n; j++){
+            //for current position, the all posible way to get here is 
+            //"the posible way of getting to the top" add "the posible way of getting to the left".
             if (i > 0 && j > 0)
-                dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+                dp[i][j] = dp[i-1][j] + dp[i][j-1];
+            //for row=0 or col=0, there is only one posible way .
             else
                 dp[i][j] = 1;
         }
-    
     return dp[m - 1][n - 1];
 }
 /*************************************
