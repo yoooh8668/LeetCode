@@ -1,0 +1,64 @@
+char * addBinary(char * a, char * b){
+    int aLen=strlen(a);
+    int bLen=strlen(b);
+    //max size of result
+    int count=aLen+bLen+1;
+    int result[count];
+    //switch char to int
+    int aNumber=0;
+    int bNumber=0;
+    int carry=0;
+    for (int i=0 ; i<count ;i++)
+    {
+        if (i>=aLen)
+            aNumber=0;
+        else
+            aNumber=a[aLen-1-i]-48;
+            
+        if (i>=bLen)
+            bNumber=0;
+        else
+            bNumber=b[bLen-1-i]-48;
+        
+        if (aNumber+bNumber+carry==3)
+        {
+            result[i]=1;
+            carry=1;
+        }
+        else if (aNumber+bNumber+carry==2)
+        {
+            result[i]=0;
+            carry=1;
+        }
+        else if (aNumber+bNumber+carry==1)
+        {
+            result[i]=1;
+            carry=0;
+        }
+        else
+        {
+            result[i]=0;
+            carry=0;
+        }
+    }
+    
+    //Remove leading '0'.
+    while (count>=1 && result[count-1] == 0)
+        count--;
+    
+    //result =0 condition.
+    if (count==0)
+    {
+        char* charResult=malloc(sizeof(char)*2);
+        charResult[0]='0';
+        charResult[1]='\0';
+        return charResult;
+    }
+    
+    char* charResult=malloc(sizeof(char)*count+1);
+    for (int i=0 ; i<count ; i++)
+        charResult[i]=result[count-1-i]+48;
+    
+    charResult[count]='\0';
+    return charResult;
+}
