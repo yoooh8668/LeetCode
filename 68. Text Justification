@@ -45,6 +45,8 @@ char ** fullJustify(char ** words, int wordsSize, int maxWidth, int* returnSize)
         
         //How many space section?
         spaceNumber=(count-1)-countStart;
+        
+        //Only one word => left justified.
         if (spaceNumber==0)
         {
             stringcopy(result[(*returnSize)],0,words[countStart]);
