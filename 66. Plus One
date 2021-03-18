@@ -19,33 +19,25 @@ int* plusOne(int* digits, int digitsSize, int* returnSize){
             carry=0;
         }
     }
-    int carryFlag=0;
-    if (carry==1)
+
+    int* intResult=malloc(sizeof(int)*(digitsSize+1));
+    if (carry)
     {
         result[0]=1;
-        carryFlag=1;
         (*returnSize)=digitsSize+1;
-    }
-    else 
-    {
-        result[0]=0;
-        (*returnSize)=digitsSize;
-
-    }
-    int* intResult=malloc(sizeof(int)*(*returnSize));
-    if (carryFlag)
-    {
         for (int i=0 ; i<digitsSize+1 ; i++)
         {
             intResult[i]=result[i];
         }
     }
-    else
+    else 
     {
+        result[0]=0;
+        (*returnSize)=digitsSize;
         for (int i=1 ; i<digitsSize+1 ; i++)
         {
             intResult[i-1]=result[i];
         }
-    }    
+    }  
     return intResult;
 }
