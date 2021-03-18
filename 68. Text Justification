@@ -25,111 +25,77 @@ char ** fullJustify(char ** words, int wordsSize, int maxWidth, int* returnSize)
     int spaceWidth;
     int spaceLargerWidth;
     int targetPosition;
+    
+    //Still have word to be added.
     while(count<wordsSize)
     {
         countStart=count;
         remainSize=maxWidth;
         targetPosition=0;
+        result[(*returnSize)]=malloc(sizeof(char)*maxWidth+1);
+        
+        //Find how many words can be store in one line.
         while ( (count < wordsSize) && remainSize+1 > strlen(words[count]) )
         {
-            printf("count=%d,wordsSize=%d\n",count,wordsSize);
-            printf("remainSize=%d,strlen(words[count])=%d\n",remainSize,strlen(words[count]));
             remainSize-=strlen(words[count]);
             remainSize--;//extra space for another string
             count++;
         }
         remainSize++;//last element don't need space after
-        printf("count=%d\n",count);
-        result[(*returnSize)]=malloc(sizeof(char)*maxWidth+1);
         
+        //How many space section?
         spaceNumber=(count-1)-countStart;
         if (spaceNumber==0)
         {
-            printf("spaceNumber==0\n");
             stringcopy(result[(*returnSize)],0,words[countStart]);
             targetPosition=strlen(words[countStart]);
             addSpace(result[(*returnSize)], targetPosition, maxWidth-strlen(words[countStart]));
         }
-        //if this is last line ==> leftShift.
-        else if (count == wordsSize)
+        //if not the last line => add space fully justified.
+        else if (count != wordsSize)
         {
-            printf("LEFT SHIFT!!\n");
-            //spaceNumber==1
-            if (spaceNumber==1)
+            //one space is 'spaceWidth +1' number.
+            spaceWidth = remainSize/spaceNumber;
+            //And there are 'spaceLargerWidth' sections that need to add one space more.
+            spaceLargerWidth = remainSize%spaceNumber;
+            
+            for (int i=countStart ; i<count ; i++)
             {
-                printf("spaceNumber==1\n");
-                stringcopy(result[(*returnSize)],0,words[countStart]);
-                targetPosition=strlen(words[countStart]);
-                addSpace(result[(*returnSize)], targetPosition, 1);
-                targetPosition++;
-                stringcopy(result[(*returnSize)],targetPosition,words[countStart+1]);
-                targetPosition+=strlen(words[countStart+1]);
-                addSpace(result[(*returnSize)], targetPosition, maxWidth-targetPosition);
-            }
-            //spaceNumber > 1
-            else
-            {
-                printf("spaceNumber>1\n");
-                stringcopy(result[(*returnSize)],targetPosition,words[countStart]);
-                targetPosition += strlen(words[countStart]);
-                for (int i=countStart+1 ; i<count ; i++)
+                stringcopy(result[(*returnSize)],targetPosition,words[i]);
+                targetPosition += strlen(words[i]);
+                //space of larger width
+                if (spaceLargerWidth != 0)
                 {
-                    addSpace(result[(*returnSize)], targetPosition, 1);
-                    targetPosition ++;
-                    stringcopy(result[(*returnSize)],targetPosition,words[i]);
-                    targetPosition += strlen(words[i]);
+                    addSpace(result[(*returnSize)], targetPosition, spaceWidth+2);
+                    spaceLargerWidth--;
+                    targetPosition += (spaceWidth+2);
                 }
-                addSpace(result[(*returnSize)], targetPosition, maxWidth-targetPosition);
+                //space of normal width (except for last word) 
+                else if (i != count-1)
+                {
+                    addSpace(result[(*returnSize)], targetPosition, spaceWidth+1);
+                    targetPosition += spaceWidth+1;
+                }
             }
         }
+        //if this is last line ==> leftShift.
         else
         {
-            //spaceNumber==1
-            if (spaceNumber==1)
+            stringcopy(result[(*returnSize)],targetPosition,words[countStart]);
+            targetPosition += strlen(words[countStart]);
+            //section can only have one space.
+            for (int i=countStart+1 ; i<count ; i++)
             {
-                printf("spaceNumber==1\n");
-                stringcopy(result[(*returnSize)],0,words[countStart]);
-                targetPosition=strlen(words[countStart]);
-                addSpace(result[(*returnSize)], targetPosition, remainSize+1);
-                targetPosition+=remainSize+1;
-                stringcopy(result[(*returnSize)],targetPosition,words[countStart+1]);
+                addSpace(result[(*returnSize)], targetPosition, 1);
+                targetPosition ++;
+                stringcopy(result[(*returnSize)],targetPosition,words[i]);
+                targetPosition += strlen(words[i]);
             }
-            //spaceNumber > 1
-            else
-            {
-                printf("spaceNumber>1\n");
-                spaceWidth = remainSize/spaceNumber;
-                spaceLargerWidth = remainSize%spaceNumber;
-                printf("spaceWidth=%d\n",spaceWidth+1);
-                printf("spaceLargerWidth=%d\n",spaceLargerWidth);
-                for (int i=countStart ; i<count ; i++)
-                {
-                    printf("returnSize=%d,count=%d,targetPosition=%d\n",(*returnSize),i,targetPosition);
-                    stringcopy(result[(*returnSize)],targetPosition,words[i]);
-                    targetPosition += strlen(words[i]);
-                    //space of larger width
-                    if (spaceLargerWidth != 0)
-                    {
-                        printf("LargerWidth\n");
-                        addSpace(result[(*returnSize)], targetPosition, spaceWidth+2);
-                        spaceLargerWidth--;
-                        targetPosition += (spaceWidth+2);
-                    }
-                    //space of normal width (except for last word) 
-                    else if (i != count-1)
-                    {
-                        printf("NormalWidth\n");
-                        addSpace(result[(*returnSize)], targetPosition, spaceWidth+1);
-                        targetPosition += spaceWidth+1;
-                    }
-                }
-            }
+            //left justified
+            addSpace(result[(*returnSize)], targetPosition, maxWidth-targetPosition);
         }
         result[(*returnSize)][maxWidth]='\0';
-        printf("result[%d]=%s\n",(*returnSize),result[(*returnSize)]);
         (*returnSize)++;
-        printf("\n\n");
     }
-    printf("FINISH!!");
     return result;
 }
