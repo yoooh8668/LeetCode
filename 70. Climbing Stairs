@@ -1,0 +1,20 @@
+/*****************************
+1.Current posible way is oneStepJump + twoStepJump.
+*****************************/
+int climbStairs(int n){
+    if (n==1)
+        return 1;
+    else if (n==2)
+        return 2;
+    
+    int oneStepJump=2;
+    int twoStepJump=1;
+    int result=0;
+    for (int i=3 ; i<=n ; i++)
+    {
+        result = oneStepJump+twoStepJump;
+        twoStepJump=oneStepJump;
+        oneStepJump=result;
+    }
+    return result;
+}
