@@ -1,3 +1,6 @@
+/**************************************
+1.Binary search row, than binary search col.
+**************************************/
 bool searchMatrix(int** matrix, int matrixSize, int* matrixColSize, int target){
     //Binary search row.
     int start=0;
@@ -27,6 +30,29 @@ bool searchMatrix(int** matrix, int matrixSize, int* matrixColSize, int target){
         if (matrix[row][mid]==target)
             return true;
         else if (matrix[row][mid] < target)
+            start=mid+1;
+        else
+            end=mid-1;
+    }
+    return false;
+}
+
+/****************************************
+2.Binary search all element.
+****************************************/
+bool searchMatrix(int** matrix, int matrixSize, int* matrixColSize, int target){
+    //Binary search row.
+    int start=0;
+    int end=matrixSize*matrixColSize[0]-1;
+    int mid,row,col;
+    while(end >= start)
+    {
+        mid = (start+end)/2;
+        row = mid/matrixColSize[0];
+        col = mid%matrixColSize[0];
+        if (matrix[row][col]==target)
+            return true;
+        else if (matrix[row][col] < target)
             start=mid+1;
         else
             end=mid-1;
