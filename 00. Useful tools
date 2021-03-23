@@ -60,3 +60,19 @@ void quick_sort(int* nums, int start, int end) {
     }
 }
 //////////////////////////Binary search 
+    while(end >= start)
+    {
+        mid = (start+end)/2;
+        if (nums[mid]==target)
+            return true;
+        else if (nums[mid] < target)
+            start=mid+1;
+        else
+            end=mid-1;
+    }
+//////////////////////////Return form for LeetCode
+    int** result=malloc(sizeof(int*)*n);
+    int *retcolsizes = malloc(sizeof(int)*n);
+    *returnColumnSizes = retcolsizes;
+    ...
+    *returnSize=n;
