@@ -1,3 +1,6 @@
+/******************************************
+1. Bubble sort
+*******************************************/
 void sortColors(int* nums, int numsSize){
     int temp=0;
     for (int i = 0; i < numsSize; i++) 
@@ -12,4 +15,44 @@ void sortColors(int* nums, int numsSize){
             }
         }
     }
+}
+/*************************************
+2. Quick sort
+*************************************/
+void quick_sort(int* nums, int start, int end) {
+
+    int pivotIndex, temp, small, big;
+    
+    if (start < end) 
+    {
+        pivotIndex = start;
+        small = start;
+        big = end;
+        
+        while (small < big) 
+        {
+            while (nums[small] <= nums[pivotIndex] && small < end) 
+                small++;
+            while (nums[big] > nums[pivotIndex]) 
+                big--;
+                
+            if (small < big) 
+            {
+                temp = nums[small];
+                nums[small] = nums[big];
+                nums[big] = temp;
+            }
+        }
+
+        temp = nums[pivotIndex];
+        nums[pivotIndex] = nums[big];
+        nums[big] = temp;
+
+        quick_sort(nums, start, big - 1);
+        quick_sort(nums, big + 1, end);
+    }
+}
+
+void sortColors(int* nums, int numsSize){
+     quick_sort(nums,0,numsSize-1);
 }
