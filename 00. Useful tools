@@ -1,0 +1,13 @@
+///////////////////////Bubble sort
+    for (int i = 0; i < numsSize; i++) 
+    {
+        for (int j = 0; j < i; j++) 
+        {
+            if (nums[j] > nums[i]) //> from small to large, < from large to small
+            {
+                int temp = nums[j];
+                nums[j] = nums[i];
+                nums[i] = temp;
+            }
+        }
+    }
