@@ -11,3 +11,52 @@
             }
         }
     }
+////////////////////Quick sort
+void quick_sort(int* nums, int start, int end) {
+
+    int pivotIndex, temp, small, big;
+    //we want to create two partition, 
+    //one is smaller than nums[pivotIndex], the other is larger than nums[pivotIndex]
+    //==>pivot point is at nums[start].
+    
+    //if start >= end stop sort
+    if (start < end) 
+    {
+        pivotIndex = start;
+        small = start;
+        big = end;
+        
+        //for     x = start ~ big-1
+        //nums[x] <= nums[pivot]
+        //and for x = big ~ end
+        //numd[x] >  nums[pivot]
+        while (small < big) 
+        {
+            // search small 
+            while (nums[small] <= nums[pivotIndex] && small < end) 
+                small++;
+            // search big
+            while (nums[big] > nums[pivotIndex]) 
+                big--;
+
+            // if big > small, swap the two to match its partition.
+            if (small < big) 
+            {
+                temp = nums[small];
+                nums[small] = nums[big];
+                nums[big] = temp;
+            }
+        }
+
+        // swap big with pivotIndex
+        //now nums is sort like [smallerThanPivot, pivot , largerThanPivot]
+        temp = nums[pivotIndex];
+        nums[pivotIndex] = nums[big];
+        nums[big] = temp;
+
+        // Recursive sort for left and right partition.
+        quick_sort(nums, start, big - 1);
+        quick_sort(nums, big + 1, end);
+    }
+}
+//////////////////////////Binary search 
