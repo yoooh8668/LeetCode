@@ -1,0 +1,70 @@
+
+
+char * simplifyPath(char * path){
+    int pLen=strlen(path);
+    char* result=malloc(sizeof(char)*(pLen+1));
+    int count=0;
+    
+    //for search directory and its name.
+    int directory=0;
+    char name[pLen];
+    int nameCount=0;
+    
+    for (int i=0 ; i<pLen+1 ; i++)
+    {
+        //discover a path, or this is the end of path.
+        if (i==pLen || path[i]=='/' )
+        {
+            //multiple slash, do nothing.
+            if (directory==0)
+                ;
+            //one valid directory.
+            else if (directory==1)
+            {
+                name[nameCount]='\0';
+                //clear directory name
+                nameCount=0;
+                directory=0;
+                
+                //current directory, do nothing.
+                if (!strcmp(name,"." ))
+                    ;
+                //up one directory
+                else if (!strcmp(name,".."))
+                {
+                    if (count>1)
+                    {
+                        while (count>1 && result[count-1]!='/')
+                            count--;
+                        //remove theslash, too.
+                        count--;
+                    }
+                }
+                //one valid directory
+                else
+                {
+                    result[count++]='/';
+                    strcpy(result+count,name);
+                    count+=strlen(name);
+                }
+            }
+            result[count]='\0';
+        }
+        //directory name
+        else
+        {
+            name[nameCount++]=path[i];
+            directory=1;//at least one directory
+        }
+    }
+    
+    //if no directory, add a slash for current directory.
+    if (count==0)
+    {
+        result[0]='/';
+        result[1]='\0';
+        return result;
+    }
+    return result;
+    
+}
