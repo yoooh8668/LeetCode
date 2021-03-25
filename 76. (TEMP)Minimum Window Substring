@@ -4,7 +4,82 @@
    If t[n]is at s[k] and t[n+1]==t[n], search t[n+1] from s[k+1].
    And for next condition, remove one char from s[n], research from s[n+1] to get a new result.
 ***********************************************/
+void searchWidth (int* tIndex, int tLen, int* result){
+    result[1]=-1;
+    result[0]=100000;
+    for (int i=0 ; i<tLen ; i++)
+    {
+        result[0]=(result[0]<tIndex[i])?result[0]:tIndex[i];
+        result[1]=(result[1]>tIndex[i])?result[1]:tIndex[i];
+    }
+}
 
+char * minWindow(char * s, char * t){
+    int sLen=strlen(s);
+    int tLen=strlen(t);
+    char* result=malloc(sizeof(char)*(sLen+1));
+    char temp;
+    for (int i = 0; i < tLen; i++) 
+    {
+        for (int j = 0; j < i; j++) 
+        {
+            if (t[j] > t[i])
+            {
+                temp = t[j];
+                t[j] = t[i];
+                t[i] = temp;
+            }
+        }
+    }
+    int tIndex[tLen];
+    int shift=0;
+    char* searchResult;
+    for (int i=0 ;i<tLen ; i++)
+    {
+        if (i>0 && t[i]==t[i-1])
+        {
+            shift=tIndex[i-1]+1;
+            searchResult=strchr(s+shift,t[i]);
+            if (searchResult==NULL)
+            {
+                result[0]='\0';
+                return result;
+            }
+            tIndex[i]=searchResult-s;
+        }
+        else
+        {
+            searchResult=strchr(s,t[i]);
+            if (searchResult==NULL)
+            {
+                result[0]='\0';
+                return result;
+            }
+            tIndex[i]=searchResult-s;
+        }
+    }
+    int* index=malloc(sizeof(int)*2);
+    searchWidth(tIndex, tLen, index);
+    printf("first search = %d, %d\n",index[0],index[1]);
+    
+    while(1)
+    {
+        searchResult=strchr(s+shift,t[i]);
+        if (searchResult==NULL)
+            break;
+        else 
+        {
+            
+        }
+    }
+    
+    //Put in result
+    int count=0;
+    for (int i=index[0] ; i<=index[1] ;i++)
+        result[count++]=s[i];
+    result[count]='\0';
+    return result;
+}
 
 /************************************************
 0. Using dp search,
