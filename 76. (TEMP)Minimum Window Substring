@@ -4,14 +4,38 @@
    If t[n]is at s[k] and t[n+1]==t[n], search t[n+1] from s[k+1].
    And for next condition, remove one char from s[n], research from s[n+1] to get a new result.
 ***********************************************/
+#define MIN(x,y) ((x)<(y))?(x):(y)
+#define MAX(x,y) ((x)>(y))?(x):(y)
 void searchWidth (int* tIndex, int tLen, int* result){
     result[1]=-1;
     result[0]=100000;
     for (int i=0 ; i<tLen ; i++)
     {
-        result[0]=(result[0]<tIndex[i])?result[0]:tIndex[i];
-        result[1]=(result[1]>tIndex[i])?result[1]:tIndex[i];
+        if (result[0]>tIndex[i])
+        {
+            result[0]=tIndex[i];
+            result[2]=i;
+        }
+        result[1]=MAX(result[1],tIndex[i]);
     }
+    //printf("section = %d , %d \n",result[0], result[1]);
+    //printf("min i=%d\n",result[2]);
+}
+
+int largestSameChar (char* t, int* tIndex, int tLen, int* result){
+    int max=-1;
+    for (int i=result[2]+1; i<tLen; i++)
+    {
+        if (t[i]==t[result[2]] && tIndex[i]>max)
+            max=tIndex[i];
+    }
+    for (int i=result[2]-1 ; i>=0 ; i--)
+    {
+        if (t[i]==t[result[2]] && tIndex[i]>max)
+            max=tIndex[i];
+    }
+    //printf("largestSameChar=%d\n",max);
+    return max;
 }
 
 char * minWindow(char * s, char * t){
@@ -19,6 +43,7 @@ char * minWindow(char * s, char * t){
     int tLen=strlen(t);
     char* result=malloc(sizeof(char)*(sLen+1));
     char temp;
+    //sort temp
     for (int i = 0; i < tLen; i++) 
     {
         for (int j = 0; j < i; j++) 
@@ -34,6 +59,8 @@ char * minWindow(char * s, char * t){
     int tIndex[tLen];
     int shift=0;
     char* searchResult;
+    
+    //first time search
     for (int i=0 ;i<tLen ; i++)
     {
         if (i>0 && t[i]==t[i-1])
@@ -58,24 +85,36 @@ char * minWindow(char * s, char * t){
             tIndex[i]=searchResult-s;
         }
     }
-    int* index=malloc(sizeof(int)*2);
+    int* index=malloc(sizeof(int)*3);
+    //index[start,end,i] , where t[i]=start
+    //printf("first search = ");
     searchWidth(tIndex, tLen, index);
-    printf("first search = %d, %d\n",index[0],index[1]);
+    int start = index[0];
+    int end = index[1];
     
-    while(1)
+    while( (end-start+1) != tLen)
     {
-        searchResult=strchr(s+shift,t[i]);
+        //printf("continue search for t[%d]=%c\n",index[2],t[index[2]]);
+        shift = largestSameChar(t, tIndex, tLen, index)+1;
+        if (shift == 0)
+            shift=index[0]+1;
+        
+        searchResult=strchr(s+shift,t[index[2]]);
         if (searchResult==NULL)
-            break;
-        else 
+           break;
+        tIndex[index[2]]=searchResult-s;
+        searchWidth(tIndex, tLen, index);
+        if (end-start > index[1]-index[0])
         {
-            
+            //printf("change section\n");
+            start=index[0];
+            end=index[1];
         }
     }
     
     //Put in result
     int count=0;
-    for (int i=index[0] ; i<=index[1] ;i++)
+    for (int i=start ; i<=end ;i++)
         result[count++]=s[i];
     result[count]='\0';
     return result;
