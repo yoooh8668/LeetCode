@@ -4,123 +4,84 @@
    If t[n]is at s[k] and t[n+1]==t[n], search t[n+1] from s[k+1].
    And for next condition, remove one char from s[n], research from s[n+1] to get a new result.
 ***********************************************/
-
-
-/**********************************************
-0.Same as 1., But time limit exceed
-**********************************************/
 #define MIN(x,y) ((x)<(y))?(x):(y)
 #define MAX(x,y) ((x)>(y))?(x):(y)
-void searchWidth (int* tIndex, int tLen, int* result){
-    result[1]=-1;
-    result[0]=100000;
-    for (int i=0 ; i<tLen ; i++)
-    {
-        if (result[0]>tIndex[i])
-        {
-            result[0]=tIndex[i];
-            result[2]=i;
-        }
-        result[1]=MAX(result[1],tIndex[i]);
-    }
-    //printf("section = %d , %d \n",result[0], result[1]);
-    //printf("min i=%d\n",result[2]);
-}
-
-int largestSameChar (char* t, int* tIndex, int tLen, int* result){
-    int max=-1;
-    for (int i=result[2]+1; i<tLen; i++)
-    {
-        if (t[i]==t[result[2]] && tIndex[i]>max)
-            max=tIndex[i];
-    }
-    for (int i=result[2]-1 ; i>=0 ; i--)
-    {
-        if (t[i]==t[result[2]] && tIndex[i]>max)
-            max=tIndex[i];
-    }
-    //printf("largestSameChar=%d\n",max);
-    return max;
-}
 
 char * minWindow(char * s, char * t){
     int sLen=strlen(s);
     int tLen=strlen(t);
     char* result=malloc(sizeof(char)*(sLen+1));
-    char temp;
-    //sort temp
-    for (int i = 0; i < tLen; i++) 
-    {
-        for (int j = 0; j < i; j++) 
-        {
-            if (t[j] > t[i])
-            {
-                temp = t[j];
-                t[j] = t[i];
-                t[i] = temp;
-            }
-        }
-    }
-    int tIndex[tLen];
-    int shift=0;
-    char* searchResult;
+    //sCopy for mark the char that had been searched.
+    char sCopy[sLen+1];
+    strcpy(sCopy,s);
     
     //first time search
-    for (int i=0 ;i<tLen ; i++)
+    char* strchrTarget;
+    int start=sLen;
+    int end=-1;
+    int pos=0;
+    for (int i=0 ; i<tLen ; i++)
     {
-        if (i>0 && t[i]==t[i-1])
+        strchrTarget=strchr(sCopy,t[i]);
+        if (strchrTarget==NULL)
         {
-            shift=tIndex[i-1]+1;
-            searchResult=strchr(s+shift,t[i]);
-            if (searchResult==NULL)
-            {
-                result[0]='\0';
-                return result;
-            }
-            tIndex[i]=searchResult-s;
+            result[0]='\0';
+            return result;
         }
         else
         {
-            searchResult=strchr(s,t[i]);
-            if (searchResult==NULL)
-            {
-                result[0]='\0';
-                return result;
-            }
-            tIndex[i]=searchResult-s;
+            pos=strchrTarget-sCopy;
+            //put '*' at searched char for skip on next search.
+            sCopy[pos]='*';
+            start=MIN(start,pos);
+            end  =MAX(end  ,pos);
         }
     }
-    int* index=malloc(sizeof(int)*3);
-    //index[start,end,i] , where t[i]=start
-    //printf("first search = ");
-    searchWidth(tIndex, tLen, index);
-    int start = index[0];
-    int end = index[1];
     
-    while( (end-start+1) != tLen)
+    //further search
+    int startTemp=start;
+    int endTemp=end;
+    while(1)
     {
-        //printf("continue search for t[%d]=%c\n",index[2],t[index[2]]);
-        shift = largestSameChar(t, tIndex, tLen, index)+1;
-        if (shift == 0)
-            shift=index[0]+1;
+        //search another target
+        strchrTarget=strchr(sCopy+startTemp+1,s[startTemp]);
         
-        searchResult=strchr(s+shift,t[index[2]]);
-        if (searchResult==NULL)
-           break;
-        tIndex[index[2]]=searchResult-s;
-        searchWidth(tIndex, tLen, index);
-        if (end-start > index[1]-index[0])
+        //If not match
+        if (strchrTarget==NULL)
+            break;
+        else
         {
-            //printf("change section\n");
-            start=index[0];
-            end=index[1];
+            pos=strchrTarget-sCopy;
+            //put '*' at searched char for skip on next search.
+            sCopy[pos]='*';
+            //update startTemp
+            for (int j=startTemp+1 ; j<sLen ; j++)
+            {
+                if (sCopy[j]=='*')
+                {
+                    startTemp=j;
+                    break;
+                }
+            }
+
+            //update endTemp
+            endTemp  =MAX(endTemp,pos);
+
+            //if this section is smaller, update start/end
+            if (end-start > endTemp-startTemp)
+            {
+                start=startTemp;
+                end=endTemp;
+            }
         }
     }
     
     //Put in result
     int count=0;
-    for (int i=start ; i<=end ;i++)
+    for (int i=start ; i<=end ; i++)
+    {
         result[count++]=s[i];
+    }
     result[count]='\0';
     return result;
 }
