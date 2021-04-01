@@ -1,8 +1,10 @@
 /***********************************************
 1. For string s, and t. 
-   Sort t first, than search t[0] from s[0], search t[1] from s[0]...
-   If t[n]is at s[k] and t[n+1]==t[n], search t[n+1] from s[k+1].
-   And for next condition, remove one char from s[n], research from s[n+1] to get a new result.
+   Search t[0] from s, search t[1] from s...
+   The searched char, mark'*' for skip on next search.
+   
+   If first search passed, we further search for smaller window.
+   If t[n] is at s[k], search t[n] from s[k+1].
 ***********************************************/
 #define MIN(x,y) ((x)<(y))?(x):(y)
 #define MAX(x,y) ((x)>(y))?(x):(y)
