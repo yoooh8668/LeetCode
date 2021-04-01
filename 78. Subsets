@@ -1,0 +1,88 @@
+/*******************************************
+1. Using modified function of 77. Combinations.
+*******************************************/
+//global variable count.
+static count=0;
+
+int** combine(int* nums, int numsSize, int k, int** result, int* retcolsizes){
+    //max size for all conditions is 184756, for n=20 , k=10.
+    //Seems the task max is n=20, k=16, we set the size to 4865.
+    int stack[10]={0};
+    int top=-1;
+    int kTemp=k;
+    int target=-1;
+    while(1)
+    {
+        //there are no more element to be push ==> no more condition for result.
+        if (target==numsSize-1 && kTemp != 0)
+            break;
+        //still need to push ==> push element.
+        else if (kTemp!=0)
+        {
+            stack[++top] = ++target;
+            kTemp--;
+        }
+        //put new result and prepare another solution
+        else
+        {
+            result[count]=malloc(sizeof(int)*k);
+            retcolsizes[count]=k;
+            for (int i=0; i<=top ; i++)
+                result[count][i]=nums[stack[i]];
+            count++;
+            
+            //pop element
+            //if stack store numsSize-1, pop until non-continuous number, then pop one.
+            if (stack[top]==numsSize-1)
+            {
+                top--; kTemp++;
+                while (top>=0 && stack[top]==stack[top+1]-1)
+                {
+                    top--; kTemp++;
+                }
+                
+                //can't pop element  ==> no more condition for result.
+                if (top==-1)
+                    break;
+                
+                //set target to pop number +1,
+                target=stack[top];
+                top--; kTemp++;
+            }
+            //pop one number.
+            else 
+            {
+                top--; kTemp++;
+            }
+        }
+    }
+    return result;
+}
+
+/**
+ * Return an array of arrays of size *returnSize.
+ * The sizes of the arrays are returned as *returnColumnSizes array.
+ * Note: Both returned array and *columnSizes array must be malloced, assume caller calls free().
+ */
+int** subsets(int* nums, int numsSize, int* returnSize, int** returnColumnSizes){
+    //max size is 2*(10!/(0!+10!)+10!/(1!+9!)+10!/(2!+8!)+10!/(3!+7!)+10!/(4!+6!)) + 10!/(5!+5!)
+    //=1024, for numsSize<=10.
+    int** result= malloc(sizeof(int*)*1024);
+    int* retcolsizes = malloc(sizeof(int)*1024);
+    *returnColumnSizes=retcolsizes;
+    count=0;
+    
+    //put null subset
+    result[count]=malloc(sizeof(int)*0);
+    retcolsizes[count]=0;
+    result[count]=NULL;
+    count++;
+    
+    //Call modified combine function from 77. Combinations
+    for (int i=1 ; i<=numsSize ; i++)
+    {
+        combine(nums, numsSize, i, result, retcolsizes);
+    }
+    (*returnSize)=count;
+    return result;
+}
