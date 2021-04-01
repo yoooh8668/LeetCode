@@ -18,16 +18,16 @@ int** combine(int n, int k, int* returnSize, int** returnColumnSizes){
     int target=0;
     while(1)
     {
-        //if target == n && kTemp !=0, there are no more element to be push ==> no more condition for result.
+        //there are no more element to be push ==> no more condition for result.
         if (target==n && kTemp != 0)
             break;
-        //if kTemp!=0, still need to push ==> push element.
+        //still need to push ==> push element.
         else if (kTemp!=0)
         {
             stack[++top] = ++target;
             kTemp--;
         }
-        //if kTemp==0, put new result and prepare another solution
+        //put new result and prepare another solution
         else
         {
             result[(*returnSize)]=malloc(sizeof(int)*k);
@@ -37,7 +37,7 @@ int** combine(int n, int k, int* returnSize, int** returnColumnSizes){
             (*returnSize)++;
             
             //pop element
-            //if stack store n, pop until non-continuous number.
+            //if stack store n, pop until non-continuous number, then pop one.
             if (stack[top]==n)
             {
                 top--; kTemp++;
@@ -46,7 +46,7 @@ int** combine(int n, int k, int* returnSize, int** returnColumnSizes){
                     top--; kTemp++;
                 }
                 
-                //if top=-1, can't pop element  ==> no more condition for result.
+                //can't pop element  ==> no more condition for result.
                 if (top==-1)
                     break;
                 
