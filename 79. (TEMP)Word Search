@@ -1,0 +1,93 @@
+/*****************************************
+0.Using dp search, but can't handle re-use case.
+******************************************/
+bool searchPath (bool** dp, int wLen, int row, int col, int rowSize, int colSize){
+    int curr=col;
+    for (int i=row+1 ; i<wLen ; i++)
+    {
+        printf("i=%d,curr=%d\n",i,curr);
+        //search left  
+        if      ((curr%colSize!=0) && dp[i][curr-1])
+        {
+            printf("left\n");
+            curr--;
+            if (searchPath (dp, wLen, i, curr, rowSize, colSize))
+                return true;
+            else
+                curr++;
+        }
+        //search right
+        if ((curr%colSize!=colSize-1) && dp[i][curr+1])
+        {
+            printf("right\n");
+            curr++;
+            if (searchPath (dp, wLen, i, curr, rowSize, colSize))
+                return true;
+            else
+                curr--;
+        }
+        //search up
+        if ((curr/colSize!=0) && dp[i][curr-colSize])
+        {
+            printf("up\n");
+            curr-=colSize;
+            if (searchPath (dp, wLen, i, curr, rowSize, colSize))
+                return true;
+            else
+                curr+=colSize;
+        }
+        //search down
+        if ((curr/colSize!=rowSize-1) && dp[i][curr+colSize])
+        {
+            printf("down\n");
+            curr+=colSize;
+            if (searchPath (dp, wLen, i, curr, rowSize, colSize))
+                return true;
+            else
+                curr-=colSize;
+        }
+        //not found
+        printf("not found\n");
+        return false;
+
+    }
+    return true;
+}
+
+bool exist(char** board, int boardSize, int* boardColSize, char * word){
+    int boardNumber=boardSize*boardColSize[0];
+    int wLen=strlen(word);
+    //bool dp[wLen][boardNumber];
+    
+    bool** dp=malloc(sizeof(bool*)*wLen);
+    for (int i=0 ; i<wLen ; i++)
+        dp[i]=malloc(sizeof(bool)*boardNumber);
+    
+    int row=0;
+    int col=0;
+    
+    //create dp
+    for (int i=0 ; i<boardNumber ; i++)
+    {
+        for (int j=0 ; j<wLen ; j++)
+        {
+            row=i/boardColSize[0];
+            col=i%boardColSize[0];
+            if (word[j]==board[row][col])
+                dp[j][i]=1;
+            else
+                dp[j][i]=0;
+        }
+    }
+    //find startPoint 
+    for (int i=0 ; i<boardNumber ; i++)
+    {
+        if (dp[0][i])
+        {
+            if (searchPath(dp, wLen, 0, i, boardSize, boardColSize[0]))
+                return true;
+        }
+    }
+    
+    return false;
+}
