@@ -4,6 +4,11 @@
    If t[n]is at s[k] and t[n+1]==t[n], search t[n+1] from s[k+1].
    And for next condition, remove one char from s[n], research from s[n+1] to get a new result.
 ***********************************************/
+
+
+/**********************************************
+0.Same as 1., But time limit exceed
+**********************************************/
 #define MIN(x,y) ((x)<(y))?(x):(y)
 #define MAX(x,y) ((x)>(y))?(x):(y)
 void searchWidth (int* tIndex, int tLen, int* result){
