@@ -1,19 +1,31 @@
 /*****************************************
-1.need to debug
+1.Search direction one by one.
+  Mark the searched char to '*'.
+  If current search is not found, re-set the char of board back and search next direction.
 *****************************************/
-bool searchPath (char** board, char* word, int wTarget, int curr, int wLen, int rowSize, int colSize){
+/*
+All element that recursive needed : 
+    baord, 
+    word, 
+    wTarget => search which element of word, 
+    curr => current board position, 
+    rowSize => row size of board, 
+    colSize => col size of board.
+*/
+bool searchPath (char** board, char* word, int wTarget, int curr, int rowSize, int colSize){
+    //if search complete, return true 
     if (wTarget==strlen(word))
         return true;
+    
     int row=curr/colSize;
     int col=curr%colSize;
+    
     //search left  
-    printf("curr=%d\n",curr);
     if (col!=0 && board[row][col-1]==word[wTarget])
     {
-        printf("left\n");
         curr--;
         board[row][curr%colSize]='*';
-        if (searchPath (board, word, wTarget+1, curr, wLen, rowSize, colSize))
+        if (searchPath (board, word, wTarget+1, curr, rowSize, colSize))
             return true;
         else
         {
@@ -21,13 +33,13 @@ bool searchPath (char** board, char* word, int wTarget, int curr, int wLen, int 
             curr++;
         }
     }
+    
     //search right
-    if (col!=colSize-1 && board[row][col+1])
+    if (col!=colSize-1 && board[row][col+1]==word[wTarget])
     {
-        printf("right\n");
         curr++;
         board[row][curr%colSize]='*';
-        if (searchPath (board, word, wTarget+1, curr, wLen, rowSize, colSize))
+        if (searchPath (board, word, wTarget+1, curr, rowSize, colSize))
             return true;
         else
         {
@@ -35,13 +47,13 @@ bool searchPath (char** board, char* word, int wTarget, int curr, int wLen, int 
             curr--;
         }
     }
+    
     //search up
-    if (row!=0 && board[row-1][col])
+    if (row!=0 && board[row-1][col]==word[wTarget])
     {
-        printf("up\n");
         curr-=colSize;
         board[curr/colSize][col]='*';
-        if (searchPath (board, word, wTarget+1, curr, wLen, rowSize, colSize))
+        if (searchPath (board, word, wTarget+1, curr, rowSize, colSize))
             return true;
         else
         {
@@ -49,13 +61,13 @@ bool searchPath (char** board, char* word, int wTarget, int curr, int wLen, int 
             curr+=colSize;
         }
     }
+    
     //search down
-    if (row!=rowSize-1 && board[row+1][col])
+    if (row!=rowSize-1 && board[row+1][col]==word[wTarget])
     {
-        printf("down\n");
         curr+=colSize;
         board[curr/colSize][col]='*';
-        if (searchPath (board, word, wTarget+1, curr, wLen, rowSize, colSize))
+        if (searchPath (board, word, wTarget+1, curr, rowSize, colSize))
             return true;
         else
         {
@@ -63,17 +75,37 @@ bool searchPath (char** board, char* word, int wTarget, int curr, int wLen, int 
             curr-=colSize;
         }
     }
-    //not found
-    printf("not found\n");
+    
+    //not found with all conditions.
     return false;
 }
 
 bool exist(char** board, int boardSize, int* boardColSize, char * word){
     int boardNumber=boardSize*boardColSize[0];
     int wLen=strlen(word);
-    
     int row=0;
     int col=0;
+    
+    //if length of word is larger than boardSize, return false.
+    if (boardNumber < wLen) return false;
+    
+    //some of the word are not present in board, return false.
+    for (int i=0 ; i<wLen ;i++)
+    {
+        int temp=0;
+        for (int j=0 ; j<boardNumber ; j++)
+        {
+            row=j/boardColSize[0];
+            col=j%boardColSize[0];
+            if (board[row][col]==word[i])
+            {
+                temp=1;
+                break;
+            }
+        }
+        if (temp==0)
+            return false;
+    }
     
     //find startPoint 
     for (int i=0 ; i<boardNumber ; i++)
@@ -82,13 +114,12 @@ bool exist(char** board, int boardSize, int* boardColSize, char * word){
         col=i%boardColSize[0];
         if (board[row][col]==word[0])
         {
-            if (searchPath(board, word, 1, i, wLen, boardSize, boardColSize[0]))
+            if (searchPath(board, word, 1, i, boardSize, boardColSize[0]))
                 return true;
         }
     }   
     return false;
 }
-
 /*****************************************
 0.Using dp search, but can't handle re-use case.
 ******************************************/
