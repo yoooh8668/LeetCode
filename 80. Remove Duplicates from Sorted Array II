@@ -1,0 +1,39 @@
+/************************
+1.Shift every element when repeating.
+************************/
+int removeDuplicates(int* nums, int numsSize){
+    if (numsSize==1)
+        return 1;
+    int numsTemp=0;
+    int count=0;
+    int repeatCount=0;
+    int result=numsSize;
+    for (int i=1 ; i<result ; i++)
+    {
+        if (nums[i]==nums[i-1])
+        {
+            if (repeatCount==1)
+            {
+                numsTemp=nums[i-1];
+                for (int j=i ; j<result ;j++)
+                {
+                    if (nums[j]==numsTemp)
+                        count++;
+                    else
+                        break;
+                }
+                //shift
+                for (int j=i ; j+count<result ;j++)
+                    nums[j]=nums[j+count];
+                result-=count;
+                count=0;
+                repeatCount=0;
+            }
+            else
+                repeatCount++;
+        }
+        else
+            repeatCount=0;
+    }
+    return result;
+}
