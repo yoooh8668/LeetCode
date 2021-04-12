@@ -1,0 +1,78 @@
+struct ListNode* deleteDuplicates(struct ListNode* head){
+    //list range 0~1 => return head.
+    if (head == NULL)
+        return head;
+    else if (head->next == NULL)
+        return head;
+    
+    struct ListNode* start;
+    struct ListNode* temp;
+    start=NULL;
+    temp=NULL;
+    int rep=0;
+    
+    //find start
+    while (1)
+    {
+        if (head->next != NULL)
+        {
+            //if repeat
+            if (head->val == head->next->val)
+            {
+                rep=1;
+                head=head->next;
+            }
+            else if (rep == 1)
+            {
+                rep=0;
+                head=head->next;
+            }
+            else if (rep == 0)
+            {
+                start=head;
+                break;
+            }
+        }
+        else 
+        {
+            if (rep == 0)
+                start=head;
+            break;
+        }
+    }
+    printf("start->val=%d\n",start->val);
+    
+    temp=head;
+    //continue search 
+    if (start!=NULL)
+    {
+        while (1)
+        {
+            if (head->next != NULL)
+            {
+                //if repeat
+                if (head->val == head->next->val)
+                {
+                    
+                    rep=1;
+                    head=head->next;
+                }
+                else if (rep == 1)
+                {
+                    temp->next=head->next;
+                }
+                else if (rep == 0)
+                {
+                    temp=head;
+                    head=head->next;
+                }
+            }
+            else 
+            {
+
+                break;
+            }
+        }
+    }
+    return head;
+}
