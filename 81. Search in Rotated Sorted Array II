@@ -1,0 +1,138 @@
+/********************************
+1.Just search one by one.
+********************************/
+bool search(int* nums, int numsSize, int target){
+    for (int i=0 ; i<numsSize ;i++)
+    {
+        if (nums[i]==target)
+            return true;
+    }
+    return false;
+}
+
+/*******************************
+2.Using same way as function 2 of 33. Search in Rotated Sorted Array.
+  Find the pivot point while searching target.
+  When it finds pivot, binary search (section pivot to numsSize-1). 
+*******************************/
+
+bool search(int* nums, int numsSize, int target){
+    int pivot=0;
+    
+    //no pivot condition (size==1)
+    if (numsSize==1)
+    {
+        if (nums[0]==target)
+            return true;
+        else
+            return false;
+    }
+    
+    //find the pivot
+    if (nums[0]==target)
+        return true;
+    for (int i=1 ; i<numsSize ;i++)
+    {
+        if (nums[i]==target)
+            return true;
+        if(nums[i]>=nums[i-1])
+            continue;
+        else
+        {
+            pivot = i;
+            break;
+        }
+    }
+    
+    //Binary search from pivot to numsSize-1.
+    if (nums[pivot] <= target && target <= nums[numsSize-1])
+    {
+        int half=0;
+        int start=pivot;
+        int end=numsSize-1;
+        half=(start+end)/2;
+        //check if target is at start or end?
+        if (nums[start]==target || nums[end]==target)
+            return true;
+
+        while(start!= half)
+        {
+            if (nums[half]==target)
+                return true;
+            else if (nums[half]>target) //at left side
+                end = half;
+            else                        //at right side
+                start = half;
+
+            half=(start+end)/2;
+        }
+    }
+    return false;
+}
+
+/********************************
+3. Modify function 2.
+*********************************/
+bool search(int* nums, int numsSize, int target){
+    int pivot=0;
+    
+    //no pivot condition (size==1)
+    if (numsSize==1)
+    {
+        if (nums[0]==target)
+            return true;
+        else
+            return false;
+    }
+    
+    if (nums[0]==target)
+        return true;
+    
+    //if nums[0] > target, target can only appear in pivot~numsSize. 
+    if (nums[0] > target)
+    {
+        //find pivot
+        for (int i=1 ; i<numsSize ;i++)
+        {
+            if(nums[i]>=nums[i-1])
+                continue;
+            else
+            {
+                pivot = i;
+                break;
+            }
+        }
+        //Binary search from pivot to numsSize-1.
+        int half=0;
+        int start=pivot;
+        int end=numsSize-1;
+        half=(start+end)/2;
+        //check if target is at start or end?
+        if (nums[start]==target || nums[end]==target)
+            return true;
+
+        while(start!= half)
+        {
+            if (nums[half]==target)
+                return true;
+            else if (nums[half]>target) //at left side
+                end = half;
+            else                        //at right side
+                start = half;
+
+            half=(start+end)/2;
+        }
+    }
+    //if nums[0]<target, target can only appear in 0~pivot-1.
+    else
+    {
+        for (int i=1 ; i<numsSize ;i++)
+        {
+            if (nums[i]==target)
+                return true;
+            if(nums[i]>=nums[i-1])
+                continue;
+        }
+    }
+    return false;
+}
