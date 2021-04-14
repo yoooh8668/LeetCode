@@ -1,0 +1,19 @@
+
+struct ListNode* deleteDuplicates(struct ListNode* head){
+    //head->next is not exist condition.
+    if (head ==NULL)
+        return head;
+    
+    struct ListNode* temp;
+    temp=head;
+    while(temp->next != NULL)
+    {
+        if (temp->val == temp->next->val)
+        {
+            temp->next=temp->next->next;
+        }
+        else
+            temp=temp->next;
+    }
+    return head;
+}
