@@ -1,3 +1,12 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     struct ListNode *next;
+ * };
+ */
+
+
 struct ListNode* deleteDuplicates(struct ListNode* head){
     //list range 0~1 => return head.
     if (head == NULL)
@@ -37,6 +46,7 @@ struct ListNode* deleteDuplicates(struct ListNode* head){
         {
             if (rep == 0)
                 start=head;
+            rep=0;
             break;
         }
     }
@@ -48,31 +58,50 @@ struct ListNode* deleteDuplicates(struct ListNode* head){
     {
         while (1)
         {
+            printf("val=%d",head->val);
             if (head->next != NULL)
             {
                 //if repeat
                 if (head->val == head->next->val)
                 {
-                    
+                    printf("  repeat\n");
                     rep=1;
                     head=head->next;
                 }
                 else if (rep == 1)
                 {
-                    temp->next=head->next;
+                    printf("  rep=1\n");
+                    if (head->next->next ==NULL || head->next->val == head->next->next->val)
+                    {
+                        temp->next=head->next;
+                        temp=head;
+                        head=head->next;
+                        rep=1;
+                    }
+                    else
+                    {
+                        head=head->next;
+                        rep=0;
+                    }
+
                 }
                 else if (rep == 0)
                 {
+                    printf("  rep=0\n");
+                    rep=0;
                     temp=head;
                     head=head->next;
                 }
             }
-            else 
+            else if(rep==1)
             {
-
+                temp->next=NULL;
                 break;
             }
+            else if(rep==0)
+                break;
+            printf("temp->val=%d\n",temp->val);
         }
     }
-    return head;
+    return start;
 }
